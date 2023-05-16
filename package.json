@@ -1,0 +1,38 @@
+{
+  "name": "salewatch_2023",
+  "version": "1.0.0",
+  "description": "1. Quản lý sản phẩm\r 2. Quản lý doanh thu\r 3. Quản lý người dùng\r 4. Quản lý đơn hàng\r 5. Đăng bài\r # Khách hàng:\r 1. Giỏ hàng\r 2. Đặt hàng\r 3. Thanh toán\r 4. Bình luận - đánh giá\r 5. Xem sản phẩm, bài đăng\r 6. Lịch sử mua hàng\r 7. Tìm kiếm, lọc sản phẩm\r 8. Đăng nhập, đăng ký\r 9. Cập nhật thông tin cá nhân",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node src/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://lvtdien@bitbucket.org/thienthanh17/salewatch_2023.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://bitbucket.org/thienthanh17/salewatch_2023/issues"
+  },
+  "homepage": "https://bitbucket.org/thienthanh17/salewatch_2023#readme",
+  "dependencies": {
+    "argon2": "^0.30.3",
+    "cloudinary": "^1.36.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.0.7",
+    "express-handlebars-sections": "^1.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.1.1",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.8",
+    "@babel/node": "^7.20.7",
+    "@babel/preset-env": "^7.21.5",
+    "nodemon": "^2.0.22"
+  }
+}
