@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 import connectDB from './config/connectDB';
 import initRoutes from './routes';
 import { engine } from 'express-handlebars';
-import sections from 'express-handlebars-sections';
+import handlebarsSection from 'express-handlebars-sections';
+import expressSession from 'express-session';
 
 dotenv.config();
 
@@ -16,10 +17,19 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('src/public'));
 
+// express session
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+}))
+
+// handlebars
 app.engine('.hbs', engine({
     extname: '.hbs',
     helpers: {
-        section: sections()
+        section: handlebarsSection()
     }
 }));
 app.set('view engine', '.hbs');
