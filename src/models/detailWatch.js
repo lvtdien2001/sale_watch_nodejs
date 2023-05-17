@@ -6,6 +6,14 @@ const detailWatchSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'watch'
     },
+    createBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },
+    updateBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },
     color: [{
         name: String
     }],

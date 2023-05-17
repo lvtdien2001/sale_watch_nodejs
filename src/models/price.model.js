@@ -6,7 +6,15 @@ const priceSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'watch'
     },
-    price: Number
+    price: Number,
+    createBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },
+    updateBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    }
 }, {timestamps: true});
 
 export default mongoose.model('price', priceSchema);

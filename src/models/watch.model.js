@@ -10,6 +10,14 @@ const watchSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'voucher'
     },
+    createBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },
+    updateBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },
     name: {
         type: String,
         required: true
