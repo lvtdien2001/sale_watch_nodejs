@@ -2,6 +2,12 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
+    roles: [{
+        roleId: {
+            type: Schema.Types.ObjectId,
+            ref: 'role'
+        }
+    }],
     username: {
         type: String,
         unique: true,

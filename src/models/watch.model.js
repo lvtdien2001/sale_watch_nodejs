@@ -6,16 +6,25 @@ const watchSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'brand'
     },
+    voucherId: {
+        type: Schema.Types.ObjectId,
+        ref: 'voucher'
+    },
     name: {
         type: String,
         required: true
     },
-    price: {
-        type: Number,
+    priceId: {
+        type: Schema.Types.ObjectId,
+        ref: 'price',
         required: true
     },
     currentQuantity: {
         type: String
+    },
+    style: {
+        type: String,
+        enum: ['Sang trọng', 'Thể thao', 'Thời trang', 'Hiện đại', 'Quân đội']
     },
     imageUrl: {
         type: String
