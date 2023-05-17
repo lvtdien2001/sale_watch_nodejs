@@ -18,7 +18,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static('src/public'));
 
 // express session
-app.use(session({
+app.use(expressSession({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true,
