@@ -1,35 +1,47 @@
-import BrandService from '../services/brand.service';
+import brandService from '../services/brand.service';
+
+// @route GET /brand/admin?currentPage=...
+// @desc get all brand
+// @access public
+exports.getAllBrands = async (req, res) => {
+    try {
+        const currentPage = req.query.currentPage || 1;
+        const response = await brandService.findAll(currentPage);
+
+        res.render('admin/brand.hbs', {layout: 'admin', response, message: req.session.message});
+    } catch (error) {
+        console.log(error);
+        res.send('Internal server error')
+    }
+}
 
 // @route POST /brand
 // @desc create a new brand
-// @access private (admin)
+// @access private
 exports.create = async (req, res) => {
+    if (!req.body.name || !req.file) {
+        return res.json({
+            status: 'err',
+            msg: 'Tên thương hiệu và hình ảnh không thể bỏ trống'
+        })
+    }
     try {
-        const uploadImage = await BrandService.create(req.file.path);
-        res.send(uploadImage);
+        const userId = '646b0f511a0f2ec77988691b';
+
+        const data = {
+            name: req.body.name,
+            imageUrl: req.file.path
+        }
+
+        const response = await brandService.create(data, userId);
+        req.session.message = response.msg;
+        return res.redirect('/brand/admin');
     } catch (error) {
         console.log(error);
+        res.json({
+            success: false,
+            msg: 'Internal server error'
+        })
     }
 }
 
-exports.home = async (req, res) => {
-    try {
-        const testData = [
-            {
-                id: 1,
-                name: 'one'
-            },
-            {
-                id: 2,
-                name: 'two'
-            },
-            {
-                id: 3,
-                name: 'three'
-            }
-        ]
-        res.render('home', {testData, isTest: false, obj: {name: 'test'}});
-    } catch (error) {
-        console.log(error);
-    }
-}

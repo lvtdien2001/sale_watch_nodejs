@@ -1,0 +1,79 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/brandManager.css" />
+{{/section}}
+
+<div class="wrapper">
+    <h4 class="text-center">QUẢN LÝ THƯƠNG HIỆU</h4>
+
+    {{!-- add brand form --}}
+    <div class="accordion mb-3">
+        <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#add-brand" aria-expanded="false" >
+            Thêm thương hiệu 
+        </button>
+
+        <div id="add-brand" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+            <form method="POST" action="/brand" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col">
+                        <label for="inputName" class="form-label fw-bold">Tên thương hiệu</label>
+                        <input name="name" required="true" type="text" class="form-control" id="inputName">
+                    </div>
+                    <div class="col">
+                        <label for="inputImage" class="form-label fw-bold">Hình ảnh</label>
+                        <input name="image" required="true" type="file" class="form-control" id="inputImage">
+                    </div>
+                    <div class="col align-self-end">
+                        <button type="submit" class="btn btn-primary">Gửi</button>
+                    </div>
+                </div>
+            </form>
+            <div class="form-border"></div>
+        </div>
+    </div>
+
+    <table class="table border-dark table-bordered text-center">
+        <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Tên thương hiệu</th>
+                <th scope="col">Hình ảnh</th>
+                <th scope="col">Thời gian tạo</th>
+                <th scope="col">Người tạo</th>
+                <th scope="col">Lần cập nhật cuối</th>
+                <th scope="col">Người cập nhật</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#with response}}
+                {{#each brands}}
+                    <tr>
+                        <th>{{@index}}</th>
+                        <td>{{name}}</td>
+                        <td>
+                            <img src={{imageUrl}} alt="Hinh anh thuong hieu" width="150px">
+                        </td>
+                        <td>{{createdAt}}</td>
+                        <td>{{createBy}}</td>
+                        <td>{{updatedAt}}</td>
+                        <td>{{updateBy}}</td>
+                        <td>
+                            {{!-- button trigger edit modal --}}
+                            <button type="button" class="edit-btn" data-bs-toggle="modal" data-bs-target="#edit-modal-{{@index}}">
+                                <i class="fas fa-pen"></i>
+                            </button>
+
+                            <button class="delete-btn" onclick="handleDelete()" >
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                {{/each}}
+            {{/with}}
+        </tbody>
+    </table>
+</div>
+
+{{#section 'js'}}
+    <script src="/js/brandManager.js"></script>
+{{/section}}
