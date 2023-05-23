@@ -1,6 +1,7 @@
 import userService from "../services/user.service";
 import cloudinary from "../utils/cloudinary";
 import * as argon2 from "argon2";
+import jwt from 'jsonwebtoken';
 class userController {
 
   displayRegister(req, res){
@@ -64,6 +65,9 @@ class userController {
   }
 
   displayLogin(req, res){
+    if(req.session.authState){
+      return res.redirect('/')
+    }
     res.render('login')
   }
   async login(req, res){
@@ -73,10 +77,27 @@ class userController {
             if(user){
                 const decryptionPass = await argon2.verify(user.password, req.body.password)
                 if(decryptionPass){
-                  req.session.username=user.username
-                  req.session.fullName=user.fullName
+                  // Tạo token
+                  const accessToken = jwt.sign(
+                    { userId: user._id, isAdmin: user.isAdmin, roles: user.roles },
+                    process.env.ACCESS_TOKEN_SECRET,
+                    { expiresIn: '6h' }
+                  )
+                  req.session.authState = {
+                    isAuthenticated: true,
+                    accessToken,
+                    user: {
+                      ...user,
+                      password: undefined
+                    }
+                  }  
+
+                  // req.session.username=user.username
+                  // req.session.fullName=user.fullName
                   // res.send(req.session)
-                  res.render('login',{messageSuccess: req.session.fullName})
+                  if (!user.isAdmin && user.roles.length===0)
+                    res.redirect('/')
+                  else res.redirect('/admin')
                 }
                 else{
                   res.render('login',{messageFailure:'sai mật khẩu'})
@@ -92,8 +113,8 @@ class userController {
 
   async logout(req,res){
     req.session.destroy((err) => {
-        if (err) res.redirect('/500');
-        res.redirect('back');
+        if (err) res.redirect('/');
+        res.redirect('/user/login');
     })
 }
 }

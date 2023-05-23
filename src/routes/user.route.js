@@ -7,5 +7,6 @@ router.post('/register',upload.single('imageUrl'),userController.register)
 router.post('/login',userController.login)
 router.get('/register',userController.displayRegister)
 router.get('/login',userController.displayLogin)
+router.get('/logout',userController.logout)
 
 export default router;
