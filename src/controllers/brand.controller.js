@@ -28,7 +28,7 @@ exports.home = async (req, res) => {
                 name: 'three'
             }
         ]
-        res.render('home', {testData, isTest: false, obj: {name: 'test'}});
+        res.render('home', {layout: 'admin', testData, isTest: false, obj: {name: 'test'}});
     } catch (error) {
         console.log(error);
     }
