@@ -95,7 +95,9 @@ class userController {
                   // req.session.username=user.username
                   // req.session.fullName=user.fullName
                   // res.send(req.session)
-                  res.render('/',{messageSuccess: 'Đăng nhập thành công'})
+                  if (!user.isAdmin && user.roles.length===0)
+                    res.redirect('/')
+                  else res.redirect('/admin')
                 }
                 else{
                   res.render('login',{messageFailure:'sai mật khẩu'})
@@ -111,8 +113,8 @@ class userController {
 
   async logout(req,res){
     req.session.destroy((err) => {
-        if (err) res.redirect('/500');
-        res.redirect('back');
+        if (err) res.redirect('/');
+        res.redirect('/user/login');
     })
 }
 }
