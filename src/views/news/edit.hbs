@@ -1,0 +1,66 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="../css/news/edit.css" />
+{{/section}}
+<h1 class="text-center">Chỉnh sửa tin tức</h1>
+{{#with data}}
+  <div class="mt-4">
+    <div class="row">
+        <div class="col">
+              <div class="mt-4">
+            <div class="row">
+                <div class="col-md-6 col-xs-12 information-col">
+                    <h3 class="text-center">Chỉnh sửa thông tin</h3>
+                    <form method="post" action="/news/updateInfo/{{_id}}" class="row" >
+                            <div class="form-group mt-4">
+                                <label for="title">Tiêu đề</label>
+                                <textarea class="form-control" rows="4" aria-label="With textarea" id="title" name="title" required="true" >
+                                    {{title}}
+                                </textarea>
+                            </div>
+                            <div class="form-group mt-4">
+                                <label for="editor1">Nội dung</label>
+                                <textarea class="form-control" rows="8" aria-label="With textarea" id="editor1" name="content" required="true" >
+                                    {{content}}
+                                </textarea>
+                            </div>
+                            
+                            <div class="form-group btn-right mt-4">
+                                <button type="submit" class="btn btn-primary">Cập nhật thông tin</button>
+                            </div>
+                           
+                        
+                    </form>
+                </div>
+                <div class="col-md-6 col-xs-12 image-col">
+                    <h3 class="text-center">Chỉnh sửa hình ảnh</h3>
+                    <form method="post" action="/news/updateImage/{{_id}}" class="row" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="">Hình ảnh</label>
+                                <div class="layout">
+                                    <img class="layout-image" src={{imageUrl}} />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageUrl"><span class="image-icon"><i class="fas fa-image"></i></span> </label>
+                                <input  type="file" class="form-control input-file" id="imageUrl" name="imageUrl" required="true">
+                            </div>
+                            
+                            <div class="form-group btn-right">
+                                <button type="submit" class="btn btn-primary">Cập nhật hình ảnh</button>
+                            </div>
+                           
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+  </div>
+
+{{/with}}
+
+<script src="/ckeditor/ckeditor.js"></script>
+<script>
+  CKEDITOR.replace('editor1')
+</script>

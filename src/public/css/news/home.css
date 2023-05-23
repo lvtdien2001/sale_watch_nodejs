@@ -1,0 +1,20 @@
+.news-layout {
+    border-top: 1px solid #95a5a6;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+.layout{
+    text-align: center;
+}
+.layout-image {
+    width: 50%;
+    height: 100%;
+    
+}
+.dropdown-layout {
+    text-align: right
+}
+.btn-update {
+    text-align: right;
+   
+} 

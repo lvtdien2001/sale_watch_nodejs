@@ -1,0 +1,81 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="../css/news/home.css" />
+{{/section}}
+<h1>Home of news</h1>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Thêm tin tức mới
+</button>
+
+<!-- Modal Create a news -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Thêm tin tức mới</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mt-4">
+            <div class="row">
+                <div class="col ">
+
+                    <form method="post" action="/news" class="row" enctype="multipart/form-data">
+                        <div class="form-group">
+                                <label for="title">Tiêu đề</label>
+                                <input type="text" class="form-control" id="title" name="title" required="true">
+                        </div>
+                            <div class="form-group">
+                                <label for="editor1">Nội dung</label>
+                                <textarea class="form-control" aria-label="With textarea" id="content" name="editor1" required="true"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                                <label for="img">Ảnh tiêu đề</label>
+                                <input type="file" class="form-control" id="imageUrl" name="imageUrl" required="true">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Thêm thông tin</button>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+{{#each news}}
+    <div class="news-layout">
+      <div class="dropdown-layout">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Tùy chọn
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="/news/edit/{{_id}}">Chỉnh sửa</a> </li>
+            
+          </ul>
+        </div>
+      </div>
+        <h2>{{title}}</h2>
+        <div>{{createdAt}}</div>
+        <p>{{content}} <a href="/news/{{_id}}">xem thêm</a></p>
+        
+        <div class="layout">
+            <img src={{imageUrl}} class="layout-image" />
+        </div>
+    </div>
+    
+{{/each}}
+
+<script src="/ckeditor/ckeditor.js"></script>
+<script>
+  CKEDITOR.replace('editor1',{
+    extraPlugins: 'filebrowser',
+    filebrowserBrowserUrl: '/list',
+    filebrowserUploadMethod: 'form',
+    filebrowserUploadUrl: '/upload'
+  } )
+</script>

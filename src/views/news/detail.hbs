@@ -1,0 +1,12 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="../css/news/detail.css" />
+{{/section}}
+{{#with data}}
+        <h2>{{title}}</h2>
+        <div>{{createdAt}}</div>
+        <p>{{content}}</p>
+        
+        <div class="layout">
+            <img src={{imageUrl}} class="layout-image" />
+        </div>
+{{/with}}

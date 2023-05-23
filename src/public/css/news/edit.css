@@ -1,0 +1,30 @@
+.layout{
+    text-align: center;
+}
+.layout-image {
+    width: 100%;
+    height: 100%;
+}
+.btn-right {
+    text-align: right;
+}
+.input-file {
+    display: none;
+}
+.image-icon {
+    font-size: 3rem;
+    font-weight: 800;
+    cursor: pointer;
+    /* background: blue; */
+    color: #fd79a8;
+}
+.information-col, .image-col {
+    /* margin: 10px; */
+    padding: 10px;
+}
+/* .information-col {
+    border: 1px solid red;
+}
+.image-col {
+    border: 1px solid red;
+} */
