@@ -64,6 +64,7 @@ class userController {
   }
 
   displayLogin(req, res){
+    if(req.session.username)
     res.render('login')
   }
   async login(req, res){
@@ -95,7 +96,33 @@ class userController {
         if (err) res.redirect('/500');
         res.redirect('back');
     })
-}
+  }
+
+  async displayProfile(req, res){
+    if(req.params.id){
+      // const result = await userService.findById(req.body.id)
+      res.render('edit-user')
+    }
+  }
+
+  async getAll(req, res){
+    const result = await userService.findAllUser()
+    res.json(result)
+  }
+
+  // async getUserById(req, res){
+  //   if(req.body){
+  //     const result = await userService.findById(req.body.id)
+  //     res.send(result)
+  //   }
+  // }
+
+  async updateUser(req, res){
+    if(req.body){
+      const result = await userService.updateUser(req.params.id, req.body)
+      res.json(result)
+    }
+  }
 }
 
 module.exports = new userController();

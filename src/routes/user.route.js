@@ -5,7 +5,11 @@ const router = express.Router();
 
 router.post('/register',upload.single('imageUrl'),userController.register)
 router.post('/login',userController.login)
+// router.post('/edit',userController.getUserById)
+router.post('/update/:id',userController.updateUser)
 router.get('/register',userController.displayRegister)
 router.get('/login',userController.displayLogin)
+router.get('/edit/:id',userController.displayProfile)
+router.get('/',userController.getAll)
 
 export default router;

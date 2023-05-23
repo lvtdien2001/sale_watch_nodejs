@@ -23,6 +23,19 @@ class UserService {
         return await userModel.findOne({username})
     }
 
+    async findById(id){
+        return await userModel.findById(id)
+    }
+
+    async findAllUser(){
+        return await userModel.find({})
+    }
+
+    async updateUser(id, data){
+        return await userModel.findByIdAndUpdate(id, data,{
+            new:true
+        })
+    }
 }
 
 module.exports = new UserService;
