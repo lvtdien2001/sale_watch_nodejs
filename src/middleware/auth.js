@@ -17,9 +17,7 @@ const verifyToken = (req, res, next) => {
     }
     // Token not found
     if (!token) {
-        return res.render('err404', {
-            msg: 'Access token not found'
-        }) 
+        return res.redirect('/user/login') 
     }
 
     try {
@@ -31,9 +29,7 @@ const verifyToken = (req, res, next) => {
         next();
     } catch (error) {
         console.log(error);
-        res.render('err404', {
-            msg: 'Invalid access token'
-        })
+        return res.redirect('/user/login') 
     }
 }
 
