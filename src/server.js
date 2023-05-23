@@ -22,7 +22,7 @@ app.use(expressSession({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }
+    // cookie: { secure: true }
 }))
 
 // handlebars

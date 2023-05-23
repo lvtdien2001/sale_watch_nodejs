@@ -8,7 +8,8 @@ const watchSchema = new Schema({
     },
     voucherId: {
         type: Schema.Types.ObjectId,
-        ref: 'voucher'
+        ref: 'voucher',
+        default: null
     },
     createBy: {
         type: Schema.Types.ObjectId,
@@ -22,13 +23,13 @@ const watchSchema = new Schema({
         type: String,
         required: true
     },
-    priceId: {
-        type: Schema.Types.ObjectId,
-        ref: 'price',
-        required: true
-    },
     currentQuantity: {
-        type: String
+        type: Number,
+        default: 0
+    },
+    price: {
+        type: Number,
+        default: 0
     },
     style: {
         type: String,
@@ -39,7 +40,19 @@ const watchSchema = new Schema({
     },
     imageId: {
         type: String
-    }
+    },
+    strap: {
+        type: String,
+        default: null
+    },
+    glass: {
+        type: String,
+        default: null
+    },
+    description: {
+        type: String,
+        default: null
+    },
 }, {timestamps: true});
 
 export default mongoose.model('watch', watchSchema);
