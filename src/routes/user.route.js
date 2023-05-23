@@ -9,7 +9,11 @@ router.post('/login',userController.login)
 router.post('/update/:id',userController.updateUser)
 router.get('/register',userController.displayRegister)
 router.get('/login',userController.displayLogin)
+<<<<<<< HEAD
 router.get('/edit/:id',userController.displayProfile)
 router.get('/',userController.getAll)
+=======
+router.get('/logout',userController.logout)
+>>>>>>> cf232214839825d9b9e6674b35adb429685cd3a3
 
 export default router;
