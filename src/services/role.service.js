@@ -8,6 +8,9 @@ class RoleService{
     async findById(id){
         return await roleModel.findById(id)
     }
+    async findAll(){
+        return await roleModel.find({})
+    }
 }
 
 module.exports = new RoleService
