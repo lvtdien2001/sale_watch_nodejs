@@ -20,7 +20,7 @@ class UserService {
     }
 
     async findByUsername(username){
-        return await userModel.findOne({username})
+        return await userModel.findOne({username}).lean()
     }
 
 }

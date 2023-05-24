@@ -1,20 +1,2 @@
-{{#section 'css'}}
-    <link rel="stylesheet" href="../css/test.css" />
-{{/section}}
-
-<h1 id="test">Home page</h1>
-{{!-- for loop --}}
-{{#each testData}}
-    
-    <h1>{{id}}{{name}}</h1>
-{{/each}}
-
-{{!-- object --}}
-{{#with obj}}
-<h2>{{name}}</h2>
-{{/with}}
-
-{{!-- if else --}}
-{{#if isTest}}
-<h3>true</h3>
-{{/if}}
+<h1>Home page</h1>
+<a href="/user/logout">Đăng xuất</a>
