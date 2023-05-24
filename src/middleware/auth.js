@@ -7,14 +7,11 @@ const verifyToken = (req, res, next) => {
     // const token = authHeader && authHeader.split(' ')[1];
     const token = req.session.authState?.accessToken;
 
-    switch(req.url){
-        case '/':
-            return next();
-        case '/user/login':
-            return next();
-        case '/user/register':
-            return next();
-    }
+    const isPublicRoute = /[/]/.test(req.url) || /[/][^admin][/w]/.test(req.url);
+
+    if (isPublicRoute)
+        return next();
+
     // Token not found
     if (!token) {
         return res.redirect('/user/login') 
@@ -38,14 +35,8 @@ const verifyAdmin = (req, res, next) => {
         next();
     }
     else {
-        res.render('err404', {
-            msg: 'User is not admin'
-        })
+        res.render('err404', {layout: false})
     }
-}
-
-const verifyAddProduct = (req, res, next) => {
-    
 }
 
 export { verifyToken, verifyAdmin }
