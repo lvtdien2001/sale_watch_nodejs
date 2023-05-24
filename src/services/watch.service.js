@@ -102,6 +102,47 @@ exports.create = async (data, userId) => {
     }
 }
 
+exports.update = async (data, watchId, userId) => {
+    try {
+        // if update data contain image
+        if (data.imageUrl){
+            const uploadImage = await cloudinary.uploader.upload(data.imageUrl, {folder: 'watches'});
+            data = {
+                ...data,
+                imageUrl: uploadImage.secure_url,
+                imageId: uploadImage.public_id
+            }
+        }
+
+        const updateWatch = await watchModel.findByIdAndUpdate(watchId, {...data, updateBy: userId});
+        if (!updateWatch){
+            // delete new image in cloudinary
+            if (data.imageId){
+                await cloudinary.uploader.destroy(data.imageId);
+            }
+            return {
+                success: false,
+                msg: 'Không tìm thấy sản phẩm'
+            }
+        }
+        else {
+            // delete old image in cloudinary
+            await cloudinary.uploader.destroy(updateWatch.imageId)
+        }
+        
+        return {
+            success: true,
+            msg: 'Cập nhật thông tin sản phẩm thành công'
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
+}
+
 exports.delete = async watchId => {
     try {
         const deleteWatch = await watchModel.findByIdAndDelete(watchId);
@@ -112,9 +153,10 @@ exports.delete = async watchId => {
                 msg: 'Không tìm thấy sản phẩm'
             }
         
+        await cloudinary.uploader.destroy(deleteWatch.imageId);
+
         return {
             success: true,
-            deleteWatch,
             msg: 'Xóa sản phẩm thành công'
         }
     } catch (error) {

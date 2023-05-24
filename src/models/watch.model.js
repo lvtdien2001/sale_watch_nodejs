@@ -33,7 +33,8 @@ const watchSchema = new Schema({
     },
     style: {
         type: String,
-        enum: ['Sang trọng', 'Thể thao', 'Thời trang', 'Hiện đại', 'Quân đội']
+        enum: ['Sang trọng', 'Thể thao', 'Thời trang', 'Hiện đại', 'Quân đội'],
+        default: null
     },
     imageUrl: {
         type: String
@@ -46,6 +47,10 @@ const watchSchema = new Schema({
         default: null
     },
     glass: {
+        type: String,
+        default: null
+    },
+    principleOperate: {
         type: String,
         default: null
     },
