@@ -6,7 +6,9 @@ const verifyToken = (req, res, next) => {
     // const authHeader = req.header('Authorization');
     // const token = authHeader && authHeader.split(' ')[1];
     const token = req.session.authState?.accessToken;
-
+    if(req.url.match(/role/i)){
+        return next(); 
+    }
     switch(req.url){
         case '/':
             return next();
@@ -14,6 +16,7 @@ const verifyToken = (req, res, next) => {
             return next();
         case '/user/register':
             return next();
+          
     }
     // Token not found
     if (!token) {
