@@ -1,12 +1,21 @@
 {{#section 'css'}}
-    <link rel="stylesheet" href="../css/news/detail.css" />
+    <link rel="stylesheet" href="/css/news/detail.css" />
 {{/section}}
 {{#with data}}
         <h2>{{title}}</h2>
         <div>{{createdAt}}</div>
-        <p>{{content}}</p>
+        <p><span class="contentValue">{{content}}</span> </p>
         
         <div class="layout">
             <img src={{imageUrl}} class="layout-image" />
         </div>
 {{/with}}
+
+
+<script>
+  let nodeList = document.querySelectorAll(".contentValue");
+  nodeList.forEach(function(node) {
+    node.innerHTML = node.textContent;
+    console.log(node.textContent)
+  });
+</script>

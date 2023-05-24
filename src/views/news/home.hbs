@@ -1,5 +1,5 @@
 {{#section 'css'}}
-    <link rel="stylesheet" href="../css/news/home.css" />
+    <link rel="stylesheet" href="/css/news/home.css" />
 {{/section}}
 <h1>Home of news</h1>
 <!-- Button trigger modal -->
@@ -27,7 +27,7 @@
                         </div>
                             <div class="form-group">
                                 <label for="editor1">Nội dung</label>
-                                <textarea class="form-control" aria-label="With textarea" id="content" name="editor1" required="true"></textarea>
+                                <textarea class="form-control" aria-label="With textarea" id="editor1" name="content" required="true"></textarea>
                         </div>
                         
                         <div class="form-group">
@@ -59,23 +59,34 @@
           </ul>
         </div>
       </div>
-        <h2>{{title}}</h2>
+        <h2> <a class="title-link" href="/news/{{_id}}">{{title}}</a> </h2>
         <div>{{createdAt}}</div>
-        <p>{{content}} <a href="/news/{{_id}}">xem thêm</a></p>
+        <p><span class="contentValue">{{content}}</span></p>
         
         <div class="layout">
+          <a class="title-link" href="/news/{{_id}}">
             <img src={{imageUrl}} class="layout-image" />
+          </a>
         </div>
     </div>
     
 {{/each}}
 
-<script src="/ckeditor/ckeditor.js"></script>
 <script>
-  CKEDITOR.replace('editor1',{
+  let nodeList = document.querySelectorAll(".contentValue");
+  nodeList.forEach(function(node) {
+    node.innerHTML = node.textContent;
+  });
+</script>
+<script src="/ckeditor/ckeditor.js">
+  
+</script>
+<script>
+  CKEDITOR.replace('editor1')
+  {{!-- ,{
     extraPlugins: 'filebrowser',
     filebrowserBrowserUrl: '/list',
     filebrowserUploadMethod: 'form',
     filebrowserUploadUrl: '/upload'
-  } )
+  }  --}}
 </script>

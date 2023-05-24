@@ -6,6 +6,7 @@ import initRoutes from './routes';
 import { engine } from 'express-handlebars';
 import handlebarsSection from 'express-handlebars-sections';
 import expressSession from 'express-session';
+import { verifyToken } from './middleware/auth';
 
 dotenv.config();
 
@@ -22,7 +23,7 @@ app.use(expressSession({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }
+    // cookie: { secure: true }
 }))
 
 // handlebars
@@ -36,6 +37,7 @@ app.set('view engine', '.hbs');
 app.set('views', './src/views');
 
 connectDB();
+// app.use(verifyToken);
 initRoutes(app)
 
 app.listen(port, () => {

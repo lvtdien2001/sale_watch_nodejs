@@ -94,7 +94,7 @@ exports.updateInformation = async (req, res) => {
             content
         }
         await News.findOneAndUpdate( condition , update);
-        res.redirect(`/news/${id}`)
+        res.redirect(`/news/edit/${id}`)
     } catch (error) {
         console.log(error);
     }
@@ -120,7 +120,7 @@ exports.updateImage = async (req, res) => {
         await News.findOneAndUpdate( condition , update);
 
 
-        res.redirect(`/news/${id}`)
+        res.redirect(`/news/edit/${id}`)
     } catch (error) {
         console.log(error);
     }

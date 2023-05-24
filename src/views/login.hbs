@@ -1,0 +1,50 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="../css/user.css" />
+{{/section}}
+
+
+<div class="register">
+    <div class="register__banner">
+        <img src="https://curnonwatch.com/blog/wp-content/uploads/2021/03/anh-dong-ho-dep-76.jpg" alt="" class="banner__img">
+    </div>
+
+    <div class="register__content">
+        <div class="container">
+            <div class="form">
+                <form class="form__block"  action="/user/login" method="POST">
+                <h3 class="form__headding">Đăng nhập</h3>
+               {{#if messageSuccess}}
+                    <h3 class="message__success">{{messageSuccess}}</h3>
+                {{/if}}
+
+                {{#if messageFailure}}
+                    <h3 class="message__failure">Đăng nhập Không thành công <br>{{messageFailure}}</h3>
+                {{/if}}
+                   
+                    <div class="form__group">
+                        <label for="" class="form__label">Username</label>
+                        <input type="text" name="username" id="username" class="form__input" placeholder="Tên đăng nhập của bạn">
+                        <span class="message"></span>
+                    </div>
+                    <div class="form__group">
+                        <label for="" class="form__label">Mật khẩu</label>
+                        <input type="text" name="password" id="password" class="form__input" placeholder="Mật khẩu của bạn">
+                        <span class="message"></span>
+                    </div>
+                    
+                    <button class="btn__submit" id="submit-btn-login">Đăng Nhập</button>
+
+                    <div class="form__change">
+                        <span>  Chưa có tài khoản</span>
+                        <br>
+                        <a href="/user/register" class="change__link">Đăng ký</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#section 'js'}}
+    <script src="/js/user.js"></script>
+{{/section}}
