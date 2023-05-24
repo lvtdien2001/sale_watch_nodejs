@@ -1,8 +1,8 @@
 import watchService from '../services/watch.service';
 
-// @route GET /watch/admin?currentPage=...
+// @route GET /admin/watch?currentPage=...
 // @desc get watches for product manager function
-// @access public
+// @access private
 exports.getAllWatches = async (req, res) => {
     try {
         const currentPage = req.query.currentPage || '1';
@@ -43,7 +43,7 @@ exports.getAllWatches = async (req, res) => {
     }
 }
 
-// @route POST /watch
+// @route POST /admin/watch/add
 // @desc create a new product
 // @access private
 exports.create = async (req, res) => {
@@ -64,7 +64,7 @@ exports.create = async (req, res) => {
 
         const response = await watchService.create(data, userId);
         req.session.message = response.msg;
-        return res.redirect('/watch/admin');
+        return res.redirect('/admin/watch');
     } catch (error) {
         console.log(error);
         res.json({
@@ -74,14 +74,15 @@ exports.create = async (req, res) => {
     }
 }
 
-// @route POST /watch/delete/:id
+// @route POST /admin/watch/delete/:id
+// @access private
 exports.delete = async (req, res) => {
     try {
         const watchId = req.params.id;
 
         const response = await watchService.delete(watchId);
         req.session.message = response.msg;
-        return res.redirect('/watch/admin');
+        return res.redirect('/admin/watch');
     } catch (error) {
         console.log(error);
         res.json({

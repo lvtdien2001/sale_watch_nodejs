@@ -15,7 +15,7 @@
             Thêm sản phẩm
         </button>
         <div id="add-brand" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-            <form method="POST" action="/watch" enctype="multipart/form-data">
+            <form method="POST" action="/admin/watch/add" enctype="multipart/form-data">
                 <div class="row mb-3">
                     <div class="col-12 col-xl">
                         <label for="inputName" class="form-label fw-bold">Tên sản phẩm <span class="text-danger">*</span></label>
@@ -149,7 +149,7 @@
                                     <button type="button" class="edit-btn" data-bs-toggle="modal" data-bs-target="#edit-modal-{{@index}}">
                                         <i class="fas fa-pen"></i>
                                     </button>
-                                    <form method="POST" action="/watch/delete/{{_id}}">
+                                    <form method="POST" action="/admin/watch/delete/{{_id}}">
                                         <button type="submit" class="delete-btn" >
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -159,7 +159,6 @@
                         </tr>
 
                         {{!-- Edit modal --}}
-
                         <div class="modal fade" id="edit-modal-{{@index}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit-modal-label-{{@index}}" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
@@ -223,8 +222,8 @@
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-        <li class="page-item"><a class="page-link" href="/watch/admin">1</a></li>
-        <li class="page-item"><a class="page-link" href="/watch/admin?currentPage=2">2</a></li>
+        <li class="page-item"><a class="page-link" href="/admin/watch">1</a></li>
+        <li class="page-item"><a class="page-link" href="/admin/watch?currentPage=2">2</a></li>
         <li class="page-item"><a class="page-link" href="#">3</a></li>
         <li class="page-item">
             <a class="page-link" href="#" aria-label="Next">
