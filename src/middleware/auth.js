@@ -5,7 +5,7 @@ dotenv.config();
 const verifyToken = (req, res, next) => {
     const token = req.session.authState?.accessToken;
 
-    const isPublicRoute = /[/][^cart]/.test(req.url) || /[/][^admin][/w]/.test(req.url);
+    const isPublicRoute = /[/]/.test(req.url) || /[/][^admin][/w]/.test(req.url);
 
     if (isPublicRoute)
         return next();
