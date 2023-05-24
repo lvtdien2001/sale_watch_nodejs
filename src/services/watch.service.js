@@ -14,6 +14,8 @@ exports.findAll = async currentPage => {
             .skip(skipPage)
             .limit(watchPerPage)
             .populate('brandId', ['_id', 'name', 'imageUrl'])
+            .populate('createBy', ['_id', 'fullName'])
+            .populate('updateBy', ['_id', 'fullName'])
             .lean()
 
         const numberOfWatches = await watchModel.countDocuments({});

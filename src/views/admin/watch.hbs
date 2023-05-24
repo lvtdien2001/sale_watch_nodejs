@@ -135,10 +135,16 @@
                             <td>
                                 {{createdAt}}
                                 <br/>Người tạo:
+                                {{#with createBy}}
+                                    {{fullName}}
+                                {{/with}}
                             </td>
                             <td>
                                 {{updatedAt}}
                                 <br/>Người cập nhật:
+                                {{#with updateBy}}
+                                    {{fullName}}
+                                {{/with}}
                             </td>
                             <td>
                                 <div class="d-flex">
@@ -167,13 +173,24 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        {{!-- name --}}
-                                        <div class="mb-3">
-                                            <label for="edit-name-{{@index}}" class="form-label fw-bold">Tên sản phẩm</label>
-                                            <input name="name" value="{{name}}" required="true" type="text" class="form-control" id="edit-name-{{@index}}" placeholder="Nhập tên sản phẩm">
+                                        {{!-- name, quantity, price --}}
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <label for="edit-name-{{@index}}" class="form-label fw-bold">Tên sản phẩm</label>
+                                                <input name="name" value="{{name}}" required="true" type="text" class="form-control" id="edit-name-{{@index}}" placeholder="Nhập tên sản phẩm">
+                                            </div>
+                                            <div class="col mb-3">
+                                                <label for="edit-quantity-{{@index}}" class="form-label fw-bold">Tồn kho</label>
+                                                <input name="currentQuantity" value="{{currentQuantity}}" required="true" type="number" class="form-control" id="edit-quantity-{{@index}}">
+                                            </div>
+                                            <div class="col mb-3">
+                                                <label for="edit-price-{{@index}}" class="form-label fw-bold">Đơn giá</label>
+                                                <input name="price" value="{{price}}" required="true" type="number" class="form-control" id="edit-price-{{@index}}">
+                                            </div>
                                         </div>
                                         {{!-- brand and style --}}
                                         <div class="row">
+                                            {{!-- brand --}}
                                             <div class="mb-3 col-6">
                                                 <label for="input-edit-brand-{{@index}}" class="form-label fw-bold">Thương hiệu</label>
                                                 <select name="brandId" id="input-edit-brand-{{@index}}" class="form-select">
@@ -182,6 +199,7 @@
                                                 </select>
         
                                             </div>
+                                            {{!-- style --}}
                                             <div class="mb-3 col-6">
                                                 <label for="input-edit-style-{{@index}}" class="form-label fw-bold">Dòng sản phẩm</label>
                                                 <select name="style" id="input-edit-style-{{@index}}" class="form-select">
@@ -194,13 +212,45 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        {{!-- image --}}
-                                        <div class="mb-3">
-                                            <label for="input-edit-image-{{@index}}" class="form-label fw-bold">Hình ảnh</label>
-                                            <input name="image" required="true" type="file" class="form-control" id="input-edit-image-{{@index}}">
-                                            <img class="mt-3 mb-3" src="{{imageUrl}}" alt="Hinh anh san pham" id="preview-edit-image-{{@index}}" width="150px">
+                                        <div class="row">
+                                            {{!-- image --}}
+                                            <div class="col mb-3">
+                                                <label for="input-edit-image-{{@index}}" class="form-label fw-bold">Hình ảnh</label>
+                                                <input name="image" required="true" type="file" class="form-control" id="input-edit-image-{{@index}}">
+                                                <span class="text-center"><img class="mt-3 mb-3" src="{{imageUrl}}" alt="Hinh anh san pham" id="preview-edit-image-{{@index}}" width="150px" height="150px"></span>
+                                            </div>
+                                            <div class="col">
+                                                {{!-- glass --}}
+                                                <div class="mb-3">
+                                                    <label for="input-edit-glass-{{@index}}" class="form-label fw-bold">Chất liệu kính</label>
+                                                    <select name="glass" id="input-edit-glass-{{@index}}" class="form-select">
+                                                        <option value="none" hidden>--- Chọn chất liệu kính ---</option>
+                                                        <option id="sapphire-{{@index}}" value="Sapphire (Kính Chống Trầy)">Sapphire (Kính Chống Trầy)</option>
+                                                        <option id="mineral-{{@index}}" value="Kính khoáng Mineral (Kính cứng)">Kính khoáng Mineral (Kính cứng)</option>
+                                                    </select>
+                                                </div>
+                                                {{!-- strap --}}
+                                                <div class="mb-3">
+                                                    <label for="input-edit-strap-{{@index}}" class="form-label fw-bold">Dây đeo</label>
+                                                    <select name="strap" id="input-edit-strap-{{@index}}" class="form-select">
+                                                        <option value="none" hidden>--- Chọn loại dây ---</option>
+                                                        <option id="thep-khong-gi-{{@index}}" value="Thép không gỉ">Thép không gỉ</option>
+                                                        <option id="cao-su-{{@index}}" value="Cao su">Cao su</option>
+                                                        <option id="day-da-{{@index}}" value="Dây da">Dây da</option>
+                                                        <option id="hop-kim-{{@index}}" value="Hợp kim">Hợp kim</option>
+                                                    </select>
+                                                </div>
+                                                {{!-- principle Operate --}}
+                                                <div class="mb-3">
+                                                    <label for="input-edit-principle-operate-{{@index}}" class="form-label fw-bold">Bộ máy</label>
+                                                    <select name="principleOperate" id="input-edit-principle-operate-{{@index}}" class="form-select">
+                                                        <option value="none" hidden>--- Chọn bộ máy ---</option>
+                                                        <option id="automatic-{{@index}}" value="Cơ tự động (Automatic)">Cơ tự động (Automatic)</option>
+                                                        <option id="quartz-{{@index}}" value="Quartz (Pin)">Quartz (Pin)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
-        
                                     </div>
                                     <div class="modal-footer justify-content-center">
                                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Hủy</button>

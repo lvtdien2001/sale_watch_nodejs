@@ -48,7 +48,7 @@ exports.getAllWatches = async (req, res) => {
 // @access private
 exports.create = async (req, res) => {
     try {
-        const userId = '64678e381a0f2ec779c8f37c';
+        const userId = req.session.authState?.user._id;
 
         const data = {
             name: req.body.name,
