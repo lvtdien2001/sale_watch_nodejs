@@ -1,0 +1,23 @@
+.wrapper {
+    margin-top: 10px;
+}
+.form-border {
+    border: 1px solid #d2cfcf;
+    margin-top: 10px;
+}
+.product-list {
+    margin-top: 10px;
+    width: 100%;
+    
+}
+.product-name-title, .product-history-title {
+    width: 25%;
+}
+.edit-btn, .show-btn {
+    color: var(--bs-blue);
+    border: none;
+}
+.delete-btn {
+    color: var(--bs-red);
+    border: none;
+}
