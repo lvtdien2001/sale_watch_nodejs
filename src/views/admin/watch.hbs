@@ -1,0 +1,246 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/productManager.css" />
+{{/section}}
+
+{{#section 'js'}}
+    <script type="module" src="/js/productManager.js"></script>
+{{/section}}
+
+<div class="wrapper">
+    <h4 class="text-center">QUẢN LÝ SẢN PHẨM</h4>
+
+    {{!-- add product form --}}
+    <div class="accordion">
+        <button class="btn btn-primary mb-3" data-bs-toggle="collapse" data-bs-target="#add-brand" aria-expanded="false" >
+            Thêm sản phẩm
+        </button>
+        <div id="add-brand" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+            <form method="POST" action="/admin/watch/add" enctype="multipart/form-data">
+                <div class="row mb-3">
+                    <div class="col-12 col-xl">
+                        <label for="inputName" class="form-label fw-bold">Tên sản phẩm <span class="text-danger">*</span></label>
+                        <input name="name" required="true" type="text" class="form-control" id="inputName" placeholder="Nhập tên sản phẩm">
+                    </div>
+                    <div class="col-12 col-xl">
+                        <label for="inputImage" class="form-label fw-bold">Hình ảnh <span class="text-danger">*</span></label>
+                        <input name="image" required="true" type="file" class="form-control" id="inputImage">
+                    </div>
+                    <div class="col-6 col-xl-2">
+                        <label for="inputQuantity" class="form-label fw-bold">Số lượng</label>
+                        <input value="0" name="currentQuantity" type="number" class="form-control" id="inputQuantity">
+                    </div>
+                    <div class="col-6 col-xl-2">
+                        <label for="inputPrice" class="form-label fw-bold">Đơn giá <span class="text-danger">*</span></label>
+                        <input value="0" name="price" required="true" type="number" class="form-control" id="inputPrice">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12 col-xl">
+                        <label for="inputBrand" class="form-label fw-bold">Thương hiệu <span class="text-danger">*</span></label>
+                        <select required="true" name="brandId" id="inputBrand" class="form-select">
+                            <option value="" hidden>-Chọn thương hiệu-</option>
+                            {{#with response}}
+                                {{#each brands}}
+                                    <option value={{_id}}>{{name}}</option>
+                                {{/each}}
+                            {{/with}}
+                        </select>
+                    </div>
+                    <div class="col-12 col-xl">
+                        <label for="inputStyle" class="form-label fw-bold">Dòng sản phẩm <span class="text-danger">*</span></label>
+                        <select required="true" name="style" id="inputStyle" class="form-select">
+                            <option value="" hidden>-Chọn dòng sản phẩm-</option>
+                            <option value="Sang trọng">Sang trọng</option>
+                            <option value="Thể thao">Thể thao</option>
+                            <option value="Thời trang">Thời trang</option>
+                            <option value="Hiện đại">Hiện đại</option>
+                            <option value="Quân đội">Quân đội</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-xl">
+                        <label for="inputStrap" class="form-label fw-bold">Dây đeo</label>
+                        <select name="strap" id="inputStrap" class="form-select">
+                            <option value="" hidden>-Chọn dây đeo-</option>
+                            <option value="Dây da">Dây da</option>
+                            <option value="Thép không gỉ">Thép không gỉ</option>
+                            <option value="Hợp kim">Hợp kim</option>
+                            <option value="Nhựa">Cao su</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-xl">
+                        <label for="inputGlass" class="form-label fw-bold">Chất liệu kính</label>
+                        <select name="glass" id="inputGlass" class="form-select">
+                            <option value="" hidden>-Chọn chất liệu kính-</option>
+                            <option value="Sapphire (Kính Chống Trầy)">Sapphire (Kính Chống Trầy)</option>
+                            <option value="Kính khoáng Mineral">Kính khoáng Mineral (Kính cứng)</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-xl">
+                        <label for="inputPrincipleOperate" class="form-label fw-bold">Bộ máy <span class="text-danger">*</span></label>
+                        <select required="true" name="principleOperate" id="inputPrincipleOperate" class="form-select">
+                            <option value="" hidden>-Chọn bộ máy-</option>
+                            <option value="Cơ tự động (Automatic)">Cơ tự động (Automatic)</option>
+                            <option value="Quartz (Pin)">Quartz (Pin)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="inputDescription" class="form-label fw-bold">Mô tả</label>
+                        <textarea name="description" class="form-control" id="inputDescription" placeholder="Mô tả sản phẩm"></textarea>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Gửi</button>
+                </div>
+            </form>
+            <div class="form-border"></div>
+        </div>
+    </div>
+
+    {{!-- table list product --}}
+    <div class="table-responsive">
+        <table class="table table-bordered border-dark product-list text-center align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Tên sản phẩm</th>
+                    <th scope="col">Hình ảnh</th>
+                    <th scope="col">Thương hiệu</th>
+                    <th scope="col">Dòng sản phẩm</th>
+                    <th scope="col">Đơn giá</th>
+                    <th scope="col">Tồn kho</th>
+                    <th scope="col">Thời gian tạo</th>
+                    <th scope="col">Lần cập nhật cuối</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#with response}}
+                    {{#each watches}}
+                        <tr>
+                            <th>{{increase @index}}</th>
+                            <td class="text-start">{{name}}</td>
+                            <td>
+                                <img src={{imageUrl}} alt="Hinh anh thuong hieu" width="150px" height="150px">
+                            </td>
+                            <td id="brand-{{@index}}">
+                                {{#with brandId}}
+                                    {{name}}
+                                {{/with}}
+                            </td>
+                            <td id="style-{{@index}}">{{style}}</td>
+                            <td>{{formatPrice price}}</td>
+                            <td>{{currentQuantity}}</td>
+                            <td>
+                                {{createdAt}}
+                                <br/>Người tạo:
+                            </td>
+                            <td>
+                                {{updatedAt}}
+                                <br/>Người cập nhật:
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <button class="show-btn">
+                                        <a href="/watch/admin/{{_id}}"><i class="fas fa-eye-slash"></i></a>
+                                    </button>
+                                    {{!-- button trigger edit modal --}}
+                                    <button type="button" class="edit-btn" data-bs-toggle="modal" data-bs-target="#edit-modal-{{@index}}">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <form method="POST" action="/admin/watch/delete/{{_id}}">
+                                        <button type="submit" class="delete-btn" >
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {{!-- Edit modal --}}
+                        <div class="modal fade" id="edit-modal-{{@index}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit-modal-label-{{@index}}" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="edit-modal-label-{{@index}}">Cập nhật thông tin sản phẩm</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{!-- name --}}
+                                        <div class="mb-3">
+                                            <label for="edit-name-{{@index}}" class="form-label fw-bold">Tên sản phẩm</label>
+                                            <input name="name" value="{{name}}" required="true" type="text" class="form-control" id="edit-name-{{@index}}" placeholder="Nhập tên sản phẩm">
+                                        </div>
+                                        {{!-- brand and style --}}
+                                        <div class="row">
+                                            <div class="mb-3 col-6">
+                                                <label for="input-edit-brand-{{@index}}" class="form-label fw-bold">Thương hiệu</label>
+                                                <select name="brandId" id="input-edit-brand-{{@index}}" class="form-select">
+                                                    <option value="none" hidden>--- Chọn thương hiệu ---</option>
+                                                    {{#getTemplateBrands}}{{/getTemplateBrands}}
+                                                </select>
+        
+                                            </div>
+                                            <div class="mb-3 col-6">
+                                                <label for="input-edit-style-{{@index}}" class="form-label fw-bold">Dòng sản phẩm</label>
+                                                <select name="style" id="input-edit-style-{{@index}}" class="form-select">
+                                                    <option value="none" hidden>--- Chọn dòng sản phẩm ---</option>
+                                                    <option id="sang-trong-{{@index}}" value="Sang trọng">Sang trọng</option>
+                                                    <option id="the-thao-{{@index}}" value="Thể thao">Thể thao</option>
+                                                    <option id="thoi-trang-{{@index}}" value="Thời trang">Thời trang</option>
+                                                    <option id="hien-dai-{{@index}}" value="Hiện đại">Hiện đại</option>
+                                                    <option id="quan-doi-{{@index}}" value="Quân đội">Quân đội</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        {{!-- image --}}
+                                        <div class="mb-3">
+                                            <label for="input-edit-image-{{@index}}" class="form-label fw-bold">Hình ảnh</label>
+                                            <input name="image" required="true" type="file" class="form-control" id="input-edit-image-{{@index}}">
+                                            <img class="mt-3 mb-3" src="{{imageUrl}}" alt="Hinh anh san pham" id="preview-edit-image-{{@index}}" width="150px">
+                                        </div>
+        
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Hủy</button>
+                                        <button type="button" class="btn btn-outline-success">Lưu thay đổi</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {{/each}}
+                {{/with}}
+            </tbody>
+        </table>
+    </div>
+
+    {{!-- pagination --}}
+    <ul class="pagination justify-content-center">
+        <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="/admin/watch">1</a></li>
+        <li class="page-item"><a class="page-link" href="/admin/watch?currentPage=2">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+
+    {{!-- message --}}
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div id="message-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex bg-success text-white">
+                <div id="message-content" class="toast-body fs-6">
+                    {{message}}
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+</div>
