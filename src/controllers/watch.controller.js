@@ -80,6 +80,36 @@ exports.getAllWatches = async (req, res) => {
                         default:
                             return null;
                     }
+                },
+                paginate: pageNumber => {
+                    if (pageNumber===1) return null;
+                    let template = '';
+                    for (let i=1; i<=pageNumber; i++){
+                        template += response.currentPage==i 
+                            ? `<li class="page-item active"><a class="page-link" href="/admin/watch?currentPage=${i}">${i}</a></li>`
+                            : `<li class="page-item"><a class="page-link" href="/admin/watch?currentPage=${i}">${i}</a></li>`
+                    }
+                    return template;
+                },
+                checkPageNumber: pageNumber => pageNumber>1,
+                showMessage: () => {
+                    if (req.session.message){
+                        return `<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+                                    <div id="message-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                        <div class="d-flex bg-success text-white">
+                                            <div id="message-content" class="toast-body fs-6">
+                                                ${req.session.message}
+                                            </div>
+                                            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                        </div>
+                                    </div>
+                                </div>`
+                    }
+                },
+                clearMessage: () => {
+                    if (req.session.message){
+                        req.session.message = undefined
+                    }
                 }
             }
         });

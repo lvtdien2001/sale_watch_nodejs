@@ -263,31 +263,26 @@
     </div>
 
     {{!-- pagination --}}
-    <ul class="pagination justify-content-center">
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        <li class="page-item"><a class="page-link" href="/admin/watch">1</a></li>
-        <li class="page-item"><a class="page-link" href="/admin/watch?currentPage=2">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-    </ul>
+    {{#with response}}
+        {{#if (checkPageNumber pageNumber)}}
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="/admin/watch" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {{#paginate pageNumber}}{{/paginate}}
+                {{!-- <li class="page-item active"><a class="page-link" href="/admin/watch?currentPage=${i}">1</a></li> --}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/watch?currentPage={{pageNumber}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        {{/if}}
+    {{/with}}
 
     {{!-- message --}}
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
-        <div id="message-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex bg-success text-white">
-                <div id="message-content" class="toast-body fs-6">
-                    {{message}}
-                </div>
-                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
+    {{#showMessage}}{{/showMessage}}
+    {{clearMessage}}
 </div>

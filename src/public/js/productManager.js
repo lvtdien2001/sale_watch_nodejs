@@ -26,9 +26,8 @@ for (let i=0; i<=9; i++){
 }
 
 // show message
-const messageContent = document.getElementById('message-content').innerHTML;
-if (messageContent !== '\n                    \n                '){
-    const messageToast = document.getElementById('message-toast')
+const messageToast = document.getElementById('message-toast')
+if (messageToast){
     const toast = new bootstrap.Toast(messageToast)
     toast.show()
 }

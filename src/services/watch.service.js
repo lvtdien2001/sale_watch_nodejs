@@ -13,6 +13,7 @@ exports.findAll = async currentPage => {
             .find()
             .skip(skipPage)
             .limit(watchPerPage)
+            .sort({ updatedAt: -1 })
             .populate('brandId', ['_id', 'name', 'imageUrl'])
             .populate('createBy', ['_id', 'fullName'])
             .populate('updateBy', ['_id', 'fullName'])
@@ -35,7 +36,8 @@ exports.findAll = async currentPage => {
             success: true,
             watches,
             brands,
-            pageNumber
+            pageNumber,
+            currentPage
         };
     } catch (error) {
         console.log(error);
