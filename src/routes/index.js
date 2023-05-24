@@ -8,7 +8,7 @@ const initRoutes = (app) => {
     app.use('/brand', brandRouter);
     app.use('/user', userRouter);
     app.use('/watch', watchRouter);
-    app.use('/admin', verifyAdmin, adminRoute);
+    app.use('/admin', adminRoute);
     
     app.use('/:notfound', (req, res) => res.render('err404', {layout: false}))
     app.use('/', (req, res) => res.render('home'))
