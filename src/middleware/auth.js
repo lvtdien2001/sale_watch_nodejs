@@ -3,11 +3,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const verifyToken = (req, res, next) => {
-    // const authHeader = req.header('Authorization');
-    // const token = authHeader && authHeader.split(' ')[1];
     const token = req.session.authState?.accessToken;
 
-    const isPublicRoute = /[/]/.test(req.url) || /[/][^admin][/w]/.test(req.url);
+    const isPublicRoute = /[/][^cart]/.test(req.url) || /[/][^admin][/w]/.test(req.url);
 
     if (isPublicRoute)
         return next();
@@ -18,11 +16,7 @@ const verifyToken = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
-        req.userId = decoded.userId;
-        req.roles = decoded.roles;
-        req.isAdmin = decoded.isAdmin;
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         next();
     } catch (error) {
         console.log(error);
