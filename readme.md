@@ -11,16 +11,17 @@
 9. Bình luận - đánh giá
 10. Xem sản phẩm
 11. Lịch sử mua hàng
-12. Tìm kiếm, lọc sản phẩm
+12. Tìm kiếm
 13. Đăng nhập, đăng ký
 14. Cập nhật thông tin cá nhân
-14. Giỏ hàng
 15. Đặt hàng
 16. Xem bài đăng
+17. Lọc sản phẩm
+18. Giỏ hàng
 
 ## THANH
 13 6 14
 ## DIEN
 1 12 10
 ## KY
-5 16 
+5 16 18
