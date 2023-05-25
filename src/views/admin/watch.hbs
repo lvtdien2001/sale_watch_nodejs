@@ -149,11 +149,10 @@
                                     <button type="button" class="edit-btn" data-bs-toggle="modal" data-bs-target="#edit-modal-{{@index}}">
                                         <i class="fas fa-pen"></i>
                                     </button>
-                                    <form method="POST" action="/admin/watch/delete/{{_id}}">
-                                        <button type="submit" class="delete-btn" >
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    <!-- Button trigger delete modal -->
+                                    <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#delete-modal-{{@index}}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -250,6 +249,23 @@
                                             <button type="submit" class="btn btn-outline-success">Lưu thay đổi</button>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delete Modal -->
+                        <div class="modal fade" id="delete-modal-{{@index}}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        Bạn có chắc chắn muốn xóa sản phẩm này không?
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <form method="POST" action="/admin/watch/delete/{{_id}}">
+                                            <button type="submit" class="btn btn-outline-success">Có</button>   
+                                        </form>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Không</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

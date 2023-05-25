@@ -16,9 +16,10 @@ exports.getAllBrands = async (req, res) => {
                 increase: num => num+1,
                 showMessage: () => {
                     if (req.session.message){
+                        const bg = req.session.success ? 'bg-success' : 'bg-danger';
                         return `<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
                                     <div id="message-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                                        <div class="d-flex bg-success text-white">
+                                        <div class="d-flex ${bg} text-white">
                                             <div id="message-content" class="toast-body fs-6">
                                                 ${req.session.message}
                                             </div>
@@ -27,6 +28,7 @@ exports.getAllBrands = async (req, res) => {
                                     </div>
                                 </div>`
                     }
+                    return null;
                 },
                 clearMessage: () => {
                     if (req.session.message){
@@ -47,7 +49,9 @@ exports.getAllBrands = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        res.send('Internal server error')
+        req.session.message = 'Internal server error';
+        req.session.success = false;
+        return res.redirect('/admin/brand');
     }
 }
 
@@ -69,11 +73,13 @@ exports.create = async (req, res) => {
 
         const response = await brandService.create(data, userId);
         req.session.message = response.msg;
+        req.session.success = response.success;
         return res.redirect('/admin/brand');
     } catch (error) {
         console.log(error);
         req.session.message = 'Internal server error';
-        return res.redirect('/admin/brand')
+        req.session.success = false;
+        return res.redirect('/admin/brand');
     }
 }
 
@@ -90,10 +96,12 @@ exports.update = async (req, res) => {
 
         const response = await brandService.update(data, brandId, userId);
         req.session.message = response.msg;
+        req.session.success = response.success;
         return res.redirect('/admin/brand')
     } catch (error) {
         console.log(error);
         req.session.message = 'Internal server error';
+        req.session.success = false;
         return res.redirect('/admin/brand');
     }
 }
@@ -106,10 +114,12 @@ exports.delete = async (req, res) => {
 
         const response = await brandService.delete(brandId);
         req.session.message = response.msg;
+        req.session.success = response.success;
         return res.redirect('/admin/brand');
     } catch (error) {
         console.log(error);
-        req.session.message = 'Internal server error'
-        return res.redirect('/admin/brand')
+        req.session.message = 'Internal server error';
+        req.session.success = false;
+        return res.redirect('/admin/brand');
     }
 }

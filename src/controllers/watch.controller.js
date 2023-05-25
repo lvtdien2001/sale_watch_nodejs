@@ -72,21 +72,40 @@ exports.getAllWatches = async (req, res) => {
                     }
                 },
                 paginate: pageNumber => {
-                    if (pageNumber===1) return null;
-                    let template = '';
-                    for (let i=1; i<=pageNumber; i++){
-                        template += response.currentPage==i 
-                            ? `<li class="page-item active"><a class="page-link" href="/admin/watch?currentPage=${i}">${i}</a></li>`
-                            : `<li class="page-item"><a class="page-link" href="/admin/watch?currentPage=${i}">${i}</a></li>`
+                    const currentPage = Number(response.currentPage);
+                    // first page
+                    let template = currentPage===1
+                        ? `<li class="page-item active"><a class="page-link" href="/admin/watch?currentPage=1">1</a></li>`
+                        : `<li class="page-item"><a class="page-link" href="/admin/watch?currentPage=1">1</a></li>`
+
+                    for (let i=2; i<pageNumber; i++){
+                        if (i===currentPage)
+                            template += `<li class="page-item active"><a class="page-link" href="/admin/watch?currentPage=${i}">${i}</a></li>`
+                        else if (i===currentPage-1 || i===currentPage+1)
+                            template += `<li class="page-item"><a class="page-link" href="/admin/watch?currentPage=${i}">${i}</a></li>`
+                        else if(i<currentPage-1){
+                            template += `<li class="page-item"><a class="page-link" href="#">...</a></li>`;
+                            i = currentPage-2;
+                        }
+                        else if (i>currentPage+1){
+                            template += `<li class="page-item"><a class="page-link" href="#">...</a></li>`;
+                            i=pageNumber;
+                        }
                     }
+
+                    // last page
+                    template += currentPage===pageNumber
+                        ? `<li class="page-item active"><a class="page-link" href="/admin/watch?currentPage=${pageNumber}">${pageNumber}</a></li>`
+                        : `<li class="page-item"><a class="page-link" href="/admin/watch?currentPage=${pageNumber}">${pageNumber}</a></li>`
                     return template;
                 },
                 checkPageNumber: pageNumber => pageNumber>1,
                 showMessage: () => {
                     if (req.session.message){
+                        const bg = req.session.success ? 'bg-success' : 'bg-danger';
                         return `<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
                                     <div id="message-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                                        <div class="d-flex bg-success text-white">
+                                        <div class="d-flex ${bg} text-white">
                                             <div id="message-content" class="toast-body fs-6">
                                                 ${req.session.message}
                                             </div>
@@ -95,6 +114,7 @@ exports.getAllWatches = async (req, res) => {
                                     </div>
                                 </div>`
                     }
+                    return null;
                 },
                 clearMessage: () => {
                     if (req.session.message){
@@ -105,7 +125,9 @@ exports.getAllWatches = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        res.send('Internal server error');
+        req.session.message = 'Internal server error';
+        req.session.success = false;
+        return res.redirect('/admin/watch')
     }
 }
 
@@ -115,6 +137,7 @@ exports.getAllWatches = async (req, res) => {
 exports.create = async (req, res) => {
     if (!req.body.name || !req.body.brandId || !req.file){
         req.session.message = 'Tên sản phẩm, hình ảnh và thương hiệu không thể bỏ trống!';
+        req.session.success = false;
         return res.redirect('/admin/watch');
     }
     try {
@@ -135,13 +158,13 @@ exports.create = async (req, res) => {
 
         const response = await watchService.create(data, userId);
         req.session.message = response.msg;
+        req.session.success = response.success;
         return res.redirect('/admin/watch');
     } catch (error) {
         console.log(error);
-        res.json({
-            success: false,
-            msg: 'Internal server error'
-        })
+        req.session.message = 'Internal server error';
+        req.session.success = false;
+        return res.redirect('/admin/watch');
     }
 }
 
@@ -167,13 +190,13 @@ exports.update = async (req, res) => {
 
         const response = await watchService.update(data, watchId, userId);
         req.session.message = response.msg;
+        req.session.success = response.success;
         return res.redirect('/admin/watch');
     } catch (error) {
         console.log(error);
-        res.json({
-            success: false,
-            msg: 'Internal server error'
-        })
+        req.session.message = 'Internal server error';
+        req.session.success = false;
+        return res.redirect('/admin/watch')
     }
 }
 
@@ -185,12 +208,12 @@ exports.delete = async (req, res) => {
 
         const response = await watchService.delete(watchId);
         req.session.message = response.msg;
+        req.session.success = response.success;
         return res.redirect('/admin/watch');
     } catch (error) {
         console.log(error);
-        res.json({
-            success: false,
-            msg: 'Internal server error'
-        })
+        req.session.message = 'Internal server error';
+        req.session.success = false;
+        return res.redirect('/admin/watch');
     }
 }
