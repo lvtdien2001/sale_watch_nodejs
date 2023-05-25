@@ -72,7 +72,7 @@
                         <select name="glass" id="inputGlass" class="form-select">
                             <option value="" hidden>-Chọn chất liệu kính-</option>
                             <option value="Sapphire (Kính Chống Trầy)">Sapphire (Kính Chống Trầy)</option>
-                            <option value="Kính khoáng Mineral">Kính khoáng Mineral (Kính cứng)</option>
+                            <option value="Kính khoáng Mineral (Kính cứng)">Kính khoáng Mineral (Kính cứng)</option>
                             <option value="Resin Glass (Kính Nhựa)">Resin Glass (Kính Nhựa)</option>
                         </select>
                     </div>
@@ -108,10 +108,8 @@
                     <th scope="col" class="product-name-title">Tên sản phẩm</th>
                     <th scope="col">Hình ảnh</th>
                     <th scope="col">Thương hiệu</th>
-                    {{!-- <th scope="col">Dòng sản phẩm</th> --}}
                     <th scope="col">Đơn giá</th>
                     <th scope="col">Tồn kho</th>
-                    {{!-- <th scope="col">Thời gian tạo</th> --}}
                     <th scope="col" class="product-history-title">Lịch sử</th>
                     <th scope="col"></th>
                 </tr>
@@ -130,7 +128,6 @@
                                     {{name}}
                                 {{/with}}
                             </td>
-                            {{!-- <td id="style-{{@index}}">{{style}}</td> --}}
                             <td>{{formatPrice price}}</td>
                             <td>{{currentQuantity}}</td>
                             <td class="text-start">
@@ -272,7 +269,6 @@
                     </a>
                 </li>
                 {{#paginate pageNumber}}{{/paginate}}
-                {{!-- <li class="page-item active"><a class="page-link" href="/admin/watch?currentPage=${i}">1</a></li> --}}
                 <li class="page-item">
                     <a class="page-link" href="/admin/watch?currentPage={{pageNumber}}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>

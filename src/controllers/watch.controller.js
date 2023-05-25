@@ -14,16 +14,6 @@ exports.getAllWatches = async (req, res) => {
             message: req.session.message,
             helpers: {
                 increase: num => num+1,
-                equals: (str1, str2) => str1===str2 ? "selected" : undefined,
-                getTemplateBrands: () => {
-                    let template = '';
-                    const brands = response.brands;
-                    const length = brands.length;
-                    for (let i=0; i<length; i++){
-                        template += `<option id="edit-brand-${i}" value="${brands[i]._id}">${brands[i].name}</option>`
-                    }
-                    return template
-                },
                 formatPrice: price => {
                     price = price.toString();
                     if (price.length <= 3)
