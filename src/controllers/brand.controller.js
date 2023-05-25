@@ -1,6 +1,6 @@
 import brandService from '../services/brand.service';
 
-// @route GET /brand/admin?currentPage=...
+// @route GET /admin/brand/admin?currentPage=...
 // @desc get all brand
 // @access public
 exports.getAllBrands = async (req, res) => {
@@ -8,25 +8,59 @@ exports.getAllBrands = async (req, res) => {
         const currentPage = req.query.currentPage || 1;
         const response = await brandService.findAll(currentPage);
 
-        res.render('admin/brand.hbs', {layout: 'admin', response, message: req.session.message});
+        res.render('admin/brand', {
+            layout: 'admin',
+            response,
+            message: req.session.message,
+            helpers: {
+                increase: num => num+1,
+                showMessage: () => {
+                    if (req.session.message){
+                        return `<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+                                    <div id="message-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                        <div class="d-flex bg-success text-white">
+                                            <div id="message-content" class="toast-body fs-6">
+                                                ${req.session.message}
+                                            </div>
+                                            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                        </div>
+                                    </div>
+                                </div>`
+                    }
+                },
+                clearMessage: () => {
+                    if (req.session.message){
+                        req.session.message = undefined
+                    }
+                },
+                paginate: pageNumber => {
+                    let template = '';
+                    for (let i=1; i<=pageNumber; i++){
+                        template += response.currentPage==i 
+                            ? `<li class="page-item active"><a class="page-link" href="/admin/brand?currentPage=${i}">${i}</a></li>`
+                            : `<li class="page-item"><a class="page-link" href="/admin/brand?currentPage=${i}">${i}</a></li>`
+                    }
+                    return template;
+                },
+                checkPageNumber: pageNumber => pageNumber>1
+            }
+        });
     } catch (error) {
         console.log(error);
         res.send('Internal server error')
     }
 }
 
-// @route POST /brand
+// @route POST /admin/brand/add
 // @desc create a new brand
 // @access private
 exports.create = async (req, res) => {
     if (!req.body.name || !req.file) {
-        return res.json({
-            status: 'err',
-            msg: 'Tên thương hiệu và hình ảnh không thể bỏ trống'
-        })
+        req.session.message = 'Tên thương hiệu và hình ảnh không thể bỏ trống'
+        return res.redirect('/admin/brand')
     }
     try {
-        const userId = '646b0f511a0f2ec77988691b';
+        const userId = req.session.authState?.user._id;
 
         const data = {
             name: req.body.name,
@@ -35,13 +69,47 @@ exports.create = async (req, res) => {
 
         const response = await brandService.create(data, userId);
         req.session.message = response.msg;
-        return res.redirect('/brand/admin');
+        return res.redirect('/admin/brand');
     } catch (error) {
         console.log(error);
-        res.json({
-            success: false,
-            msg: 'Internal server error'
-        })
+        req.session.message = 'Internal server error';
+        return res.redirect('/admin/brand')
     }
 }
 
+// @route POST /admin/brand/update/:id
+// @access private
+exports.update = async (req, res) => {
+    try {
+        const userId = req.session.authState?.user._id;
+        const brandId = req.params.id;
+        const data = {
+            name: req.body.name,
+            imageUrl: req.file?.path
+        }
+
+        const response = await brandService.update(data, brandId, userId);
+        req.session.message = response.msg;
+        return res.redirect('/admin/brand')
+    } catch (error) {
+        console.log(error);
+        req.session.message = 'Internal server error';
+        return res.redirect('/admin/brand');
+    }
+}
+
+// @route POST /admin/brand/delete/:id
+// @access private
+exports.delete = async (req, res) => {
+    try {
+        const brandId = req.params.id;
+
+        const response = await brandService.delete(brandId);
+        req.session.message = response.msg;
+        return res.redirect('/admin/brand');
+    } catch (error) {
+        console.log(error);
+        req.session.message = 'Internal server error'
+        return res.redirect('/admin/brand')
+    }
+}
