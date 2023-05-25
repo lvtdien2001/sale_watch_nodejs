@@ -1,0 +1,27 @@
+.header {
+    background-color: #000;
+    /* background-image: url(../images/teaser-gm-b2100-pc.avif); */
+}
+.input-search {
+    border-right: none;
+    border-radius: 10px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.btn-search {
+    border-left: none;
+    border-radius: 10px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    background: #fff;
+}
+.header-link {
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+}
+.header-btn-link {
+    background-color: #000;
+    border: none;
+}
