@@ -92,7 +92,7 @@ exports.update = async (data, brandId, userId) => {
                 msg: 'Không tìm thấy thương hiệu'
             }
         }
-        else {
+        if (data.imageId) {
             // delete old image in cloudinary
             await cloudinary.uploader.destroy(updateBrand.imageId)
         }

@@ -127,7 +127,7 @@ exports.update = async (data, watchId, userId) => {
                 msg: 'Không tìm thấy sản phẩm'
             }
         }
-        else {
+        if (data.imageId) {
             // delete old image in cloudinary
             await cloudinary.uploader.destroy(updateWatch.imageId)
         }
