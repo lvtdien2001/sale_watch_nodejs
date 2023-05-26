@@ -143,6 +143,7 @@ class userController {
       res.json(result)
     }
   }
+
 }
 
 module.exports = new userController();

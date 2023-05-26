@@ -6,11 +6,11 @@ class RoleService{
     }
 
     async findById(id){
-        return await roleModel.findById(id)
+        return await roleModel.findById(id).lean()
     }
 
     async findAll(){
-        return await roleModel.find({})
+        return await roleModel.find({}).lean()
     }
 
     async updateRole(id, name){

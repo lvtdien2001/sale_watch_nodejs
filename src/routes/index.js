@@ -2,11 +2,8 @@ import { verifyAdmin } from '../middleware/auth';
 import adminRoute from './admin.route';
 import brandRouter from './brand.route';
 import userRouter from './user.route';
-<<<<<<< HEAD
 import roleRouter from './role.route';
-=======
 import watchRouter from './watch.route';
->>>>>>> 104b6740fe915a621012e9a69f553d48de70e1cb
 
 const initRoutes = (app) => {
     app.use('/brand', brandRouter);

@@ -19,22 +19,33 @@ class UserService {
         return  isPhone ? true : false
     }
 
+    
     async findByUsername(username){
         return await userModel.findOne({username}).lean()
     }
 
     async findById(id){
-        return await userModel.findById(id)
+        return await userModel
+            .findById(id)
+            .populate({
+                path: 'roles',
+                populate: {path: 'roleId'}
+            })
+            .lean()
     }
 
     async findAllUser(){
-        return await userModel.find({})
+        return await userModel.find({isAdmin:false}).lean()
     }
 
     async updateUser(id, data){
         return await userModel.findByIdAndUpdate(id, data,{
             new:true
         })
+    }
+
+    async updateRole(id, data){
+         return await this.updateUser(id, {roles:data});
     }
 }
 
