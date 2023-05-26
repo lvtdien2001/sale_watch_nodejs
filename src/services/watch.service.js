@@ -4,7 +4,28 @@ import cloudinary from '../utils/cloudinary';
 import moment from 'moment';
 import 'moment/locale/vi'
 
-exports.findAll = async currentPage => {
+exports.findAll = async (condition, limit, sort) => {
+    try {
+        const watches = await watchModel
+            .find(condition)
+            .limit(limit)
+            .sort(sort)
+            .lean()
+
+        return {
+            success: true,
+            watches
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
+}
+
+exports.findAllAndPage = async currentPage => {
     try {
         const watchPerPage = 10; // number of product in a page
         const skipPage = (currentPage-1) * watchPerPage;

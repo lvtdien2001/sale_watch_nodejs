@@ -80,3 +80,15 @@ exports.formatPrice = price => {
 
     return priceFormat.reverse().join('.') + ' đ';
 }
+
+exports.formatName = name => {
+    if (name.length <=30)
+        return name;
+    return name.substring(0, 27) + '...'
+}
+
+exports.checkRole = user => {
+    if (user?.isAdmin || user?.roles.length>0)
+        return true;
+    return false;
+}

@@ -1,0 +1,37 @@
+.watch-name {
+    color: var(--bs-blue);
+    font-size: 24px;
+    font-weight: 600;
+}
+.watch-body-text {
+    font-size: 20px;
+}
+.watch-price {
+    color: var(--bs-red);
+    font-size: 24px;
+    font-weight: 700;
+}
+.btn-cart {
+    background-color: brown;
+    color: #fff;
+    font-size: 24px;
+}
+.btn-cart:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+.card-image:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.05);
+}
+.watch-suggest-name {
+    color: var(--bs-blue);
+    font-weight: 600;
+}
+.watch-suggest-price {
+    color: var(--bs-red);
+    font-weight: 600;
+}
+.watch-description {
+    text-align: justify;
+}

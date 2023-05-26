@@ -3,10 +3,10 @@ import watchService from '../services/watch.service';
 // @route GET /admin/watch?currentPage=...
 // @desc get watches for product manager function
 // @access private
-exports.getAllWatches = async (req, res) => {
+exports.getProductManager = async (req, res) => {
     try {
         const currentPage = req.query.currentPage || '1';
-        const response = await watchService.findAll(currentPage);
+        const response = await watchService.findAllAndPage(currentPage);
 
         res.render('admin/watch', {
             layout: 'admin',
@@ -71,6 +71,28 @@ exports.getAllWatches = async (req, res) => {
         req.session.message = 'Internal server error';
         req.session.success = false;
         return res.redirect('/admin/watch')
+    }
+}
+
+// @route GET /watch/:id
+// @access public
+exports.getProductDetail = async (req, res) => {
+    try {
+        const watchId = req.params.id;
+
+        const response = await watchService.findById(watchId);
+        const suggestWatches = (await watchService.findAll({brandId: response.watch.brandId, _id: {$ne: response.watch._id}}, 4, {price: -1})).watches;
+
+        res.render('productDetail', {
+            watch: response.watch,
+            suggestWatches,
+            user: req.session.authState?.user
+        })
+    } catch (error) {
+        console.log(error);
+        req.session.message = 'Internal server error';
+        req.session.success = false;
+        res.render('err404', {layout: false});
     }
 }
 

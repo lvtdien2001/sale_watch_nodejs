@@ -4,7 +4,24 @@ import cloudinary from '../utils/cloudinary';
 import moment from 'moment';
 import 'moment/locale/vi';
 
-exports.findAll = async currentPage => {
+exports.findAll = async () => {
+    try {
+        const brands = await brandModel.find().lean();
+
+        return {
+            success: true,
+            brands
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
+}
+
+exports.findAllAndPage = async currentPage => {
     try {
         const brandPerPage = 10; // number of brand in a page
         const skipPage = (currentPage-1) * brandPerPage;

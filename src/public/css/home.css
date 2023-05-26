@@ -1,3 +1,24 @@
 .img-bg {
     max-width: 100%;
 }
+.content-home-brand{
+    display: flex;
+    overflow: scroll;
+    overflow-y: hidden;
+}
+.btn-home-brand {
+    min-width: 120px;
+    font-weight: 700;
+}
+.text-name-home {
+    color: var(--bs-blue);
+    font-weight: 600;
+}
+.text-price-home {
+    color: var(--bs-red);
+    font-weight: 600;
+}
+.card-image:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.05);
+}

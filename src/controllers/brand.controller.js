@@ -6,7 +6,7 @@ import brandService from '../services/brand.service';
 exports.getAllBrands = async (req, res) => {
     try {
         const currentPage = req.query.currentPage || 1;
-        const response = await brandService.findAll(currentPage);
+        const response = await brandService.findAllAndPage(currentPage);
 
         res.render('admin/brand', {
             layout: 'admin',
