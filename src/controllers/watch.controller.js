@@ -12,19 +12,8 @@ exports.getAllWatches = async (req, res) => {
             layout: 'admin',
             response,
             message: req.session.message,
+            success: req.session.success,
             helpers: {
-                increase: num => num+1,
-                formatPrice: price => {
-                    price = price.toString();
-                    if (price.length <= 3)
-                        return price;
-                
-                    let priceFormat = [];
-                    for (let i=price.length; i>0; i-=3)
-                        priceFormat.push(price.substring(i-3, i));
-                
-                    return priceFormat.reverse().join('.') + ' đ';
-                },
                 getTemplateEditSelect: (index, attr) => {
                     let template = '';
                     switch(attr){
@@ -71,55 +60,9 @@ exports.getAllWatches = async (req, res) => {
                             return null;
                     }
                 },
-                paginate: pageNumber => {
-                    const currentPage = Number(response.currentPage);
-                    // first page
-                    let template = currentPage===1
-                        ? `<li class="page-item active"><a class="page-link" href="/admin/watch?currentPage=1">1</a></li>`
-                        : `<li class="page-item"><a class="page-link" href="/admin/watch?currentPage=1">1</a></li>`
-
-                    for (let i=2; i<pageNumber; i++){
-                        if (i===currentPage)
-                            template += `<li class="page-item active"><a class="page-link" href="/admin/watch?currentPage=${i}">${i}</a></li>`
-                        else if (i===currentPage-1 || i===currentPage+1)
-                            template += `<li class="page-item"><a class="page-link" href="/admin/watch?currentPage=${i}">${i}</a></li>`
-                        else if(i<currentPage-1){
-                            template += `<li class="page-item"><a class="page-link" href="#">...</a></li>`;
-                            i = currentPage-2;
-                        }
-                        else if (i>currentPage+1){
-                            template += `<li class="page-item"><a class="page-link" href="#">...</a></li>`;
-                            i=pageNumber;
-                        }
-                    }
-
-                    // last page
-                    template += currentPage===pageNumber
-                        ? `<li class="page-item active"><a class="page-link" href="/admin/watch?currentPage=${pageNumber}">${pageNumber}</a></li>`
-                        : `<li class="page-item"><a class="page-link" href="/admin/watch?currentPage=${pageNumber}">${pageNumber}</a></li>`
-                    return template;
-                },
-                checkPageNumber: pageNumber => pageNumber>1,
-                showMessage: () => {
-                    if (req.session.message){
-                        const bg = req.session.success ? 'bg-success' : 'bg-danger';
-                        return `<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
-                                    <div id="message-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                                        <div class="d-flex ${bg} text-white">
-                                            <div id="message-content" class="toast-body fs-6">
-                                                ${req.session.message}
-                                            </div>
-                                            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                                        </div>
-                                    </div>
-                                </div>`
-                    }
-                    return null;
-                },
                 clearMessage: () => {
-                    if (req.session.message){
-                        req.session.message = undefined
-                    }
+                    req.session.message = undefined;
+                    req.session.success = undefined;
                 }
             }
         });

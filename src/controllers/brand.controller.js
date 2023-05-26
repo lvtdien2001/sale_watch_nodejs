@@ -12,39 +12,12 @@ exports.getAllBrands = async (req, res) => {
             layout: 'admin',
             response,
             message: req.session.message,
+            success: req.session.success,
             helpers: {
-                increase: num => num+1,
-                showMessage: () => {
-                    if (req.session.message){
-                        const bg = req.session.success ? 'bg-success' : 'bg-danger';
-                        return `<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
-                                    <div id="message-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                                        <div class="d-flex ${bg} text-white">
-                                            <div id="message-content" class="toast-body fs-6">
-                                                ${req.session.message}
-                                            </div>
-                                            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                                        </div>
-                                    </div>
-                                </div>`
-                    }
-                    return null;
-                },
                 clearMessage: () => {
-                    if (req.session.message){
-                        req.session.message = undefined
-                    }
-                },
-                paginate: pageNumber => {
-                    let template = '';
-                    for (let i=1; i<=pageNumber; i++){
-                        template += response.currentPage==i 
-                            ? `<li class="page-item active"><a class="page-link" href="/admin/brand?currentPage=${i}">${i}</a></li>`
-                            : `<li class="page-item"><a class="page-link" href="/admin/brand?currentPage=${i}">${i}</a></li>`
-                    }
-                    return template;
-                },
-                checkPageNumber: pageNumber => pageNumber>1
+                    req.session.message = undefined;
+                    req.session.success = undefined;
+                }
             }
         });
     } catch (error) {

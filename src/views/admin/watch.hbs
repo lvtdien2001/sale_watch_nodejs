@@ -284,7 +284,7 @@
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
-                {{#paginate pageNumber}}{{/paginate}}
+                {{#paginate pageNumber currentPage '/admin/watch'}}{{/paginate}}
                 <li class="page-item">
                     <a class="page-link" href="/admin/watch?currentPage={{pageNumber}}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
@@ -295,6 +295,6 @@
     {{/with}}
 
     {{!-- message --}}
-    {{#showMessage}}{{/showMessage}}
+    {{#showMessage message success}}{{/showMessage}}
     {{clearMessage}}
 </div>
