@@ -7,6 +7,7 @@ import { engine } from 'express-handlebars';
 import handlebarsSection from 'express-handlebars-sections';
 import expressSession from 'express-session';
 import { verifyToken } from './middleware/auth';
+import handlebarsHelpers from './config/handlebarsHelpers';
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use(expressSession({
 app.engine('.hbs', engine({
     extname: '.hbs',
     helpers: {
+        ...handlebarsHelpers,
         section: handlebarsSection()
     }
 }));

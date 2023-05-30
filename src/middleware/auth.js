@@ -7,9 +7,7 @@ const verifyToken = (req, res, next) => {
     // const token = authHeader && authHeader.split(' ')[1];
     const token = req.session.authState?.accessToken;
 
-
-
-    const isPublicRoute = /[/]/.test(req.url) || /[/][^admin][/w]/.test(req.url);
+    const isPublicRoute = req.path==='/' || !(new RegExp('/admin').test(req.path));
 
     if (isPublicRoute)
         return next();

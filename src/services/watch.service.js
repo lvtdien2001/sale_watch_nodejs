@@ -4,7 +4,28 @@ import cloudinary from '../utils/cloudinary';
 import moment from 'moment';
 import 'moment/locale/vi'
 
-exports.findAll = async currentPage => {
+exports.findAll = async (condition, limit, sort) => {
+    try {
+        const watches = await watchModel
+            .find(condition)
+            .limit(limit)
+            .sort(sort)
+            .lean()
+
+        return {
+            success: true,
+            watches
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
+}
+
+exports.findAllAndPage = async currentPage => {
     try {
         const watchPerPage = 10; // number of product in a page
         const skipPage = (currentPage-1) * watchPerPage;
@@ -13,6 +34,7 @@ exports.findAll = async currentPage => {
             .find()
             .skip(skipPage)
             .limit(watchPerPage)
+            .sort({ updatedAt: -1 })
             .populate('brandId', ['_id', 'name', 'imageUrl'])
             .populate('createBy', ['_id', 'fullName'])
             .populate('updateBy', ['_id', 'fullName'])
@@ -35,7 +57,8 @@ exports.findAll = async currentPage => {
             success: true,
             watches,
             brands,
-            pageNumber
+            pageNumber,
+            currentPage
         };
     } catch (error) {
         console.log(error);
@@ -102,6 +125,47 @@ exports.create = async (data, userId) => {
     }
 }
 
+exports.update = async (data, watchId, userId) => {
+    try {
+        // if update data contain image
+        if (data.imageUrl){
+            const uploadImage = await cloudinary.uploader.upload(data.imageUrl, {folder: 'watches'});
+            data = {
+                ...data,
+                imageUrl: uploadImage.secure_url,
+                imageId: uploadImage.public_id
+            }
+        }
+
+        const updateWatch = await watchModel.findByIdAndUpdate(watchId, {...data, updateBy: userId});
+        if (!updateWatch){
+            // delete new image in cloudinary
+            if (data.imageId){
+                await cloudinary.uploader.destroy(data.imageId);
+            }
+            return {
+                success: false,
+                msg: 'Không tìm thấy sản phẩm'
+            }
+        }
+        if (data.imageId) {
+            // delete old image in cloudinary
+            await cloudinary.uploader.destroy(updateWatch.imageId)
+        }
+        
+        return {
+            success: true,
+            msg: 'Cập nhật thông tin sản phẩm thành công'
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
+}
+
 exports.delete = async watchId => {
     try {
         const deleteWatch = await watchModel.findByIdAndDelete(watchId);
@@ -112,9 +176,10 @@ exports.delete = async watchId => {
                 msg: 'Không tìm thấy sản phẩm'
             }
         
+        await cloudinary.uploader.destroy(deleteWatch.imageId);
+
         return {
             success: true,
-            deleteWatch,
             msg: 'Xóa sản phẩm thành công'
         }
     } catch (error) {
