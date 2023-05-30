@@ -38,6 +38,7 @@ app.set('views', './src/views');
 
 connectDB();
 // app.use(verifyToken);
+app.use(verifyToken);
 initRoutes(app)
 
 app.listen(port, () => {

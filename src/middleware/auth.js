@@ -7,25 +7,21 @@ const verifyToken = (req, res, next) => {
     // const token = authHeader && authHeader.split(' ')[1];
     const token = req.session.authState?.accessToken;
 
-    switch(req.url){
-        case '/':
-            return next();
-        case '/user/login':
-            return next();
-        case '/user/register':
-            return next();
-    }
+
+
+    const isPublicRoute = /[/]/.test(req.url) || /[/][^admin][/w]/.test(req.url);
+
+    if (isPublicRoute)
+        return next();
+
     // Token not found
     if (!token) {
         return res.redirect('/user/login') 
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
-        req.userId = decoded.userId;
-        req.roles = decoded.roles;
-        req.isAdmin = decoded.isAdmin;
+        
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         next();
     } catch (error) {
         console.log(error);
@@ -34,18 +30,12 @@ const verifyToken = (req, res, next) => {
 }
 
 const verifyAdmin = (req, res, next) => {
-    if (req.isAdmin) {
+    if (req.session.authState?.user.isAdmin) {
         next();
     }
     else {
-        res.render('err404', {
-            msg: 'User is not admin'
-        })
+        res.render('err404', {layout: false})
     }
-}
-
-const verifyAddProduct = (req, res, next) => {
-    
 }
 
 export { verifyToken, verifyAdmin }
