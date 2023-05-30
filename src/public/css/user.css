@@ -148,9 +148,16 @@
     line-height: 40px;
     bottom: -12px;
     right: -16px;
+    transition: transform linear .3s;
   }
   .user__file i{
     color: #fff;
+  }
+  .user__file:hover{
+    transform: scale(1.2);
+  }
+  .user__file:hover i{
+    color: #c3ee17;
   }
   .user-name input {
     margin-left: 100px;

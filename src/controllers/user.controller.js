@@ -119,7 +119,56 @@ class userController {
   }
 
   async displayEditUser(req, res){
-    res.render('admin/user-edit')
+    try {
+      if(req.session.authState){
+        res.render('admin/user-edit',{user:req.session.authState.user})
+      }else{
+        res.redirect('/user/login')
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async editUser(req, res){
+    try {
+      const userLogin = req.session.authState.user
+      if(req.body){
+        if(req.file){
+        const imageOptions = await cloudinary.uploader.upload(req.file.path, {
+            folder: "user_avatars",
+          });
+          const data ={
+            fullName : req.body.fullName,
+            phoneNumber : req.body.phoneNumber,
+            imageUrl: imageOptions?.url || undefined,
+            imageId : imageOptions?.public_id  || undefined
+          }
+          const result = await userService.updateUser(userLogin._id,data)
+          
+          if(result){
+            
+            req.session.authState.user= {
+              ...result,
+              password: undefined
+            }
+            res.redirect('back')
+          }
+        }else{
+          const result = await userService.updateUser(userLogin._id,req.body)
+          if(result){
+            req.session.authState.user= {
+              ...result,
+              password: undefined
+            }
+            res.redirect('back')
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 

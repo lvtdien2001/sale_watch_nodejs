@@ -5,18 +5,19 @@
 
 <main>
     <div class="wrapper">
-        <form class="form-edit-user" @submit.prevent="updateUser()">
+        {{#with user}}
+        <form class="form-edit-user" enctype="multipart/form-data" method="post" action="/user/edit">
             <div class="pl-4">
-                <h2 class="pt-4 pb-2">Sửa hồ sơ</h2>
+                <h2 class="pt-4 pb-2 text-center">Sửa hồ sơ</h2>
                 <hr />
                 <div class="user-image d-flex">
                     <h5>Ảnh hồ sơ</h5>
                     <div class="user-image-edit">
                         <div class="image__container">
-                            <img src="https://i0.wp.com/thatnhucuocsong.com.vn/wp-content/uploads/2022/01/anh-dai-dien-avt-anime-nen-xanh-la.jpg?ssl=1"
-                                alt="">
+                            <img id="image-user" src="{{imageUrl}}"
+                                alt="ảnh đại diện">
                         </div>
-                        <input type="file" name="image" id="input__img" />
+                        <input type="file" name="imageUrl" id="input__img" />
                         <label title="Chọn hình ảnh" for="input__img" class="user__file">
                             <i class="fa-solid fa-user-pen"></i>
                         </label>
@@ -25,19 +26,41 @@
                 <hr />
                 <div class="user-name d-flex">
                     <h5 class="">Họ và tên</h5>
-                    <input class="pl-3 ps-3" type="text" name="fullName" placeholder="Họ và tên" />
+                    <input class="pl-3 ps-3" value="{{fullName}}" type="text" name="fullName" placeholder="Họ và tên" />
                 </div>
                 <hr />
 
                 <div class="user-sdt d-flex">
                     <h5>Số điện thoại</h5>
-                    <input class="pl-3 ps-3" type="text" name="phoneNumber" placeholder="Số điện thoại" />
+                    <input class="pl-3 ps-3" value="{{phoneNumber}}" type="text" name="phoneNumber" placeholder="Số điện thoại" />
                 </div>
                 <hr />
                 <div class="submit-user-edit">
-                    <button type="submit">Thay đổi</button>
+                    <button type="submit" id="submit-edit-user">Thay đổi</button>
                 </div>
             </div>
         </form>
+        {{/with}}
     </div>
 </main>
+
+
+{{#section 'js'}}
+    <script>
+        const btnSubmit = document.querySelector('#submit-edit-user')
+        btnSubmit.addEventListener('click', (e)=> {
+            if(confirm('Hành động này sẽ thay đổi thông tin của bạn')){
+                e.submit()
+            }else{
+                e.preventDefault()
+            }
+        })
+        const inputImageFile= document.querySelector('#input__img')
+        const imageUser = document.querySelector('#image-user')
+        inputImageFile.addEventListener('change',(e)=>{
+            console.log(e.target.files)
+            const src = URL.createObjectURL(e.target.files[0])
+            imageUser.src= src
+        })
+    </script>
+{{/section}}
