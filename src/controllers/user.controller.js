@@ -118,34 +118,6 @@ class userController {
     })
   }
 
-<<<<<<< HEAD
-  async displayProfile(req, res){
-    if(req.params.id){
-      // const result = await userService.findById(req.body.id)
-      res.render('edit-user')
-    }
-  }
-
-  async getAll(req, res){
-    const result = await userService.findAllUser()
-    res.json(result)
-  }
-
-  // async getUserById(req, res){
-  //   if(req.body){
-  //     const result = await userService.findById(req.body.id)
-  //     res.send(result)
-  //   }
-  // }
-
-  async updateUser(req, res){
-    if(req.body){
-      const result = await userService.updateUser(req.params.id, req.body)
-      res.json(result)
-    }
-  }
-
-=======
   async displayEditUser(req, res){
     try {
       if(req.session.authState){
@@ -198,7 +170,6 @@ class userController {
       console.log(error)
     }
   }
->>>>>>> 16ef9024a83dea2d8c024597674265b1d750e100
 }
 
 module.exports = new userController();

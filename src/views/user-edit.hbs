@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="/css/user.css" />
 {{/section}}
 
-<main>
+<div class="container d-flex justify-content-center align-items-center">
     <div class="wrapper">
         {{#with user}}
         <form class="form-edit-user" enctype="multipart/form-data" method="post" action="/user/edit">
@@ -42,7 +42,7 @@
         </form>
         {{/with}}
     </div>
-</main>
+</div>
 
 
 {{#section 'js'}}
