@@ -6,8 +6,8 @@
 5. Đăng bài
 6. Phân quyền người dùng
 7. Quản lý khách hàng thân thiết
+8. Quản lý thương hiệu
 # Khách hàng:
-8. Thanh toán
 9. Bình luận - đánh giá
 10. Xem sản phẩm
 11. Lịch sử mua hàng
@@ -18,10 +18,11 @@
 16. Xem bài đăng
 17. Lọc sản phẩm
 18. Giỏ hàng
+19. Thanh toán
 
 ## THANH
 13 6 14
 ## DIEN
-1 12 10
+1 8 12 10
 ## KY
 5 16 18

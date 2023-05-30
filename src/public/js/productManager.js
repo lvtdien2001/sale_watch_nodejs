@@ -1,22 +1,5 @@
-// set default content for edit form
-for (let i=0; i<=9; i++){
-    // default value of product style
-    const currentStyle = document.getElementById(`style-${i}`)?.innerHTML;
-    if (currentStyle){ // if currentStyle is exist
-        const attr = document.createAttribute('selected');
-        attr.value = 'selected';
-        if (currentStyle === 'Sang trọng')
-            document.getElementById(`sang-trong-${i}`).setAttributeNode(attr);
-        else if (currentStyle === 'Thể thao')
-            document.getElementById(`the-thao-${i}`).setAttributeNode(attr);
-        else if (currentStyle === 'Thời trang')
-            document.getElementById(`thoi-trang-${i}`).setAttributeNode(attr);
-        else if (currentStyle === 'Hiện đại')
-            document.getElementById(`hien-dai-${i}`).setAttributeNode(attr);
-        else if (currentStyle === 'Quân đội')
-            document.getElementById(`quan-doi-${i}`).setAttributeNode(attr);
-    }
 
+for (let i=0; i<=9; i++){
     // default value of brand
     const currentBrand = document.getElementById(`brand-${i}`)?.innerHTML.trim();
     if (currentBrand){ // if currentBrand is exist
@@ -43,9 +26,8 @@ for (let i=0; i<=9; i++){
 }
 
 // show message
-const messageContent = document.getElementById('message-content').innerHTML;
-if (messageContent !== '\n                    \n                '){
-    const messageToast = document.getElementById('message-toast')
+const messageToast = document.getElementById('message-toast')
+if (messageToast){
     const toast = new bootstrap.Toast(messageToast)
     toast.show()
 }

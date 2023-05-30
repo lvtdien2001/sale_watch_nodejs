@@ -5,15 +5,7 @@
     border: 1px solid #d2cfcf;
     margin-top: 10px;
 }
-.product-list {
-    margin-top: 10px;
-    width: 100%;
-    
-}
-.product-name-title, .product-history-title {
-    width: 25%;
-}
-.edit-btn, .show-btn {
+.edit-btn {
     color: var(--bs-blue);
     border: none;
 }

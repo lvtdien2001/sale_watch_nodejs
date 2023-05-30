@@ -14,7 +14,7 @@ const verifyToken = (req, res, next) => {
     }
 
 
-    const isPublicRoute = /[/][^cart]/.test(req.url) || /[/][^admin][/w]/.test(req.url);
+    const isPublicRoute = req.path==='/' || !(new RegExp('/admin').test(req.path));
 
     if (isPublicRoute)
         return next();

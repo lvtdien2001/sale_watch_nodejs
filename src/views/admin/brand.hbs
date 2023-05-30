@@ -1,0 +1,152 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/brandManager.css" />
+{{/section}}
+
+<div class="wrapper">
+    <h4 class="text-center">QUẢN LÝ THƯƠNG HIỆU</h4>
+
+    {{!-- add brand form --}}
+    <div class="accordion mb-3">
+        <button class="btn btn-primary mb-3" data-bs-toggle="collapse" data-bs-target="#add-brand" aria-expanded="false" >
+            Thêm thương hiệu 
+        </button>
+
+        <div id="add-brand" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+            <form method="POST" action="/admin/brand/add" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col">
+                        <label for="inputName" class="form-label fw-bold">Tên thương hiệu</label>
+                        <input name="name" required="true" type="text" class="form-control" id="inputName" placeholder="Nhập tên thương hiệu">
+                    </div>
+                    <div class="col">
+                        <label for="inputImage" class="form-label fw-bold">Hình ảnh</label>
+                        <input name="image" required="true" type="file" class="form-control" id="inputImage">
+                    </div>
+                    <div class="col align-self-end">
+                        <button type="submit" class="btn btn-primary">Gửi</button>
+                    </div>
+                </div>
+            </form>
+            <div class="form-border"></div>
+        </div>
+    </div>
+
+    {{!-- table list brands --}}
+    <div class="table-responsive">
+        <table class="table table-bordered border-dark product-list text-center align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Tên thương hiệu</th>
+                    <th scope="col">Hình ảnh</th>
+                    <th scope="col">Lịch sử</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#with response}}
+                    {{#each brands}}
+                        <tr>
+                            <th>{{increase @index}}</th>
+                            <td class="text-start">{{name}}</td>
+                            <td>
+                                <img src={{imageUrl}} alt="Hinh anh thuong hieu" width="150px" height="50px">
+                            </td>
+                            <td class="text-start">
+                                <b>Thời gian tạo: </b> {{createdAt}}, được tạo bởi {{#with createBy}}{{fullName}}{{/with}} </br>
+                                <b>Lần cập nhật cuối: </b> {{updatedAt}}, người cập nhật: {{#with updateBy}}{{fullName}}{{/with}}
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    {{!-- button trigger edit modal --}}
+                                    <button type="button" class="edit-btn" data-bs-toggle="modal" data-bs-target="#edit-modal-{{@index}}">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <!-- Button trigger delete modal -->
+                                    <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#delete-modal-{{@index}}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {{!-- Edit modal --}}
+                        <div class="modal fade" id="edit-modal-{{@index}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit-modal-label-{{@index}}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="edit-modal-label-{{@index}}">Cập nhật thông tin thương hiệu</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="POST" action="/admin/brand/update/{{_id}}" enctype="multipart/form-data">
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="input-edit-name-{{@index}}" class="form-label fw-bold">Tên thương hiệu</label>
+                                                <input name="name" value="{{name}}" type="text" class="form-control" id="input-edit-name-{{@index}}" placeholder="Nhập tên sản phẩm">
+                                            </div>
+                                            <div class="mb-3">
+                                                <div>
+                                                    <label for="input-edit-image-{{@index}}" class="form-label fw-bold">Hình ảnh</label>
+                                                    <input name="image" type="file" class="form-control" id="input-edit-image-{{@index}}">
+                                                </div>
+                                                <div class="text-center"><img class="mt-3" src="{{imageUrl}}" alt="Hinh anh san pham" id="preview-edit-image-{{@index}}" height="150px"></div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+                                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Hủy</button>
+                                            <button type="submit" class="btn btn-outline-success">Lưu thay đổi</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delete Modal -->
+                        <div class="modal fade" id="delete-modal-{{@index}}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        Bạn có chắc chắn muốn xóa sản phẩm này không?
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <form method="POST" action="/admin/brand/delete/{{_id}}">
+                                            <button type="submit" class="btn btn-outline-success">Có</button>   
+                                        </form>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Không</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {{/each}}
+                {{/with}}
+            </tbody>
+        </table>
+    </div>
+
+    {{!-- pagination --}}
+    {{#with response}}
+        {{#if (checkPageNumber pageNumber)}}
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="/admin/brand" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {{#paginate pageNumber currentPage '/admin/brand'}}{{/paginate}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/brand?currentPage={{pageNumber}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        {{/if}}
+    {{/with}}
+
+    {{!-- message --}}
+    {{#showMessage message success}}{{/showMessage}}
+    {{clearMessage}}
+</div>
+
+{{#section 'js'}}
+    <script src="/js/brandManager.js"></script>
+{{/section}}
