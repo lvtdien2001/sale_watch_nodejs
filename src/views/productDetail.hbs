@@ -1,0 +1,96 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/productDetail.css" />
+{{/section}}
+
+<div class="container">
+    {{#with watch}}
+        <div class="watch-name mt-3 mb-3">
+            {{name}}
+        </div>
+        <div class="watch-body row">
+            <div class="col-12 col-xl-6">
+                <img src="{{imageUrl}}" alt="Hinh anh san pham" width="100%">
+            </div>
+            <div class="col-12 col-xl-6">
+                {{!-- Product information --}}
+                <h4 class="text-center mb-3">Thông tin sản phẩm</h4>
+                <div class="watch-body-text">
+                    <div class="mb-2 watch-description">{{description}}</div>
+                    <div class="watch-price mb-2">Đơn giá: {{formatPrice price}}</div>
+                    <div class="mb-2"><b>Thương hiệu:</b> {{#with brandId}}{{name}}{{/with}}</div>
+                    <div class="mb-2"><b>Kính:</b> {{glass}}</div>
+                    <div class="mb-2"><b>Dây đeo:</b> {{strap}}</div>
+                    <div class="mb-2"><b>Bộ máy:</b> {{principleOperate}}</div>
+                </div>
+
+                {{!-- Button trigger cart modal --}}
+                <div class="row me-1 ms-1">
+                    <button type="button" class="btn btn-lg btn-cart" data-bs-toggle="modal" data-bs-target="#cart-modal">
+                        Thêm vào giỏ hàng
+                    </button>
+                </div>
+            </div>
+        </div>
+    {{/with}}
+
+    {{!-- Suggest product --}}
+    <div class="row mt-3 mb-3">
+        <div class="col-12">
+            <h4>Sản phẩm gợi ý</h4>
+        </div>
+
+        {{#each suggestWatches}}
+            <div class="col-6 col-xl-3 col-md-4 mb-3">
+                <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{name}}">
+                    <a style="text-decoration: none;" href="/watch/{{_id}}">
+                        <img src="{{imageUrl}}" class="card-img-top card-image" alt="...">
+                        <div class="card-body">
+                            <div class="watch-suggest-name">{{formatName name}}</div>
+                            <div class="watch-suggest-price">{{formatPrice price}}</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+
+    {{!-- Cart modal --}}
+    <div class="modal fade" id="cart-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {{!-- Add cart form --}}
+                <form method="" action="">
+                    {{#with watch}}
+                        <div class="modal-body">
+                            <div class="text-primary"><b>{{name}}</b></div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <img src="{{imageUrl}}" alt="Hinh anh san pham" width="100%">
+                                </div>
+                                <div class="col-6">
+                                    {{!-- form input --}}
+                                    <div class="mt-3 mb-3">
+                                        <label for="inputQuantity" class="form-label fw-bold">Số lượng</label>
+                                        <input value="0" name="" type="number" class="form-control" id="inputQuantity">
+                                    </div>
+
+                                    <div class="mt-3 mb-3 text-danger">
+                                        <b>Đơn giá: {{formatPrice price}}</b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {{/with}}
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-lg btn-outline-danger" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-lg btn-outline-success">Thêm vào giỏ hàng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#section 'js'}}
+    <script src="/js/productDetail.js"></script>
+{{/section}}
