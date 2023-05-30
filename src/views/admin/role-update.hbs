@@ -1,8 +1,8 @@
 <div>
-  <h3 class="text-center">Cập nhật quyền người dùng</h3>
+  <h3 class="text-center mt-2">Cập nhật quyền người dùng</h3>
   <div class="role__update">
     {{#with userRoles}}
-      <h4 class="username">{{fullName}}</h4>
+      <h4 class="username">Tên người dùng: <span class="text-info">{{ fullName}}</span></h4>
    
     
     <form action="/role/update-role/{{_id}}" class="form__role" method="POST">
