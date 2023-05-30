@@ -23,6 +23,13 @@ class UserService {
     async findByUsername(username){
         return await userModel.findOne({username}).lean()
     }
+    async updateUser(id,data){
+        return userModel.findByIdAndUpdate(
+            id,
+            data,
+            { returnDocument: "after", upsert: true }
+        ).lean()
+    }
 
     async findById(id){
         return await userModel
