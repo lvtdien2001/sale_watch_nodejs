@@ -48,20 +48,34 @@
 
 {{#each news}}
     <div class="news-layout">
-      <div class="dropdown-layout">
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            Tùy chọn
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="/news/edit/{{_id}}">Chỉnh sửa</a> </li>
-            
-          </ul>
-        </div>
+          <div class="dropdown-layout">
+              <a  href="/news/edit/{{_id}}"><button type="button" class="btn btn-primary"><i class="fas fa-edit"></i></button></a>
+              
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal-{{@index}}">
+                  <i class="fas fa-trash"></i>
+              </button>
+              <div class="modal fade" id="delete-modal-{{@index}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="delete-modal-label-{{@index}}" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="delete-modal-label-{{@index}}">Xóa bài viết </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Hủy</button>
+                                        <button type="button" class="btn btn-danger">Xóa</button>
+                                    </div>
+                                </div>
+                            </div>
+              </div>
+          </div>
+           
+          
+        
       </div>
         <h2> <a class="title-link" href="/news/{{_id}}">{{title}}</a> </h2>
-        <div>{{createdAt}}</div>
-        <p><span class="contentValue">{{content}}</span></p>
+        <div>{{formatDate createdAt}}</div>
+        {{!-- <p><span class="contentValue">{{content}}</span></p> --}}
         
         <div class="layout">
           <a class="title-link" href="/news/{{_id}}">
@@ -69,9 +83,21 @@
           </a>
         </div>
     </div>
-    
+       
 {{/each}}
 
+<div class="text-center">
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+      <li class="page-item"><a class="page-link" href="/news">1</a></li>
+      <li class="page-item"><a class="page-link" href="/news?currentPage=2">2</a></li>
+      <li class="page-item"><a class="page-link" href="/news?currentPage=3">3</a></li>
+      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+  </nav>
+</div>
 <script>
   let nodeList = document.querySelectorAll(".contentValue");
   nodeList.forEach(function(node) {

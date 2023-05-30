@@ -1,8 +1,10 @@
 import News from '../models/news.model';
 import cloudinary from '../utils/cloudinary';
-
+import moment from 'moment';
+import 'moment/locale/vi'
 
 import NewsService from '../services/news.service';
+
 
 
 // @route POST /news
@@ -12,7 +14,7 @@ exports.create = async (req, res) => {
    
     try { 
         const {title, content} = req.body;
-        const result = await cloudinary.uploader.upload(req.file.path);
+        const result = await cloudinary.uploader.upload(req.file.path, { folder: "news" });
         const news = new News({
             ...req.body,
             imageUrl:result.secure_url,
@@ -36,9 +38,26 @@ exports.create = async (req, res) => {
 exports.get = async (req, res) => {
    
     try { 
-        
-        const news = await News.find().sort({createdAt: -1}).lean();
-        res.render('news/home',{news})
+        const currentPage = req.query.currentPage || '1';
+        const watchPerPage = 5; // number of product in a page
+        const skipPage = (currentPage-1) * watchPerPage;
+        const news = await News.find().sort({createdAt: -1})
+                                .skip(skipPage)
+                                .limit(watchPerPage)
+                                .lean();
+
+        const numberOfWatches = await News.countDocuments({});
+        const pageNumber = Math.ceil(numberOfWatches/10);
+        res.render('news/home',{
+            layout: 'main',
+            news,
+            helpers: {
+                formatDate: date => moment(date).format('lll')
+
+            },
+            pageNumber
+        }
+        )
         
     } catch (error) {
         console.log(error);

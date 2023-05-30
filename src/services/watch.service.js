@@ -125,3 +125,19 @@ exports.delete = async watchId => {
         }
     }
 }
+
+exports.getQuantity = async watchId => {
+    try {
+        const watch = await watchModel.findById(watchId);
+
+        
+        return watch.currentQuantity || -1
+
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
+}

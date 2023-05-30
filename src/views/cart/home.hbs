@@ -1,0 +1,70 @@
+<h1>Cart</h1>
+
+<div class="table-responsive">
+  <table class="table table-striped text-center align-middle">
+      <thead>
+      <tr>
+        <th scope="col">Checked</th>
+        <th scope="col">#</th>
+        <th scope="col" colspan="2">Tên</th>
+        <th scope="col">Hình ảnh</th>
+        <th scope="col">Số lượng</th>
+        <th scope="col">Giá Tiền</th>
+        <th scope="col">Tổng cộng</th>
+
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      {{#each carts}}
+       
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td scope="col">{{number @index}}</td>
+          <td scope="col" colspan="2" class="text-start">{{watchId.name}}</td>
+          <td scope="col"><img width="100px" height="100px" src="{{watchId.imageUrl}}"/></td>
+          <td scope="col">
+            <span>-</span>
+            {{quantity}}
+            <span>+</span>
+          </td>
+          <td scope="col">{{formatPrice watchId.price}}</td>
+          <td scope="col">{{totalPrice watchId.price quantity}}</td>
+          
+          <td scope="col">
+            <form method="post" action="/cart">
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal-{{@index}}">
+                  <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </td>
+          
+
+        </tr>
+      {{/each}}
+    
+    </tbody>
+    <tfoot>
+      <tr>
+        <td><input type="checkbox" /></td>
+          <td scope="col"></td>
+          <td scope="col" colspan="2"></td>
+          <td scope="col"><img width="100px" height="100px" src=""/></td>
+          <td scope="col"></td>
+          <td scope="col"></td>
+          <td scope="col"></td>
+          <td scope="col">Mua</td>
+          <td scope="col">
+           
+          </td>
+      </tr>
+    </tfoot>
+    </table>
+</div>
+
+   
+  
+
+    
+
