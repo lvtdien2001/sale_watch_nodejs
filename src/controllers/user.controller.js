@@ -121,7 +121,7 @@ class userController {
   async displayEditUser(req, res){
     try {
       if(req.session.authState){
-        res.render('admin/user-edit',{user:req.session.authState.user})
+        res.render('user-edit',{user:req.session.authState.user})
       }else{
         res.redirect('/user/login')
       }
