@@ -116,7 +116,11 @@ class userController {
         if (err) res.redirect('/');
         res.redirect('/user/login');
     })
-}
+  }
+
+  async displayEditUser(req, res){
+    res.render('admin/user-edit')
+  }
 }
 
 module.exports = new userController();

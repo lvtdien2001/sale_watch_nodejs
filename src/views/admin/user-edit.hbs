@@ -1,0 +1,43 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/user.css" />
+{{/section}}
+
+<main>
+    <div class="wrapper">
+        <form class="form-edit-user" @submit.prevent="updateUser()">
+            <div class="pl-4">
+                <h2 class="pt-4 pb-2">Sửa hồ sơ</h2>
+                <hr />
+                <div class="user-image d-flex">
+                    <h5>Ảnh hồ sơ</h5>
+                    <div class="user-image-edit">
+                        <div class="image__container">
+                            <img src="https://i0.wp.com/thatnhucuocsong.com.vn/wp-content/uploads/2022/01/anh-dai-dien-avt-anime-nen-xanh-la.jpg?ssl=1"
+                                alt="">
+                        </div>
+                        <input type="file" name="image" id="input__img" />
+                        <label title="Chọn hình ảnh" for="input__img" class="user__file">
+                            <i class="fa-solid fa-user-pen"></i>
+                        </label>
+                    </div>
+                </div>
+                <hr />
+                <div class="user-name d-flex">
+                    <h5 class="">Họ và tên</h5>
+                    <input class="pl-3 ps-3" type="text" name="fullName" placeholder="Họ và tên" />
+                </div>
+                <hr />
+
+                <div class="user-sdt d-flex">
+                    <h5>Số điện thoại</h5>
+                    <input class="pl-3 ps-3" type="text" name="phoneNumber" placeholder="Số điện thoại" />
+                </div>
+                <hr />
+                <div class="submit-user-edit">
+                    <button type="submit">Thay đổi</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>

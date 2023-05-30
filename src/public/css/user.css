@@ -85,3 +85,124 @@
 .change__link:hover{
     color: orange;
 }
+
+/* edit user */
+.wrapper {
+    /* margin-top: 80px;
+      margin-bottom: 80px; */
+    padding: 50px 400px;
+    /* background: #f0eeee; */
+    background-image: url("https://cdn.tgdd.vn/mwgcart/orderhistory/images/bg.png");
+    min-height: 550px;
+  }
+  .form-edit-user {
+    width: 700px;
+    height: 820px;
+    background-color: #fff;
+    border-radius: 10px;
+  }
+  .form-edit-user h2 {
+    font-family: "IBM Plex Sans", ProximaNova, Arial, Tahoma, PingFangSC,
+      sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    /* padding-left: 20px; */
+  }
+  .form-edit-user div > h5 {
+    font-family: "IBM Plex Sans", ProximaNova, Arial, Tahoma, PingFangSC,
+      sans-serif;
+    font-weight: 600;
+    line-height: 24px;
+    font-size: 16px;
+  }
+  .image__container{
+    border: 1px solid #ccc;
+   margin-left: 50px;
+    overflow: hidden;
+    position: relative;
+  }
+  .user-image-edit{
+    position: relative;
+  }
+  .user-image-edit img {
+    border: 5px;
+    width: 120px;
+    height: 120px;
+    border: none;
+  }
+  hr {
+    margin-right: 20px;
+  }
+  .user-image-edit input {
+    display: none;
+  }
+  .user__file{
+    cursor: pointer;
+    font-size: 20px;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #666;
+    text-align: center;
+    line-height: 40px;
+    bottom: -12px;
+    right: -16px;
+  }
+  .user__file i{
+    color: #fff;
+  }
+  .user-name input {
+    margin-left: 100px;
+    width: 360px;
+    height: 40px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(22, 24, 35, 0.06);
+  }
+  .user-email input {
+    margin-left: 85px;
+    width: 360px;
+    height: 40px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(22, 24, 35, 0.06);
+  }
+  .user-sdt input {
+    margin-left: 95px;
+    width: 360px;
+    height: 40px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(22, 24, 35, 0.06);
+  }
+  .user-ngaysinh input {
+    margin-left: 50px;
+    width: 360px;
+    height: 40px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(22, 24, 35, 0.06);
+  }
+  .user-name,
+  .user-email,
+  .user-sdt,
+  .user-ngaysinh {
+    height: 80px;
+  }
+  .submit-user-edit {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-right: 50px;
+  }
+  .submit-user-edit button {
+    width: 95px;
+    height: 33px;
+    border: none;
+    border-radius: 5px;
+    transition: transform linear 0.3s;
+  }
+  .submit-user-edit button:hover{
+    color: #71ee17;
+    transform: scale(1.2);
+  } 
