@@ -1,0 +1,68 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/search.css" />
+{{/section}}
+
+<div class="container">
+    <div class="row mt-3 mb-3">
+        <div class="col-12 d-flex">
+            <h4 class="me-3">Kết quả tìm kiếm: '{{searchValue}}'</h4>
+            <i class="text-secondary">Có <b>{{numberOfResult}}</b> kết quả phù hợp</i>
+        </div>
+
+         {{!-- pagination --}}
+        {{#if (checkPageNumber pageNumber)}}
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {{#paginate pageNumber currentPage '/search' (setSearchKey searchValue)}}{{/paginate}}
+                <li class="page-item">
+                    <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8&currentPage={{pageNumber}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        {{/if}}
+
+        {{#if isEmpty}}
+            <i class="fs-5 text-secondary">Không tìm thấy kết quả phù hợp</i>
+        {{else}}
+            {{#each watches}}
+                <div class="col-6 col-xl-3 col-md-4 mb-3">
+                    <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{name}}">
+                        <a style="text-decoration: none;" href="/watch/{{_id}}">
+                            <img src="{{imageUrl}}" class="card-img-top card-image" alt="...">
+                            <div class="card-body">
+                                <div id="search-card-name" class="text-name-home">{{formatName name}}</div>
+                                <div id="search-card-price" class="text-price-home">{{formatPrice price}}</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {{/each}}
+        {{/if}}
+    </div>
+
+    {{!-- pagination --}}
+    {{#if (checkPageNumber pageNumber)}}
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {{#paginate pageNumber currentPage '/search' 'key={{searchValue}}&watchPerPage=8'}}{{/paginate}}
+            <li class="page-item">
+                <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8&currentPage={{pageNumber}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    {{/if}}
+</div>
+
+{{#section 'js'}}
+    <script src="/js/search.js"></script>
+{{/section}}

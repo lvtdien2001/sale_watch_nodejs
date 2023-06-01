@@ -60,4 +60,5 @@ const watchSchema = new Schema({
     },
 }, {timestamps: true});
 
+watchSchema.index({name: 'text', description: 'text', glass: 'text', strap: 'text', style: 'text'});
 export default mongoose.model('watch', watchSchema);

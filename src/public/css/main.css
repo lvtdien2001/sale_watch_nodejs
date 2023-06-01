@@ -32,3 +32,6 @@
     background-color: #000;
     border: none;
 }
+#header-user-avatar {
+    border-radius: 25px;
+}
