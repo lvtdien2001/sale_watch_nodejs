@@ -13,7 +13,45 @@ const initRoutes = (app) => {
     app.use('/watch', watchRouter);
     app.use('/admin', verifyRole, adminRoute);
     
+    // search
+    app.use('/search', async (req, res) => {
+        // Bỏ dấu tiếng Việt
+        // const removeAccents = str => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
+
+        try {
+            const searchValue = req.query.key;
+            const currentPage = req.query.currentPage || 1;
+            const watchPerPage = req.query.watchPerPage;
+
+            const response = await watchService.findAllAndPage(
+                currentPage, 
+                {$text: {$search: searchValue}},
+                watchPerPage
+            );
+
+            const isEmpty = response.watches.length>0 ? false : true;
+
+            res.render('search', {
+                watches: response.watches,
+                searchValue,
+                isEmpty,
+                numberOfResult: response.numberOfWatches,
+                pageNumber: response.pageNumber,
+                currentPage: response.currentPage,
+                helpers: {
+                    setSearchKey: key => `key=${key}&watchPerPage=8`
+                }
+            });
+        } catch (error) {
+            console.log(error);
+            res.redirect('/');
+        }
+    })
+
+    // 404 not found
     app.use('/:notfound', (req, res) => res.render('err404', {layout: false}))
+
+    // Home
     app.use('/', async (req, res) => {
         try {
             const brandId = req.query.brand;

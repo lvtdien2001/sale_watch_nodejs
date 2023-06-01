@@ -25,13 +25,14 @@ exports.findAll = async (condition, limit, sort) => {
     }
 }
 
-exports.findAllAndPage = async currentPage => {
+exports.findAllAndPage = async (currentPage, condition, watchPerPage) => {
     try {
-        const watchPerPage = 10; // number of product in a page
+        if (!watchPerPage)
+            watchPerPage = 10;
         const skipPage = (currentPage-1) * watchPerPage;
 
         let watches = await watchModel
-            .find()
+            .find(condition)
             .skip(skipPage)
             .limit(watchPerPage)
             .sort({ updatedAt: -1 })
@@ -40,8 +41,8 @@ exports.findAllAndPage = async currentPage => {
             .populate('updateBy', ['_id', 'fullName'])
             .lean()
 
-        const numberOfWatches = await watchModel.countDocuments({});
-        const pageNumber = Math.ceil(numberOfWatches/10);
+        const numberOfWatches = await watchModel.countDocuments(condition);
+        const pageNumber = Math.ceil(numberOfWatches/watchPerPage);
 
         const brands = await brandModel.find().lean();
 
@@ -58,7 +59,9 @@ exports.findAllAndPage = async currentPage => {
             watches,
             brands,
             pageNumber,
-            currentPage
+            currentPage,
+            watchPerPage,
+            numberOfWatches
         };
     } catch (error) {
         console.log(error);

@@ -38,18 +38,19 @@ exports.showMessage = (message, success) => {
     return null;
 }
 
-exports.paginate = (pageNumber, currentPage, router) => {
+exports.paginate = (pageNumber, currentPage, router, param) => {
     currentPage = Number(currentPage);
+
     // first page
     let template = currentPage===1
-        ? `<li class="page-item active"><a class="page-link" href="${router}?currentPage=1">1</a></li>`
-        : `<li class="page-item"><a class="page-link" href="${router}?currentPage=1">1</a></li>`
-
+        ? `<li class="page-item active"><a class="page-link" href="${router}?currentPage=1&${param}">1</a></li>`
+        : `<li class="page-item"><a class="page-link" href="${router}?currentPage=1&${param}">1</a></li>`
+    
     for (let i=2; i<pageNumber; i++){
         if (i===currentPage)
-            template += `<li class="page-item active"><a class="page-link" href="${router}?currentPage=${i}">${i}</a></li>`
+            template += `<li class="page-item active"><a class="page-link" href="${router}?currentPage=${i}&${param}">${i}</a></li>`
         else if (i===currentPage-1 || i===currentPage+1)
-            template += `<li class="page-item"><a class="page-link" href="${router}?currentPage=${i}">${i}</a></li>`
+            template += `<li class="page-item"><a class="page-link" href="${router}?currentPage=${i}&${param}">${i}</a></li>`
         else if(i<currentPage-1){
             template += `<li class="page-item"><a class="page-link" href="#">...</a></li>`;
             i = currentPage-2;
@@ -62,8 +63,8 @@ exports.paginate = (pageNumber, currentPage, router) => {
 
     // last page
     template += currentPage===pageNumber
-        ? `<li class="page-item active"><a class="page-link" href="${router}?currentPage=${pageNumber}">${pageNumber}</a></li>`
-        : `<li class="page-item"><a class="page-link" href="${router}?currentPage=${pageNumber}">${pageNumber}</a></li>`
+        ? `<li class="page-item active"><a class="page-link" href="${router}?currentPage=${pageNumber}&${param}">${pageNumber}</a></li>`
+        : `<li class="page-item"><a class="page-link" href="${router}?currentPage=${pageNumber}&${param}">${pageNumber}</a></li>`
     return template;
 }
 
