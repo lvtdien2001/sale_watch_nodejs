@@ -5,7 +5,7 @@ exports.getAuthBtn = user => {
     if (user){
         return  `<div class="dropdown">
                     <button class="btn dropdown-toggle header-user-toggle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="${user.imageUrl}" width="25px" height="25px">
+                        <img id="header-user-avatar" src="${user.imageUrl}" width="25px" height="25px">
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="/user/edit">Chỉnh sửa thông tin</a></li>

@@ -40,6 +40,7 @@ const initRoutes = (app) => {
                 numberOfResult: response.numberOfWatches,
                 pageNumber: response.pageNumber,
                 currentPage: response.currentPage,
+                user: req.session.authState?.user,
                 helpers: {
                     setSearchKey: key => `key=${key}&watchPerPage=8`
                 }
