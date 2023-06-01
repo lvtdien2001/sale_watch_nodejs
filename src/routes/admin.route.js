@@ -1,6 +1,8 @@
 import express from 'express';
 import watchController from '../controllers/watch.controller';
 import brandController from '../controllers/brand.controller';
+import roleController from '../controllers/role.controller';
+import {verifyAdmin} from '../middleware/auth';
 import upload from '../utils/multer';
 
 const router = express.Router();
@@ -18,5 +20,15 @@ router.get('/brand', brandController.getAllBrands)
 router.post('/brand/add', upload.single('image'), brandController.create)
 router.post('/brand/update/:id', upload.single('image'), brandController.update)
 router.post('/brand/delete/:id', brandController.delete)
+
+// role route
+router.post('/role/create', verifyAdmin, roleController.createRole)
+router.post('/role/update-role/:id', verifyAdmin, roleController.updateRole)
+router.get('/role/role-detail/:id', verifyAdmin, roleController.roleUser)
+router.get('/role/role-edit/:id', verifyAdmin, roleController.displayRoleEdit)
+router.get('/role/role-delete/:id', verifyAdmin, roleController.deleteRole)
+router.post('/role/role-edit/:id', verifyAdmin, roleController.roleEdit)
+router.get('/role/role-create', verifyAdmin, roleController.displayCreateRole)
+router.get('/role', verifyAdmin, roleController.displayRole)
 
 export default router;
