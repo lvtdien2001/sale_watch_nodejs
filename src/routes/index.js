@@ -3,6 +3,7 @@ import brandRouter from './brand.route';
 import userRouter from './user.route';
 import roleRouter from './role.route';
 import watchRouter from './watch.route';
+import commentRouter from './comment.route';
 
 import brandService from '../services/brand.service';
 import watchService from '../services/watch.service';
@@ -13,6 +14,7 @@ const initRoutes = (app) => {
     app.use('/role', roleRouter);
     app.use('/user', userRouter);
     app.use('/watch', watchRouter);
+    app.use('/comment', commentRouter);
     app.use('/admin', verifyRole, adminRoute);
     
     app.use('/:notfound', (req, res) => res.render('err404', {layout: false}))
