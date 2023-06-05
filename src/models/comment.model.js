@@ -19,6 +19,11 @@ const commentSchema = new Schema({
         enum: [1, 2, 3, 4, 5],
         default: 5
     },
+    feedback: [{
+        content: {
+            type: String,
+        }
+    }],
     imageUrl: {
         type: String
     },

@@ -10,7 +10,7 @@ const verifyToken = (req, res, next) => {
         case '/user/login':
             return next();
         case '/user/register':
-            return next();  
+            return next(); 
     }
 
 

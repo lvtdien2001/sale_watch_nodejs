@@ -1,5 +1,7 @@
 {{#section 'css'}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/css/productDetail.css" />
+    <link rel="stylesheet" href="/css/comment.css" />
 {{/section}}
 
 <div class="container">
@@ -91,6 +93,91 @@
     </div>
 </div>
 
+
+{{!-- comment --}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-8 comment__frame">
+            <h3>Bình luận - đánh giá</h3>
+            <hr>
+            <div class="comment">
+            {{#each data}}
+                <h4 class="comment__username">{{this.userId.fullName}}</h4>
+                <ul class="list__star">
+                    {{#each this.element}}
+                        <li class="star__item"><i class="fa-solid fa-star"></i></li>
+                    {{/each}}
+                </ul>
+                <div class="comment__content">
+                    <p class="comment__description">Nội dung: {{this.content}}</p>
+                    {{#if this.imageUrl}}
+                    <img class="comment__img" src="{{this.imageUrl}}" alt="">
+                    {{/if}}
+                    <div class="comment__response">
+                        <span class="text-info res__btn"><i class="fa-regular fa-message"></i> Phản hồi</span>
+                        <div class="res">
+                            <form action="/comment/res/{{this._id}}" class="mt-4" method="post">
+                                <input type="text" name="feedback" placeholder="Phản hồi của bạn" class="res__input">
+                                <button class="res__submit">Gửi</button>
+                            </form>
+                            <div class="res__order">
+                                <h6 class="text-center text-warning mt-2">Các phản hồi khác</h6>
+                                {{#each this.feedback}}
+                                    <p class="ms-4 res__content">{{this.content}}</p>
+                                    <hr>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                {{/each}}
+            </div>
+
+                <div class="row">
+                    <div class="col-lg-5 btn btn-info ms-4 btn__open">Viết đánh giá</div>
+                </div>
+        </div>
+        <div class="comment__post">
+            <div class="overlay row">
+                    {{#with watch}}
+                <form action="/comment/create/{{_id}}" enctype="multipart/form-data" method="post" class="form__comment col-4">
+                    <div class="form__head">
+                        <h4 class="fs-5">Đánh giá</h4>
+                        <div class="btn btn-outline-info btn__close"><i class="fa-solid fa-xmark"></i> Đóng</div>
+                    </div>
+                    <hr>
+                    <ul class="stars">
+                        <li class="star" data-star="1"><i class="fa-regular fa-star"></i></li>
+                        <li class="star" data-star="2"><i class="fa-regular fa-star"></i></li>
+                        <li class="star" data-star="3"><i class="fa-regular fa-star"></i></li>
+                        <li class="star" data-star="4"><i class="fa-regular fa-star"></i></li>
+                        <li class="star" data-star="5"><i class="fa-regular fa-star"></i></li>
+                    </ul>
+                    <input type="number" name="rate" id="" class="rate " value="0">
+                    <div class="comment__res">
+                        <input type="text" name="content" class="comment__content2" placeholder="Viết đánh giá của bạn ở đây">
+                        <input type="file" name="imageUrl" id="comment__img">
+                        <label for="comment__img" class="comment__label"> <i class="fa-sharp fa-solid fa-camera"></i>
+                            Hình chụp thực tế</label>
+                        <div class="file__img">
+                            <img src="" alt="" class="comment__img">
+                            <span class="delete__img">xóa</span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <button type="submit" class="btn btn-warning col-8 comment__btn">Gửi đánh giá</button>
+                    </div>
+                </form>
+            {{/with}}
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {{#section 'js'}}
     <script src="/js/productDetail.js"></script>
+    <script src="/js/comment.js"></script>
 {{/section}}
