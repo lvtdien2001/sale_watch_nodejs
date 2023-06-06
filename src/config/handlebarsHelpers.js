@@ -89,7 +89,7 @@ exports.formatName = name => {
 }
 
 exports.checkRole = user => {
-    if (user?.isAdmin || user?.roles.length>0)
+    if (user?.isAdmin || (user?.roles?.length && user?.roles.length>0))
         return true;
     return false;
 }

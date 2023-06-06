@@ -100,10 +100,10 @@ class userController {
                   else res.redirect('/admin')
                 }
                 else{
-                  res.render('login',{messageFailure:'sai mật khẩu'})
+                  res.render('login',{messageFailure:'Tên người dùng hoặc mật khẩu không hợp lệ'})
                 } 
             }else{
-              res.render('login',{messageFailure:'tên người dùng ko hợp lệ'})
+              res.render('login',{messageFailure:'Tên người dùng hoặc mật khẩu khong hợp lệ'})
             }
         }
     } catch (error) {
@@ -121,7 +121,7 @@ class userController {
   async displayEditUser(req, res){
     try {
       if(req.session.authState){
-        res.render('user-edit',{user:req.session.authState.user})
+        res.render('user-edit',{user:req.session.authState?.user})
       }else{
         res.redirect('/user/login')
       }
@@ -145,23 +145,17 @@ class userController {
             imageUrl: imageOptions?.url || undefined,
             imageId : imageOptions?.public_id  || undefined
           }
-          const result = await userService.updateUser(userLogin._id,data)
+          let result = await userService.updateUser(userLogin._id,data)
           
           if(result){
-            
-            req.session.authState.user= {
-              ...result,
-              password: undefined
-            }
+            req.session.authState.user= result
             res.redirect('back')
           }
         }else{
-          const result = await userService.updateUser(userLogin._id,req.body)
+          let result = await userService.updateUser(userLogin._id,req.body)
           if(result){
-            req.session.authState.user= {
-              ...result,
-              password: undefined
-            }
+            req.session.authState.user= result
+            console.log(req.session.authState);
             res.redirect('back')
           }
         }
