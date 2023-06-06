@@ -29,6 +29,7 @@ class UserService {
             data,
             { returnDocument: "after", upsert: true }
         ).lean()
+        .exclude('password')
     }
 
     async findById(id){
