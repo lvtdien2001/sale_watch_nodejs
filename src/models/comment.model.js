@@ -20,9 +20,9 @@ const commentSchema = new Schema({
         default: 5
     },
     feedback: [{
-        content: {
+        contentFeedback: {
             type: String,
-        }
+        },
     }],
     imageUrl: {
         type: String

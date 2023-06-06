@@ -44,15 +44,18 @@ deleteImg.addEventListener('click', function(){
     fileImg.style.display='none'
 })
 
-const resBtn = document.querySelector('.res__btn')
-const resContent = document.querySelector('.res')
+const resBtn = document.querySelectorAll('.res__btn')
+const resContent = document.querySelectorAll('.res')
 let displayStyle = false
-resBtn.addEventListener('click',function(){
-    displayStyle=!displayStyle
-    if(displayStyle){
-        resContent.style.display='block'
-    }else{
-        resContent.style.display='none'
+for(let i=0;i<resBtn.length;i++){
+    resBtn[i].addEventListener('click',function(){
+        displayStyle=!displayStyle
+        if(displayStyle){
+            resContent[i].style.display='block'
+        }else{
+            resContent[i].style.display='none'
+    
+        }
+    })
+}
 
-    }
-})

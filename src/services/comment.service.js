@@ -19,15 +19,6 @@ class CommentServices {
         .lean()
     }
 
-    async findAll(watchId){
-        return await commentModel.find({
-            watchId
-        })
-        .populate('userId',['fullName'])
-        .sort({ createdAt: -1 })
-        .lean()
-    }
-
     async updateComment(id,data){
         return commentModel.findByIdAndUpdate(id, {$push: { feedback: data }},{
             new:true

@@ -85,6 +85,7 @@ exports.getProductDetail = async (req, res) => {
         const response = await watchService.findById(watchId);
         const suggestWatches = (await watchService.findAll({ brandId: response.watch.brandId, _id: { $ne: response.watch._id } }, 4, { price: -1 })).watches;
         // comment
+
         const result = await commentServices.findAllByWatchId(req.params.id)
         var data = [];
         for (let i = 0; i < result.length; i++) {
@@ -92,9 +93,10 @@ exports.getProductDetail = async (req, res) => {
             for (let j = 0; j < parseInt(result[i].rate); j++) {
                 starElement.push(1)
             }
+          
             const temp = {
+                element: starElement,
                 ...result[i],
-                element: starElement
             }
             data.push(temp)
         }
