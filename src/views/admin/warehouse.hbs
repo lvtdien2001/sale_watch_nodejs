@@ -1,0 +1,69 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/warehouse.css" />
+{{/section}}
+
+<div>
+    <h4 class="text-center mt-3 mb-3">DANH SÁCH PHIẾU NHẬP KHO</h4>
+    
+    <!-- Button trigger create receipt modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-receipt-modal">
+        Tạo phiếu nhập kho
+    </button>
+
+    <!-- create receipt modal -->
+    <div class="modal fade" id="create-receipt-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createReceiptModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="createReceiptModalLabel">Tạo phiếu nhập kho</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                {{!-- create add receipt form --}}
+                <form action="/admin/warehouse/add" method="POST">
+                    <div id="product-list" class="modal-body">
+                        <div id="product-item-0" class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">Sản phẩm <span class="text-danger">*</span></label>
+                                <select id="select-product" required class="form-select" name="watches[0][watchId]" oninvalid="setCustomValidity('Bạn chưa chọn sản phẩm')" oninput="setCustomValidity('')">
+                                    <option value="" hidden>--- Chọn sản phẩm ---</option>
+                                    {{#each watches}}
+                                        <option value="{{_id}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-4 mb-3">
+                                        <label class="form-label fw-bold">Nhà cung cấp <span class="text-danger">*</span></label>
+                                        <input class="form-control" required="true" oninvalid="setCustomValidity('Nhà cung cấp không thể bỏ trống')" oninput="setCustomValidity('')" type="text" name="watches[0][supplier]" placeholder="Nhà cung cấp">
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label class="form-label fw-bold">Số lượng <span class="text-danger">*</span></label>
+                                        <input class="form-control" min="1" required="true" oninvalid="setCustomValidity('Số lượng phải lớn hơn 0')" oninput="setCustomValidity('')" type="number" name="watches[0][quantity]" value="0">
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label class="form-label fw-bold">Đơn giá nhập <span class="text-danger">*</span></label>
+                                        <input class="form-control" min="1000" required="true" oninvalid="setCustomValidity('Đơn giá thấp nhất là 1000 đ')" oninput="setCustomValidity('')" type="number" name="watches[0][price]" value="0">
+                                    </div>
+                                    <div class="col-2 mb-3 align-self-end">
+                                        <button id="btn-add" type="button" class="btn btn-outline-success">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-outline-danger btn-lg" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-outline-success btn-lg">Gửi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#section 'js'}}
+    <script src="/js/warehouse.js"></script>
+{{/section}}

@@ -1,6 +1,7 @@
 import express from 'express';
 import watchController from '../controllers/watch.controller';
 import brandController from '../controllers/brand.controller';
+import warehouseController from '../controllers/warehouse.controller';
 import upload from '../utils/multer';
 
 const router = express.Router();
@@ -18,5 +19,9 @@ router.get('/brand', brandController.getAllBrands)
 router.post('/brand/add', upload.single('image'), brandController.create)
 router.post('/brand/update/:id', upload.single('image'), brandController.update)
 router.post('/brand/delete/:id', brandController.delete)
+
+// warehouse route
+router.get('/warehouse', warehouseController.getHomePage);
+router.post('/warehouse/add', warehouseController.createAddReceipt);
 
 export default router;
