@@ -5,7 +5,7 @@ export const verifyRole = (req, res, next) => {
 }
 
 export const verifyAddProduct = (req, res, next) => {
-
+    
 }
 
 export const verifyUpdateProduct = (req, res, next) => {
