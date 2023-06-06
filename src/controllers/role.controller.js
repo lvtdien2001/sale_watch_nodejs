@@ -18,7 +18,7 @@ class roleController {
             if (roles) {
                 const result = await userService.updateRole(req.params.id, data)
                 if (result) {
-                    res.redirect('/role')
+                    res.redirect('/admin/role')
                 }
             }
         } catch (error) {
