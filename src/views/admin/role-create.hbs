@@ -5,14 +5,14 @@
 <div class="role__create">
     <form action="/admin/role/create" method="post" class="form__crearte-role">
         <h3 class="text-center">Thêm quyền vào hệ thống</h3>
-        {{#if message}}
-        <span class="text-success">{{message}}</span>
-        {{/if}}
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Tên Quyền</label>
             <input placeholder="Nhập tên quyền" type="text" name="name" class="form-control" id="exampleInputEmail1">
         </div>
         <button class="btn btn-info">Thêm</button>
+        {{#if success}}
+            <p class="text-success fs-4">{{message}}</p>
+        {{/if}}
     </form>
 
 

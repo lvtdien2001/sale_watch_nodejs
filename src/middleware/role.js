@@ -1,64 +1,106 @@
 export const verifyRole = (req, res, next) => {
-    if (
-        req.session.authState?.user.isAdmin ||
-        req.session.authState?.user.roles.length > 0
-    )
-        return next();
-    else return res.redirect("/user/login");
+  if (req.session.authState?.user.isAdmin || req.session.authState?.user.roles.length > 0)
+    return next();
+  else return res.redirect("/user/login");
 };
 
 export const verifyAddProduct = (req, res, next) => {
-    if (
-        req.session.authState?.user.roles.length > 0 ||
-        req.session.authState?.user.isAdmin
-    ) {
-        if (req.session.authState?.user.isAdmin) {
-            return next();
-        } else {
-            for (let i = 0; i < req.session.authState?.user.roles.length; i++) {
-                if (
-                    req.session.authState?.user.roles[i].roleId ===
-                    "647db266fc95a902d1b48ee3"
-                ) {
-                    return next();
-                } else {
-                    return res.redirect("/admin");
-                }
-            }
-        }
-    } else {
-        return res.redirect("/");
+  const roles = req.session.authState?.user.roles
+  if (req.session.authState?.user.isAdmin) {
+    return next();
+  } else if (roles.length > 0) {
+    for (let i = 0; i < roles.length; i++) {
+      if (req.session.authState?.user.isAdmin || roles[i].roleId === "647db266fc95a902d1b48ee3") {
+        return next();
+      } else {
+        return res.redirect("/admin");
+      }
     }
+  }
 };
 
 export const verifyUpdateProduct = (req, res, next) => {
-    if (
-        req.session.authState?.user.roles.length > 0 ||
-        req.session.authState?.user.isAdmin
-    ) {
-        if (req.session.authState?.user.isAdmin) {
-            return next();
-        } else {
-            for (let i = 0; i < req.session.authState?.user.roles.length; i++) {
-                if (
-                    req.session.authState?.user.roles[i].roleId ===
-                    "6470783d442bb7582321cdbc"
-                ) {
-                    return next();
-                } else {
-                    return res.redirect("/admin");
-                }
-            }
-        }
-    } else {
-        return res.redirect("/");
+  const roles = req.session.authState?.user.roles
+  if (req.session.authState?.user.isAdmin) {
+    return next();
+  } 
+  else if (roles.length > 0) {
+    for (let i = 0; i < roles.length; i++) {
+      if (req.session.authState?.user.isAdmin || roles[i].roleId === "6470783d442bb7582321cdbc") {
+        return next();
+      } 
+      else {
+        return res.redirect("/admin");
+      }
     }
+  }
 };
 
-export const verifyDeleteProduct = (req, res, next) => { };
+export const verifyDeleteProduct = (req, res, next) => {
+  const roles = req.session.authState?.user.roles
+  if (req.session.authState?.user.isAdmin) {
+    return next();
+  } 
+  else if (roles.length > 0) {
+    for (let i = 0; i < roles.length; i++) {
+      if (req.session.authState?.user.isAdmin || roles[i].roleId === "646f04704fcf7491a6c1e9b0") {
+        return next();
+      } 
+      else {
+        return res.redirect("/admin");
+      }
+    }
+  }
+};
 
-export const verifyAddBrand = (req, res, next) => { };
+export const verifyAddBrand = (req, res, next) => { 
+  const roles = req.session.authState?.user.roles
+  if (req.session.authState?.user.isAdmin) {
+    return next();
+  } 
+  else if (roles.length > 0) {
+    for (let i = 0; i < roles.length; i++) {
+      if (req.session.authState?.user.isAdmin || roles[i].roleId === "64705ea58882950102523b10") {
+        return next();
+      } 
+      else {
+        return res.redirect("/admin");
+      }
+    }
+  }
+};
 
-export const verifyUpdateBrand = (req, res, next) => { };
+export const verifyUpdateBrand = (req, res, next) => { 
+  const roles = req.session.authState?.user.roles
+  if (req.session.authState?.user.isAdmin) {
+    return next();
+  } 
+  else if (roles.length > 0) {
+    for (let i = 0; i < roles.length; i++) {
+      if (req.session.authState?.user.isAdmin || roles[i].roleId === "647057a4a910f2cec64327c1") {
+        return next();
+      } 
+      else {
+        return res.redirect("/admin");
+      }
+    }
+  }
+};
 
-export const verifyDeleteBrand = (req, res, next) => { };
+export const verifyDeleteBrand = (req, res, next) => { 
+  const roles = req.session.authState?.user.roles
+  if (req.session.authState?.user.isAdmin) {
+    return next();
+  } 
+  else if (roles.length > 0) {
+    for (let i = 0; i < roles.length; i++) {
+      if (req.session.authState?.user.isAdmin || roles[i].roleId === "6470570a60def8b8d021c2b0") {
+        return next();
+      } 
+      else {
+        return res.redirect("/admin");
+      }
+    }
+  }
+};
+

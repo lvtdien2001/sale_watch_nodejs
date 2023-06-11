@@ -5,6 +5,8 @@ import userService from '../services/user.service'
 class roleController {
     async updateRole(req, res) {
         try {
+            req.session.message = undefined
+            req.session.success= false
             const roles = req.body.roles;
             let data = []
             for (let i = 0; i < roles.length; i++) {
@@ -18,7 +20,9 @@ class roleController {
             if (roles) {
                 const result = await userService.updateRole(req.params.id, data)
                 if (result) {
-                    res.redirect('/admin/role')
+                    req.session.message = 'Thay đổi quyền thành công'
+                    req.session.success= true
+                    res.redirect('back')
                 }
             }
         } catch (error) {
@@ -32,6 +36,8 @@ class roleController {
             if (req.body) {
                 const result = await roleService.create(req.body)
                 if (result)
+                    req.session.message = 'Thêm thành công'
+                    req.session.success= true
                     res.redirect('back')
             }
         } catch (error) {
@@ -61,6 +67,8 @@ class roleController {
                 userRoles,
                 listRoles: roles,
                 layout: 'admin',
+                message:req.session.message,
+                success:req.session.success,
                 helpers: {
                     templateRole: () => {
                         let inputChecked = ''
@@ -72,9 +80,9 @@ class roleController {
                                 for (let j = 0; j < roles.length; j++) {
                                     if (allrole[i].name == roles[j].name && !temp.includes(allrole[i].name)) {
                                         inputChecked += `
-                                        <div>
-                                            <input id="input__role" class="input__role" name="roles[]" type="checkbox" checked/ value="${allrole[i]._id}">
-                                            <lable for="input__role">${allrole[i].name}</lable>
+                                        <div >
+                                            <input id='input__role${i}' class="input__role fs-2 me-4" name="roles[]" type="checkbox" checked/ value="${allrole[i]._id}">
+                                            <lable  class="fs-5" for='input__role${i}'>${allrole[i].name}</lable>
                                         </div>
                                         `
                                         temp.push(allrole[i].name)
@@ -86,9 +94,9 @@ class roleController {
                                 for (let j = 0; j < allrole.length; j++) {
                                     if (temp[i] != allrole[j].name) {
                                         inputCheck += `
-                                        <div>
-                                            <input id="input__role" name="roles[]" class="input__role" type="checkbox" value="${allrole[j]._id}"/>
-                                            <lable for="input__role">${allrole[j].name}</lable>
+                                        <div >
+                                            <input 'input__role${j}' name="roles[]" class="input__role fs-2 me-4" type="checkbox" value="${allrole[j]._id}"/>
+                                            <lable  class="fs-5" for='input__role${j}'>${allrole[j].name}</lable>
                                         </div>
                                         `
                                     }
@@ -104,8 +112,8 @@ class roleController {
                             for (let k = 0; k < allrole.length; k++) {
                                 inputChecked += ` 
                                         <div>
-                                            <input id="input__role" name="roles[]" class="input__role" type="checkbox" value="${allrole[k]._id}" />
-                                            <lable for="input__role" >${allrole[k].name}</lable>
+                                            <input id='input__role${k}' name="roles[]" class="input__role fs-2 me-4" type="checkbox" value="${allrole[k]._id}" />
+                                            <lable  class="fs-5" for='input__role${k}' >${allrole[k].name}</lable>
                                         </div>
                                         `
                             }
@@ -126,6 +134,8 @@ class roleController {
             const roles = await roleService.findAll()
             res.render('admin/role-create', {
                 roles,
+                message:req.session.message,
+                success:req.session.success,
                 layout: 'admin'
             })
         } catch (error) {
@@ -148,6 +158,7 @@ class roleController {
             if (req.body) {
                 const result = await roleService.updateRole(req.params.id, req.body)
                 if (result)
+                
                     res.redirect(req.get('referer'))
             }
         } catch (error) {
