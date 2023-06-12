@@ -2,6 +2,7 @@ import userService from "../services/user.service";
 import cloudinary from "../utils/cloudinary";
 import * as argon2 from "argon2";
 import jwt from 'jsonwebtoken';
+import nodemailer from "nodemailer"
 class userController {
 
   displayRegister(req, res){
@@ -13,11 +14,11 @@ class userController {
   async register(req, res) {
     try {
       if (req.body) {
-        var isUsename = await userService.checkUsername(req.body.username);
-        var isPhoneNumber = await userService.checkPhoneNumber(
-          req.body.phoneNumber
-        );
-        if (!isUsename && !isPhoneNumber) {
+        var isUsename = await userService.checkEmail(req.body.email);
+        // var isPhoneNumber = await userService.checkPhoneNumber(
+        //   req.body.phoneNumber
+        // );
+        if (!isUsename) {
           const passHashed = await argon2.hash(req.body.password);
           var imageUrl;
           if (req.file) {
@@ -31,22 +32,43 @@ class userController {
             };
           }
           const infoUser = {
-            // roles:[
-            //     {
-            //         roleId:''
-            //     },
-            // ],
-            username: req.body.username,
+            email: req.body.email,
             password: passHashed,
             fullName: req.body.fullName,
             phoneNumber: req.body.phoneNumber,
             imageUrl: imageUrl.url,
             imageId: imageUrl.public_id,
           };
-          var result = await userService.create(infoUser);
-          if(result){
-            res.render('register', {messageSuccess: "Đăng Ký thành công"})
-          }
+          let testAccount = await nodemailer.createTestAccount();
+          // send email
+          let transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+              user: 'nguyenthienthanh17082001@gmail.com', // generated ethereal user
+              pass: 'thanhtran17082001', // generated ethereal password
+            },
+            tls: {
+              rejectUnauthorized: false // Tắt kiểm tra chứng chỉ SSL
+            }
+          });
+          // Định nghĩa nội dung email
+            const mailOptions = {
+              from: 'nguyenthienthanh17082001@gmail.com',
+              to: infoUser.email,
+              subject: 'Xác nhập đăng ký',
+              text: infoUser.fullName
+            };
+
+          // Gửi email
+          const info = await transporter.sendMail(mailOptions);
+          console.log("Message sent: %s", info.messageId);
+
+          // let result = await userService.create(infoUser);
+          // if(result){
+          //   res.render('register', {messageSuccess: "Đăng Ký thành công"})
+          // }
         } else {
           if(isPhoneNumber){
             res.render('register', {
@@ -54,7 +76,7 @@ class userController {
           })
           }else if(isUsename){
             res.render('register', {
-              messageFailure:'Tên người dùng đã đươc sử dụng',
+              messageFailure:'Email đã đươc sử dụng',
           })
           }
         }
@@ -73,7 +95,7 @@ class userController {
   async login(req, res){
     try {
         if(req.body){
-            var user= await userService.findByUsername(req.body.username)
+            var user= await userService.findByEmail(req.body.email)
             if(user){
                 const decryptionPass = await argon2.verify(user.password, req.body.password)
                 if(decryptionPass){
@@ -121,7 +143,10 @@ class userController {
   async displayEditUser(req, res){
     try {
       if(req.session.authState){
-        res.render('user-edit',{user:req.session.authState?.user})
+        res.render('user-edit',{
+          user:req.session.authState?.user,
+          message:req.session.message
+        })
       }else{
         res.redirect('/user/login')
       }
@@ -149,13 +174,14 @@ class userController {
           
           if(result){
             req.session.authState.user= result
+            req.session.message = 'Chỉnh sửa thông tin thành công'
             res.redirect('back')
           }
         }else{
           let result = await userService.updateUser(userLogin._id,req.body)
           if(result){
             req.session.authState.user= result
-            console.log(req.session.authState);
+            req.session.message = 'Chỉnh sửa thông tin thành công'
             res.redirect('back')
           }
         }

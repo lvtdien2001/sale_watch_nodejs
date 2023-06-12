@@ -7,6 +7,8 @@ const submitBtn= document.querySelector('#submit-btn')
 const submitBtnLogIn= document.querySelector('#submit-btn-login')
 const formBlock= document.querySelector('.form__block')
 const formGroups =formBlock.querySelectorAll('.form__group')
+const title= document.querySelector('.title')
+document.title=title.textContent
 
 function messageError(element, message){
     if(element){
@@ -33,7 +35,8 @@ function messageSuccess(element, message){
 
 usernameInput.addEventListener('blur', checkUsername)
 function checkUsername(e){
-    usernameInput.value < 6 ? messageError(usernameInput,'Tên đăng nhập phải lớn hơn 6 ký tự') : messageSuccess(usernameInput,'Hợp lệ')
+    const emailFormat=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    usernameInput.value.match(emailFormat) ?  messageSuccess(usernameInput,'Hợp lệ') :messageError(usernameInput,'không phải là email')
 }
 
 passInput.addEventListener('blur', checkPassword)
