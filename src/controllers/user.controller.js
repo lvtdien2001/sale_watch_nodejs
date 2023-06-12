@@ -15,10 +15,10 @@ class userController {
     try {
       if (req.body) {
         var isUsename = await userService.checkEmail(req.body.email);
-        // var isPhoneNumber = await userService.checkPhoneNumber(
-        //   req.body.phoneNumber
-        // );
-        if (!isUsename) {
+        var isPhoneNumber = await userService.checkPhoneNumber(
+          req.body.phoneNumber
+        );
+        if (!isUsename && !isPhoneNumber) {
           const passHashed = await argon2.hash(req.body.password);
           var imageUrl;
           if (req.file) {
@@ -39,36 +39,10 @@ class userController {
             imageUrl: imageUrl.url,
             imageId: imageUrl.public_id,
           };
-          let testAccount = await nodemailer.createTestAccount();
-          // send email
-          let transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-              user: 'nguyenthienthanh17082001@gmail.com', // generated ethereal user
-              pass: 'thanhtran17082001', // generated ethereal password
-            },
-            tls: {
-              rejectUnauthorized: false // Tắt kiểm tra chứng chỉ SSL
-            }
-          });
-          // Định nghĩa nội dung email
-            const mailOptions = {
-              from: 'nguyenthienthanh17082001@gmail.com',
-              to: infoUser.email,
-              subject: 'Xác nhập đăng ký',
-              text: infoUser.fullName
-            };
-
-          // Gửi email
-          const info = await transporter.sendMail(mailOptions);
-          console.log("Message sent: %s", info.messageId);
-
-          // let result = await userService.create(infoUser);
-          // if(result){
-          //   res.render('register', {messageSuccess: "Đăng Ký thành công"})
-          // }
+          let result = await userService.create(infoUser);
+          if(result){
+            res.render('register', {messageSuccess: "Đăng Ký thành công"})
+          }
         } else {
           if(isPhoneNumber){
             res.render('register', {
@@ -78,6 +52,7 @@ class userController {
             res.render('register', {
               messageFailure:'Email đã đươc sử dụng',
           })
+          
           }
         }
       }

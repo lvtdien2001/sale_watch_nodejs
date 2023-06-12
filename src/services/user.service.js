@@ -1,4 +1,4 @@
-import userModel from '../models/user.model2'
+import userModel from '../models/user.model'
 
 class UserService {
     async create(infoUser){
