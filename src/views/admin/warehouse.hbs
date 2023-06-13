@@ -3,12 +3,127 @@
 {{/section}}
 
 <div>
-    <h4 class="text-center mt-3 mb-3">DANH SÁCH PHIẾU NHẬP KHO</h4>
+    <h4 class="text-center mt-3 mb-3">QUẢN LÝ KHO HÀNG</h4>
     
-    <!-- Button trigger create receipt modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-receipt-modal">
-        Tạo phiếu nhập kho
-    </button>
+    <div class="mb-3">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <div id="nav-receipt" class="nav-link active">Phiếu nhập kho</div>
+            </li>
+            <li class="nav-item">
+                <div id="nav-product" class="nav-link">Hàng hóa</div>
+            </li>
+        </ul>
+    </div>
+
+    {{!-- product list content --}}
+    <div class="hidden" id="product-list-content">
+        <h5 class="mb-3 text-center">DANH SÁCH HÀNG HÓA</h5>
+
+        <div class="table-responsive">
+            <table class="table table-bordered border-dark text-center align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Tên sản phẩm</th>
+                        <th scope="col">Hình ảnh</th>
+                        <th scope="col">Tồn kho</th>
+                        <th scope="col">Đã bán</th>
+                        <th scope="col">Đơn giá</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each watchesOfPage}}
+                        <tr>
+                            <th>{{increase @index}}</th>
+                            <td style="max-width: 700px;" class="text-start">{{name}}</td>
+                            <td>
+                                <img src={{imageUrl}} alt="Hinh anh thuong hieu" width="100px" height="100px">
+                            </td>
+                            <td>{{inventory}}</td>
+                            <td>{{sold}}</td>
+                            <td><b class="text-danger">{{formatPrice price}}</b></td>
+                            <td>
+                                <button class="btn btn-outline-success"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {{!-- Add receipt list content --}}
+    <div id="receipt-list-content">
+        <!-- Button trigger create receipt modal -->
+        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#create-receipt-modal">
+            Tạo phiếu nhập kho
+        </button>
+
+        <h5 class="mb-3 text-center">DANH SÁCH PHIẾU NHẬP KHO</h5>
+
+        {{#if (checkPageNumber pageNumberOfReceipt)}}
+            <ul class="pagination justify-content-center mb-3">
+                <li class="page-item">
+                    <a class="page-link" href="/admin/warehouse" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {{#paginate pageNumberOfReceipt currentPageOfReceipt '/admin/warehouse' ''}}{{/paginate}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/warehouse?currentPage={{pageNumberOfReceipt}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        {{/if}}
+
+        {{!-- receipt list table --}}
+        <div class="table-responsive">
+            <table class="table table-bordered border-dark text-center align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Ngày nhập kho</th>
+                        <th scope="col">Phân loại sản phẩm</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Tổng số tiền</th>
+                        <th scope="col">Người tạo phiếu</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each receipts}}
+                        <tr>
+                            <th>{{formatNum (increase @index)}}</th>
+                            <td class="text-start">{{createdAt}}</td>
+                            <td>
+                                {{#with watches}}
+                                    {{length}}
+                                {{/with}}
+                            </td>
+                            <td>
+                                {{totalQuantity}}
+                            </td>
+                            <td class="text-danger">
+                                <b>{{formatPrice totalAmount}}</b>
+                            </td>
+                            <td>
+                                {{#with createBy}}
+                                    {{fullName}}
+                                {{/with}}
+                            </td>
+                            <td>
+                                <button class="btn btn-light btn-detail">Xem chi tiết</button>
+                            </td>
+                        </tr>
+
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <!-- create receipt modal -->
     <div class="modal fade" id="create-receipt-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createReceiptModalLabel" aria-hidden="true">
@@ -62,6 +177,10 @@
             </div>
         </div>
     </div>
+
+    {{!-- message --}}
+    {{#showMessage message success}}{{/showMessage}}
+    {{clearMessage}}
 </div>
 
 {{#section 'js'}}

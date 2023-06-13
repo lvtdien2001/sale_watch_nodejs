@@ -15,20 +15,28 @@ document.getElementById('btn-add').onclick = () => {
             +        '<select id="name-' + localStorage['listLength'] + '" required class="form-select" name="watches['+ localStorage['listLength'] +'][watchId]" oninvalid="setCustomValidity('+"'Bạn chưa chọn sản phẩm'"+')" oninput="setCustomValidity('+ "''" +')">'
             +            selectContent
             +        '</select>'
+            +   '</div>'
+            +    '<div class="col-6">'
+            +    '<div class="row">'
+            +    '<div class="col-4 mb-3">'
+            +        '<label class="form-label fw-bold">Nhà cung cấp <span class="text-danger">*</span></label>'
+            +        '<input id="suplier-' + localStorage['listLength'] + '" class="form-control" name="watches[' + localStorage['listLength'] + '][suplier]" required="true" oninvalid="setCustomValidity('+"'Nhà cung cấp không thể bỏ trống'"+')" oninput="setCustomValidity('+"''"+')" type="text" placeholder="Nhà cung cấp">'
             +    '</div>'
-            +    '<div class="col-2 mb-3">'
+            +    '<div class="col mb-3">'
             +        '<label class="form-label fw-bold">Số lượng <span class="text-danger">*</span></label>'
-            +        '<input id="quantity-' + localStorage['listLength'] + '" class="form-control" required="true" type="number" name="watches[' + localStorage['listLength'] + '][quantity]" value="0">'
+            +        '<input id="quantity-' + localStorage['listLength'] + '" class="form-control" required="true" min="1" oninvalid="setCustomValidity('+"'Số lượng phải lớn hơn 0'"+')" oninput="setCustomValidity('+"''"+')" type="number" name="watches[' + localStorage['listLength'] + '][quantity]" value="0">'
             +    '</div>'
-            +    '<div class="col-2 mb-3">'
+            +    '<div class="col mb-3">'
             +        '<label class="form-label fw-bold">Đơn giá nhập <span class="text-danger">*</span></label>'
-            +        '<input id="price-' + localStorage['listLength'] + '" class="form-control" required="true" type="number" name="watches[' + localStorage['listLength'] + '][price]" value="0">'
+            +        '<input id="price-' + localStorage['listLength'] + '" class="form-control" min="1000" required="true" oninvalid="setCustomValidity('+"'Đơn giá thấp nhất là 1000 đ'"+')" oninput="setCustomValidity('+"''"+')" type="number" name="watches[' + localStorage['listLength'] + '][price]" value="0">'
             +    '</div>'
-            +    '<div class="col-xl-1 mb-3 align-self-end">'
+            +    '<div class="col-2 mb-3 align-self-end">'
             +        '<button id="btn-' + localStorage['listLength'] + '" onclick="removeProduct(' + localStorage['listLength'] + ')" type="button" class="btn btn-outline-danger">'
             +            '<i class="fas fa-trash"></i>'
             +        '</button>'
             +    '</div>'
+            +        '</div>'
+            +        '</div>'
 
     div.innerHTML = html;
 
@@ -46,6 +54,10 @@ const removeProduct = num => {
         htmlName.name = `watches[${i-1}][name]`;
         htmlName.id = `name-${i-1}`;
 
+        let htmlSuplier = document.getElementById(`suplier-${i}`);
+        htmlSuplier.name = `watches[${i-1}][suplier]`;
+        htmlSuplier.id = `suplier-${i-1}`;
+
         let htmlQuantity = document.getElementById(`quantity-${i}`);
         htmlQuantity.name = `watches[${i-1}][quantity]`;
         htmlQuantity.id = `quantity-${i-1}`;
@@ -60,4 +72,31 @@ const removeProduct = num => {
 
         document.getElementById(`product-item-${i}`).id = `product-item-${i-1}`;
     }
+}
+
+document.getElementById('nav-receipt').onclick = () => {
+    const isHidden = document.getElementById('receipt-list-content').classList.contains('hidden');
+    if (isHidden){
+        document.getElementById('receipt-list-content').classList.toggle('hidden');
+        document.getElementById('product-list-content').classList.toggle('hidden');
+        document.getElementById('nav-receipt').classList.toggle('active');
+        document.getElementById('nav-product').classList.toggle('active'); 
+    }
+}
+
+document.getElementById('nav-product').onclick = () => {
+    const isHidden = document.getElementById('product-list-content').classList.contains('hidden');
+    if (isHidden){
+        document.getElementById('receipt-list-content').classList.toggle('hidden');
+        document.getElementById('product-list-content').classList.toggle('hidden');
+        document.getElementById('nav-receipt').classList.toggle('active');
+        document.getElementById('nav-product').classList.toggle('active'); 
+    }
+}
+
+// show message
+const messageToast = document.getElementById('message-toast')
+if (messageToast){
+    const toast = new bootstrap.Toast(messageToast)
+    toast.show()
 }

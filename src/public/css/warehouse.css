@@ -1,0 +1,13 @@
+#nav-receipt, #nav-product {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+.btn-detail {
+    background-color: #fff;
+    border: none;
+    color: var(--bs-blue);
+    text-decoration: underline;
+}
