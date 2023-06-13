@@ -1,0 +1,145 @@
+.comment__frame{
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    /* max-height: 500px; */
+}
+.comment{
+    max-height: 430px;
+    overflow: auto;
+}
+.list__star{
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.star__item{
+    color: yellow;
+    margin: 10px 8px 10px 0;
+}
+.comment__username{
+    font-size: 20px;
+    color: rgb(10, 2, 2);
+}
+
+/* form comment */
+
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    transition: all linear 0.3s;
+}
+.form__comment{
+    min-height: 450px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+}
+.form__head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.stars{
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.star{
+    font-size: 35px;
+    color: yellow;
+    margin:0 15px 20px 0px;
+    cursor: pointer;
+}
+.icon{
+    color: #fff;
+    overflow: hidden;
+}
+.comment__res{
+    min-height: 100px;
+    border: 1px solid#ccc;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+}
+#comment__img{
+    display: none;
+}
+.comment__content2{
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #ccc;
+    margin-top: 3px;
+    font-size: 18px;
+    padding:5px 0 30px 10px;
+}
+.comment__label{
+    margin-left: 10px;
+    font-size: 17px;
+    color: rgb(91, 91, 227);
+}
+.comment__img{
+    height: 80px;
+    width: 80px;
+}
+.file__img{
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    display: none;
+}
+.delete__img{
+    background-color: #666;
+    width: 80px;
+    text-align: center;
+    cursor: pointer;
+}
+.delete__img:hover{
+    color: #fff;
+}
+.comment__btn{
+    margin-top: 20px;
+}
+.rate{
+    opacity: 0;
+}
+.res{
+    display: none;
+    transition: all linear 0.3s;
+}
+.res__btn{
+    cursor: pointer;
+    font-size: 17px;
+    font-style: italic;
+    font-weight: 500;
+
+}
+.res__input{
+    width: 80%;
+    outline: none;
+    border: 1px solid #666;
+    border-radius: 5px;
+    padding-left: 10px;
+    height: 38px;
+}
+.res__submit{
+    outline: none;
+    height: 38px;
+    border: 1px solid #666;
+    padding: 0 10px;
+    border-radius: 5px;
+}

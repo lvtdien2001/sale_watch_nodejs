@@ -5,10 +5,11 @@ exports.getAuthBtn = user => {
     if (user){
         return  `<div class="dropdown">
                     <button class="btn dropdown-toggle header-user-toggle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="${user.imageUrl}" width="25px" height="25px">
+                        <img id="header-user-avatar" src="${user.imageUrl}" width="25px" height="25px">
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="/order/myorder">Đơn hàng của tôi</a></li>
+                        <li><a class="dropdown-item" href="/user/edit">Chỉnh sửa thông tin</a></li>
                         <li><a class="dropdown-item" href="#">#2</a></li>
                         <li>
                             <a class="dropdown-item text-danger" href="/user/logout">
@@ -38,18 +39,19 @@ exports.showMessage = (message, success) => {
     return null;
 }
 
-exports.paginate = (pageNumber, currentPage, router) => {
+exports.paginate = (pageNumber, currentPage, router, param) => {
     currentPage = Number(currentPage);
+
     // first page
     let template = currentPage===1
-        ? `<li class="page-item active"><a class="page-link" href="${router}?currentPage=1">1</a></li>`
-        : `<li class="page-item"><a class="page-link" href="${router}?currentPage=1">1</a></li>`
-
+        ? `<li class="page-item active"><a class="page-link" href="${router}?currentPage=1&${param}">1</a></li>`
+        : `<li class="page-item"><a class="page-link" href="${router}?currentPage=1&${param}">1</a></li>`
+    
     for (let i=2; i<pageNumber; i++){
         if (i===currentPage)
-            template += `<li class="page-item active"><a class="page-link" href="${router}?currentPage=${i}">${i}</a></li>`
+            template += `<li class="page-item active"><a class="page-link" href="${router}?currentPage=${i}&${param}">${i}</a></li>`
         else if (i===currentPage-1 || i===currentPage+1)
-            template += `<li class="page-item"><a class="page-link" href="${router}?currentPage=${i}">${i}</a></li>`
+            template += `<li class="page-item"><a class="page-link" href="${router}?currentPage=${i}&${param}">${i}</a></li>`
         else if(i<currentPage-1){
             template += `<li class="page-item"><a class="page-link" href="#">...</a></li>`;
             i = currentPage-2;
@@ -62,8 +64,8 @@ exports.paginate = (pageNumber, currentPage, router) => {
 
     // last page
     template += currentPage===pageNumber
-        ? `<li class="page-item active"><a class="page-link" href="${router}?currentPage=${pageNumber}">${pageNumber}</a></li>`
-        : `<li class="page-item"><a class="page-link" href="${router}?currentPage=${pageNumber}">${pageNumber}</a></li>`
+        ? `<li class="page-item active"><a class="page-link" href="${router}?currentPage=${pageNumber}&${param}">${pageNumber}</a></li>`
+        : `<li class="page-item"><a class="page-link" href="${router}?currentPage=${pageNumber}&${param}">${pageNumber}</a></li>`
     return template;
 }
 
@@ -88,7 +90,7 @@ exports.formatName = name => {
 }
 
 exports.checkRole = user => {
-    if (user?.isAdmin || user?.roles.length>0)
+    if (user?.isAdmin || (user?.roles?.length && user?.roles.length>0))
         return true;
     return false;
 }

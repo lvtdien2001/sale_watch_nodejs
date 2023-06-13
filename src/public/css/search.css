@@ -1,0 +1,11 @@
+#search-card-name {
+    font-weight: 600;
+}
+#search-card-price {
+    font-weight: 600;
+    color: var(--bs-red);
+}
+.card-image:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.05);
+}

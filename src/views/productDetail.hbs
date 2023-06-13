@@ -1,36 +1,40 @@
 {{#section 'css'}}
-    <link rel="stylesheet" href="/css/productDetail.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="/css/productDetail.css" />
+<link rel="stylesheet" href="/css/comment.css" />
 {{/section}}
 
 <div class="container">
     {{#with watch}}
-        <div class="watch-name mt-3 mb-3">
-            {{name}}
+    <div class="watch-name mt-3 mb-3">
+        {{name}}
+    </div>
+    <div class="watch-body row">
+        <div class="col-12 col-xl-6">
+            <img src="{{imageUrl}}" alt="Hinh anh san pham" width="100%">
         </div>
-        <div class="watch-body row">
-            <div class="col-12 col-xl-6">
-                <img src="{{imageUrl}}" alt="Hinh anh san pham" width="100%">
+        <div class="col-12 col-xl-6">
+            {{!-- Product information --}}
+            <h4 class="text-center mb-3">Thông tin sản phẩm</h4>
+            <div class="watch-body-text">
+                <div class="mb-2 watch-description">{{description}}</div>
+                <div class="watch-price mb-2">Đơn giá: {{formatPrice price}}</div>
+                <div class="mb-2"><b>Thương hiệu:</b> {{#with brandId}}{{name}}{{/with}}</div>
+                <div class="mb-2"><b>Kính:</b> {{glass}}</div>
+                <div class="mb-2"><b>Dây đeo:</b> {{strap}}</div>
+                <div class="mb-2"><b>Bộ máy:</b> {{principleOperate}}</div>
             </div>
-            <div class="col-12 col-xl-6">
-                {{!-- Product information --}}
-                <h4 class="text-center mb-3">Thông tin sản phẩm</h4>
-                <div class="watch-body-text">
-                    <div class="mb-2 watch-description">{{description}}</div>
-                    <div class="watch-price mb-2">Đơn giá: {{formatPrice price}}</div>
-                    <div class="mb-2"><b>Thương hiệu:</b> {{#with brandId}}{{name}}{{/with}}</div>
-                    <div class="mb-2"><b>Kính:</b> {{glass}}</div>
-                    <div class="mb-2"><b>Dây đeo:</b> {{strap}}</div>
-                    <div class="mb-2"><b>Bộ máy:</b> {{principleOperate}}</div>
-                </div>
 
-                {{!-- Button trigger cart modal --}}
-                <div class="row me-1 ms-1">
-                    <button type="button" class="btn btn-lg btn-cart" data-bs-toggle="modal" data-bs-target="#cart-modal">
-                        Thêm vào giỏ hàng
-                    </button>
-                </div>
+            {{!-- Button trigger cart modal --}}
+            <div class="row me-1 ms-1">
+                <button type="button" class="btn btn-lg btn-cart" data-bs-toggle="modal" data-bs-target="#cart-modal">
+                    Thêm vào giỏ hàng
+                </button>
             </div>
         </div>
+    </div>
     {{/with}}
 
     {{!-- Suggest product --}}
@@ -40,17 +44,17 @@
         </div>
 
         {{#each suggestWatches}}
-            <div class="col-6 col-xl-3 col-md-4 mb-3">
-                <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{name}}">
-                    <a style="text-decoration: none;" href="/watch/{{_id}}">
-                        <img src="{{imageUrl}}" class="card-img-top card-image" alt="...">
-                        <div class="card-body">
-                            <div class="watch-suggest-name">{{formatName name}}</div>
-                            <div class="watch-suggest-price">{{formatPrice price}}</div>
-                        </div>
-                    </a>
-                </div>
+        <div class="col-6 col-xl-3 col-md-4 mb-3">
+            <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{name}}">
+                <a style="text-decoration: none;" href="/watch/{{_id}}">
+                    <img src="{{imageUrl}}" class="card-img-top card-image" alt="...">
+                    <div class="card-body">
+                        <div class="watch-suggest-name">{{formatName name}}</div>
+                        <div class="watch-suggest-price">{{formatPrice price}}</div>
+                    </div>
+                </a>
             </div>
+        </div>
         {{/each}}
     </div>
 
@@ -75,9 +79,8 @@
                                         <input value="1" min="1" max="{{currentQuantity}}" name="quantity" type="number" class="form-control" id="inputQuantity">
                                     </div>
 
-                                    <div class="mt-3 mb-3 text-danger">
-                                        <b>Đơn giá: {{formatPrice price}}</b>
-                                    </div>
+                                <div class="mt-3 mb-3 text-danger">
+                                    <b>Đơn giá: {{formatPrice price}}</b>
                                 </div>
                             </div>
                         </div>
@@ -93,6 +96,93 @@
     </div>
 </div>
 
+
+{{!-- comment --}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-8 comment__frame">
+            <h3>Bình luận - đánh giá</h3>
+            <hr>
+            <div class="comment">
+                {{#each data}}
+                <h4 class="comment__username">{{this.userId.fullName}}</h4>
+                <ul class="list__star">
+                    {{#each this.element}}
+                    <li class="star__item"><i class="fa-solid fa-star"></i></li>
+                    {{/each}}
+                </ul>
+                <div class="comment__content">
+                    <p class="comment__description">Nội dung: {{this.content}}</p>
+                    {{#if this.imageUrl}}
+                    <img class="comment__img" src="{{this.imageUrl}}" alt="">
+                    {{/if}}
+                    <div class="comment__response">
+                        <span class="text-info res__btn"><i class="fa-regular fa-message"></i> Phản hồi</span>
+                        <div class="res">
+                            <form action="/comment/res/{{this._id}}" class="mt-4" method="post">
+                                <input type="text" name="feedback" placeholder="Phản hồi của bạn" class="res__input">
+                                <button class="res__submit">Gửi</button>
+                            </form>
+                            <div class="res__order">
+                                <h6 class="text-center text-warning mt-2">Các phản hồi khác</h6>
+                                {{#each this.feedback}}
+                                    <p class="ms-4 res__content">{{this.contentFeedback}}</p>
+                                {{/each}}
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                {{/each}}
+            </div>
+
+            <div class="row">
+                <div class="col-lg-5 btn btn-info ms-4 btn__open">Viết đánh giá</div>
+            </div>
+        </div>
+        <div class="comment__post">
+            <div class="overlay row">
+                {{#with watch}}
+                <form action="/comment/create/{{_id}}" enctype="multipart/form-data" method="post"
+                    class="form__comment col-4">
+                    <div class="form__head">
+                        <h4 class="fs-5">Đánh giá</h4>
+                        <div class="btn btn-outline-info btn__close"><i class="fa-solid fa-xmark"></i> Đóng</div>
+                    </div>
+                    <hr>
+                    <ul class="stars">
+                        <li class="star" data-star="1"><i class="fa-regular fa-star"></i></li>
+                        <li class="star" data-star="2"><i class="fa-regular fa-star"></i></li>
+                        <li class="star" data-star="3"><i class="fa-regular fa-star"></i></li>
+                        <li class="star" data-star="4"><i class="fa-regular fa-star"></i></li>
+                        <li class="star" data-star="5"><i class="fa-regular fa-star"></i></li>
+                    </ul>
+                    <input type="number" name="rate" id="" class="rate " value="0">
+                    <div class="comment__res">
+                        <input type="text" name="content" class="comment__content2"
+                            placeholder="Viết đánh giá của bạn ở đây">
+                        <input type="file" name="imageUrl" id="comment__img">
+                        <label for="comment__img" class="comment__label"> <i class="fa-sharp fa-solid fa-camera"></i>
+                            Hình chụp thực tế</label>
+                        <div class="file__img">
+                            <img src="" alt="" class="comment__img">
+                            <span class="delete__img">xóa</span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <button type="submit" class="btn btn-warning col-8 comment__btn">Gửi đánh giá</button>
+                    </div>
+                </form>
+                {{/with}}
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {{#section 'js'}}
-    <script src="/js/productDetail.js"></script>
+<script src="/js/productDetail.js"></script>
+<script src="/js/comment.js"></script>
 {{/section}}

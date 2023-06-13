@@ -1,0 +1,22 @@
+.role__icon{
+    font-size: 20px;
+}
+.form__crearte-role{
+    width: 600px;
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin:auto;
+}
+
+.role__table{
+    /* width: 50% !important; */
+    margin: auto;
+}
+.list__role{
+    width: 50%;
+    margin: auto;
+    height: 300px;
+    overflow:scroll;
+    scroll-behavior: smooth;
+}

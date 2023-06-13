@@ -5,6 +5,8 @@ import userRouter from './user.route'
 import watchRouter from './watch.route';
 import cartRouter from './cart.route';
 import orderRouter from './order.route';
+import commentRouter from './comment.route';
+
 import brandService from '../services/brand.service';
 import watchService from '../services/watch.service';
 import { verifyRole } from '../middleware/role';
@@ -16,9 +18,49 @@ const initRoutes = (app) => {
     app.use('/news', newsRouter)
     app.use('/cart', cartRouter)
     app.use('/order', orderRouter)
+    app.use('/comment', commentRouter);
     app.use('/admin', verifyRole, adminRoute);
     
+    // search
+    app.use('/search', async (req, res) => {
+        // Bỏ dấu tiếng Việt
+        // const removeAccents = str => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
+
+        try {
+            const searchValue = req.query.key;
+            const currentPage = req.query.currentPage || 1;
+            const watchPerPage = req.query.watchPerPage;
+
+            const response = await watchService.findAllAndPage(
+                currentPage, 
+                {$text: {$search: searchValue}},
+                watchPerPage
+            );
+
+            const isEmpty = response.watches.length>0 ? false : true;
+
+            res.render('search', {
+                watches: response.watches,
+                searchValue,
+                isEmpty,
+                numberOfResult: response.numberOfWatches,
+                pageNumber: response.pageNumber,
+                currentPage: response.currentPage,
+                user: req.session.authState?.user,
+                helpers: {
+                    setSearchKey: key => `key=${key}&watchPerPage=8`
+                }
+            });
+        } catch (error) {
+            console.log(error);
+            res.redirect('/');
+        }
+    })
+
+    // 404 not found
     app.use('/:notfound', (req, res) => res.render('err404', {layout: false}))
+
+    // Home
     app.use('/', async (req, res) => {
         try {
             const brandId = req.query.brand;

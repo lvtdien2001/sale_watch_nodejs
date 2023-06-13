@@ -3,6 +3,7 @@ import cartService from '../services/cart.service';
 import cloudinary from "../utils/cloudinary";
 import * as argon2 from "argon2";
 import jwt from 'jsonwebtoken';
+import nodemailer from "nodemailer"
 class userController {
 
   displayRegister(req, res){
@@ -14,7 +15,7 @@ class userController {
   async register(req, res) {
     try {
       if (req.body) {
-        var isUsename = await userService.checkUsername(req.body.username);
+        var isUsename = await userService.checkEmail(req.body.email);
         var isPhoneNumber = await userService.checkPhoneNumber(
           req.body.phoneNumber
         );
@@ -32,19 +33,14 @@ class userController {
             };
           }
           const infoUser = {
-            // roles:[
-            //     {
-            //         roleId:''
-            //     },
-            // ],
-            username: req.body.username,
+            email: req.body.email,
             password: passHashed,
             fullName: req.body.fullName,
             phoneNumber: req.body.phoneNumber,
             imageUrl: imageUrl.url,
             imageId: imageUrl.public_id,
           };
-          var result = await userService.create(infoUser);
+          let result = await userService.create(infoUser);
           if(result){
             res.render('register', {messageSuccess: "Đăng Ký thành công"})
           }
@@ -55,8 +51,9 @@ class userController {
           })
           }else if(isUsename){
             res.render('register', {
-              messageFailure:'Tên người dùng đã đươc sử dụng',
+              messageFailure:'Email đã đươc sử dụng',
           })
+          
           }
         }
       }
@@ -74,7 +71,7 @@ class userController {
   async login(req, res){
     try {
         if(req.body){
-            var user= await userService.findByUsername(req.body.username)
+            var user= await userService.findByEmail(req.body.email)
             if(user){
                 const decryptionPass = await argon2.verify(user.password, req.body.password)
                 if(decryptionPass){
@@ -106,10 +103,10 @@ class userController {
                   else res.redirect('/admin')
                 }
                 else{
-                  res.render('login',{messageFailure:'sai mật khẩu'})
+                  res.render('login',{messageFailure:'Tên người dùng hoặc mật khẩu không hợp lệ'})
                 } 
             }else{
-              res.render('login',{messageFailure:'tên người dùng ko hợp lệ'})
+              res.render('login',{messageFailure:'Tên người dùng hoặc mật khẩu khong hợp lệ'})
             }
         }
     } catch (error) {
@@ -122,7 +119,58 @@ class userController {
         if (err) res.redirect('/');
         res.redirect('/user/login');
     })
-}
+  }
+
+  async displayEditUser(req, res){
+    try {
+      if(req.session.authState){
+        res.render('user-edit',{
+          user:req.session.authState?.user,
+          message:req.session.message
+        })
+      }else{
+        res.redirect('/user/login')
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async editUser(req, res){
+    try {
+      const userLogin = req.session.authState.user
+      if(req.body){
+        if(req.file){
+        const imageOptions = await cloudinary.uploader.upload(req.file.path, {
+            folder: "user_avatars",
+          });
+          const data ={
+            fullName : req.body.fullName,
+            phoneNumber : req.body.phoneNumber,
+            imageUrl: imageOptions?.url || undefined,
+            imageId : imageOptions?.public_id  || undefined
+          }
+          let result = await userService.updateUser(userLogin._id,data)
+          
+          if(result){
+            req.session.authState.user= result
+            req.session.message = 'Chỉnh sửa thông tin thành công'
+            res.redirect('back')
+          }
+        }else{
+          let result = await userService.updateUser(userLogin._id,req.body)
+          if(result){
+            req.session.authState.user= result
+            req.session.message = 'Chỉnh sửa thông tin thành công'
+            res.redirect('back')
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 
 module.exports = new userController();
