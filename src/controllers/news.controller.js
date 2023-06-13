@@ -5,7 +5,29 @@ import 'moment/locale/vi'
 
 import NewsService from '../services/news.service';
 
+// @route GET /admin/news
+// @desc managed news
+// @access private (admin)
+exports.getAllByAdmin = async(req, res) => {
+    try {
+        const currentPage = req.query.currentPage || '1';
+        const watchPerPage = 3;
+        const response = await NewsService.findAll(currentPage, watchPerPage);
+        res.render('admin/news',{
+            layout:'admin',
+            news: response.news,
+            helpers: {
+                formatDate: date => moment(date).format('lll'),
+                increaseNumber: number => (currentPage - 1) * watchPerPage + number + 1
 
+            },
+            pageNumber: response.pageNumber,
+            currentPage
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 // @route POST /news
 // @desc create a new news
@@ -24,7 +46,7 @@ exports.create = async (req, res) => {
     
     
         await news.save()
-        .then(() => res.redirect('/news'))
+        .then(() => res.redirect('/admin/news'))
         ;
         
     } catch (error) {
@@ -34,7 +56,7 @@ exports.create = async (req, res) => {
 
 // @route GET /news
 // @desc create a new brand
-// @access private (admin)
+// @access public
 exports.get = async (req, res) => {
    
     try { 
@@ -64,13 +86,19 @@ exports.get = async (req, res) => {
     }
 }
 
-// @route delete /news/:id
+// @route delete /admin/delete/news/:id
 // @desc delete a news
 // @access private (admin)
 exports.delete = async (req, res) => {
+   
     try {
+        const deleteImage = await News.findOne({_id: req.params.id})
+        console.log(deleteImage)
+        await NewsService.delete(deleteImage.imageId)
+        console.log(deleteImage.imageId)
         await News.findByIdAndDelete(req.params.id)
-        res.redirect('/news')
+        
+        res.redirect('/admin/news')
     } catch (error) {
         console.log(error);
     }
@@ -94,7 +122,7 @@ exports.getById = async (req, res) => {
     try {
         const id = req.params.id;
         const data = await News.findOne({_id: id}).lean();
-        res.render('news/edit',{data})
+        res.render('admin/edit',{ layout: 'admin',data})
     } catch (error) {
         console.log(error);
     }
@@ -113,7 +141,7 @@ exports.updateInformation = async (req, res) => {
             content
         }
         await News.findOneAndUpdate( condition , update);
-        res.redirect(`/news/edit/${id}`)
+        res.redirect(`/admin/news/edit/${id}`)
     } catch (error) {
         console.log(error);
     }
@@ -139,7 +167,7 @@ exports.updateImage = async (req, res) => {
         await News.findOneAndUpdate( condition , update);
 
 
-        res.redirect(`/news/edit/${id}`)
+        res.redirect(`/admin/news/edit/${id}`)
     } catch (error) {
         console.log(error);
     }

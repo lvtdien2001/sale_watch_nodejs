@@ -12,13 +12,19 @@ const orderSchema = new Schema({
                 type: Schema.Types.ObjectId,
                 ref: 'watch'
             },
-            quantity: Number
+            quantity: Number,
+            price: Number
         }
     ],
     totalAmount: Number,
-    address: String,
-    phoneNumber: Number,
-    payMethod: String,
+    province: String,
+    district: String,
+    ward: String,
+    description: String,
+    fullName: String,
+    email: String,
+    phoneNumber: String,
+    paymentMethod: String,
     isPayment: {
         type: Boolean,
         default: false

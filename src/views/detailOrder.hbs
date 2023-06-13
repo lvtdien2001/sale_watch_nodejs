@@ -1,0 +1,49 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/detailOrder.css" />
+{{/section}}
+<div class="container mt-4">
+            <div class="row justify-content-center">
+                <h3 class="text-center">Thông tin chi tiết đơn hàng</h3>
+               
+                    {{#with order}}   
+                        <div class="status-order-title">Trạng thái đơn hàng    </div>
+                        {{#formatStatusProgess status}}{{/formatStatusProgess}}
+                        <div class="col-12 col-md-4 info-order">
+                            <div class="m-2 p-2"><span class="text-secondary">Tên người nhận :</span> {{fullName}}</div>
+                            <div class="m-2 p-2"><span class="text-secondary">Email :</span> {{email}}</div>
+                            <div class="m-2 p-2"><span class="text-secondary">Số điện thoại :</span> {{phoneNumber}}</div>
+                            <div class="m-2 p-2"><span class="text-secondary">Địa chỉ :</span> {{description}}, {{ward}}, {{district}}, {{province}}</div>
+                            <div class="m-2 p-2"><span class="text-secondary">Phương thức thanh toán :</span> {{formatPaymentMethod paymentMethod}}</div>
+                            <div class="m-2 p-2"><span class="text-secondary">Tổng tiền :</span> {{formatPrice totalAmount}}</div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table text-center align-middle">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Tên sản phẩm</th>
+                                        <th scope="col">Hình ảnh</th>
+                                        <th scope="col">Số lượng</th>
+                                        <th scope="col">Giá tiền</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each products}}
+                                    <tr>
+                                        <td scope="col">{{watchId.name}}</td>
+                                        <td scope="col"><img width="100px" height="100px" src="{{watchId.imageUrl}}" /></td>
+                                        <td scope="col">{{quantity}}</td>
+                                        <td scope="col">{{formatPrice price}}</td>
+                                        <td scope="col"> <a href="/watch/{{watchId._id}}">Xem chi tiết</a></td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                       
+                    {{/with}}     
+                
+               
+                
+            </div>
+        </div>

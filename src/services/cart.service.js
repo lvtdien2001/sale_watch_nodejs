@@ -10,7 +10,7 @@ exports.findAll = async (conditional) => {
     const carts = await cartModel.find(conditional)
                                 .populate('watchId')
                                 .lean();
-    const numberOfCarts = await cartModel.countDocuments({});
+  
    
     return {
         success: true,
@@ -22,8 +22,9 @@ exports.create = async (quantity, watchId, userId)  => {
     try {
         const condition = {watchId, userId}
         const cart = await cartModel.findOne(condition)
-        if (cart && checkCurrentQuantity(quantity+cart.quantity, watchId)) {
-            const updateCart = await cartModel.findOneAndUpdate(condition, {quantity:quantity+cart.quantity})
+        
+        if (cart && checkCurrentQuantity(quantity+cart?.quantity, watchId)) {
+            await cartModel.findOneAndUpdate(condition, {"quantity": quantity+cart?.quantity})
             return {message: "Ok!"}
         }
        
@@ -35,7 +36,6 @@ exports.create = async (quantity, watchId, userId)  => {
         
     })
     await newCart.save()
-    return 
     } catch (error) {
         console.log(error);
         return {
@@ -49,9 +49,14 @@ exports.create = async (quantity, watchId, userId)  => {
 exports.updateQuantity = async (quantity, watchId, userId) => {
     try {
         
-            const condition = {"watchId": watchId, "userId": userId};
+        const condition = {watchId, userId}
+        const cart = await cartModel.findOne(condition)
+        if (!checkCurrentQuantity(quantity ,cart.watchId)) return;
         
-            const cart = await Cart.findOneAndUpdate(condition,quantity)
+          
+    
+        
+        await cartModel.findOneAndUpdate(condition, {"quantity": quantity})
         
       
         
@@ -65,10 +70,36 @@ exports.updateQuantity = async (quantity, watchId, userId) => {
    
 }
 // check số lượng sản phẩm hiện tại với số lượng sản phẩm có trong giỏ hàng
-exports.checkCurrentQuantity = async (quantity, watchId) => {
+const checkCurrentQuantity = async (quantity, watchId) => {
     const currentQuantity = await watchServices.getQuantity(watchId);
+    
     if (quantity > currentQuantity) {
         return false;
     }
     return true;
+}
+
+exports.delete = async (conditional) => {
+    try {
+        await cartModel.findOneAndDelete(conditional)
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
+}
+
+
+exports.deleteAll = async (conditional) => {
+    try {
+        await cartModel.deleteMany(conditional)
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
 }

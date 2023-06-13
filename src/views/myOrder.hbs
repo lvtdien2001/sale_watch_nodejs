@@ -1,0 +1,68 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/myOrder.css" />
+{{/section}}
+<div class="container mt-4">
+            <div class="row">
+                <div class="col">
+                    <h3 class="text-center">Đơn hàng của tôi</h3>  
+                                    <div class="list-status">
+                                        <a class="status-item-link" href="/order/myorder"><button class="btn btn-primary btn-md">Tất cả </button></a>
+                                        <a class="status-item-link" href="/order/myorder?status=Chờ xác nhận"><button class="btn btn-primary">Chờ xác nhận</button> </a> 
+                                        <a class="status-item-link" href="/order/myorder?status=Chờ lấy hàng"><button class="btn btn-primary">Chờ lấy hàng</button> </a> 
+                                        <a class="status-item-link" href="/order/myorder?status=Đang vận chuyển"><button class="btn btn-primary">Đang vận chuyển</button> </a> 
+                                        <a class="status-item-link" href="/order/myorder?status=Đã nhận"><button class="btn btn-primary">Đã nhận</button> </a> 
+                                    </div>      
+                                   <div class="table-responsive">
+
+                                        <table class="table text-center align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Tên sản phẩm</th>
+                                                    <th scope="col">Hình ảnh</th>
+                                                    <th scope="col">Tổng tiền</th>
+                                                    <th scope="col">Số điện thoại</th>
+                                                    <th scope="col">Địa chỉ</th>
+                                                    <th scope="col">Trạng thái đơn hàng</th>
+                                                    <th scope="col">Thời gian đặt hàng</th>
+                                                    <th scope="col"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                    {{#each orders}}
+                                                    <tr>
+                                                        <td scope="col">
+                                                        
+                                                            {{#each products}}
+                                                            {{#if (firstWatch @index)}}
+                                                                {{watchId.name}}
+                                                            {{/if}} 
+                                                            {{/each}}
+                                                        </td>
+                                                         <td scope="col">
+                                                          
+                                                            {{#each products}}
+                                                            {{#if (firstWatch @index)}}
+                                                                <img width="100px" height="100px" src="{{watchId.imageUrl}}" />
+                                                            {{/if}} 
+                                                            {{/each}}
+                                                        </td>
+                                                        <td scope="col">{{formatPrice totalAmount}}</td>
+                                                        <td scope="col">{{phoneNumber}}</td>
+                                                        
+                                                        <td scope="col">{{description}}, {{ward}}, {{district}}, {{province}}</td>
+                                                        <td scope="col">{{status}}</td>
+                                                         <td scope="col">{{formatDate createdAt}}</td>
+                                                        <td scope="col"><a href="/order/myorder/{{_id}}">Xem chi tiết</a></td>
+                                                    </tr>
+                                                    
+                                                    {{/each}}
+                                            
+                                            </tbody>
+                                           
+                                        </table>
+                                   </div>
+                </div>
+                
+            </div>
+        </div>

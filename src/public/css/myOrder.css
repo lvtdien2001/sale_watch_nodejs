@@ -1,0 +1,14 @@
+.list-status {
+    display: flex;
+    overflow: scroll;
+    overflow-y: hidden
+}
+
+.status-item {
+    
+}
+.status-item-link {
+    text-decoration: none;
+    
+    margin : 4px;
+}

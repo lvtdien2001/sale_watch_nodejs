@@ -8,6 +8,8 @@ import handlebarsSection from 'express-handlebars-sections';
 import expressSession from 'express-session';
 import { verifyToken } from './middleware/auth';
 import handlebarsHelpers from './config/handlebarsHelpers';
+import cookieParser from 'cookie-parser';
+
 
 dotenv.config();
 
@@ -18,6 +20,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('src/public'));
+
+// cookies
+app.use(cookieParser());
 
 // express session
 app.use(expressSession({

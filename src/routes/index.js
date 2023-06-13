@@ -4,7 +4,7 @@ import newsRouter from './news.route'
 import userRouter from './user.route'
 import watchRouter from './watch.route';
 import cartRouter from './cart.route';
-
+import orderRouter from './order.route';
 import brandService from '../services/brand.service';
 import watchService from '../services/watch.service';
 import { verifyRole } from '../middleware/role';
@@ -15,6 +15,7 @@ const initRoutes = (app) => {
     app.use('/watch', watchRouter);
     app.use('/news', newsRouter)
     app.use('/cart', cartRouter)
+    app.use('/order', orderRouter)
     app.use('/admin', verifyRole, adminRoute);
     
     app.use('/:notfound', (req, res) => res.render('err404', {layout: false}))

@@ -1,4 +1,5 @@
 import userService from "../services/user.service";
+import cartService from '../services/cart.service';
 import cloudinary from "../utils/cloudinary";
 import * as argon2 from "argon2";
 import jwt from 'jsonwebtoken';
@@ -91,7 +92,12 @@ class userController {
                       password: undefined
                     }
                   }  
-
+                  // add cart from cookies to db
+                  const cartsCookies = req?.cookies?.cart || [];
+                  for(let i = 0; i< cartsCookies?.length ; i++) {
+                      await cartService.create(cartsCookies[i].quantity,cartsCookies[i].watchId, user._id)
+                  }
+                  res.clearCookie("cart");
                   // req.session.username=user.username
                   // req.session.fullName=user.fullName
                   // res.send(req.session)
