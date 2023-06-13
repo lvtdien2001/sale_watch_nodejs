@@ -3,21 +3,22 @@
   <div class="role__update">
     {{#with userRoles}}
       <h4 class="username">Tên người dùng: <span class="text-info">{{ fullName}}</span></h4>
-   
+      
     
-    <form action="/role/update-role/{{_id}}" class="form__role" method="POST">
-      <input type="checkbox" name="" id="check--all" >
-      <label for="check--all">Chọn tất cả</label>
+    <form action="/admin/role/update-role/{{_id}}" class="form__role" method="POST">
+      <input type="checkbox" name="" class="fs-2 me-4" id="check--all" >
+      <label for="check--all" class="fs-5">Chọn tất cả</label>
 
     {{#templateRole}}{{/templateRole}}
-
-    <button  class="btn btn-warning text-white submitRole">Thay đổi quyền</button>
-
+      <button  class="my-4 btn btn-warning text-white submitRole">Thay đổi quyền</button>
     </form>
   {{/with}}
-
+  {{#if success}}
+      <p class="mt-2 text-success fs-4">{{message}}</p>
+  {{/if}}
   </div>
 </div>
+{{#section 'js'}}
 <script>
   const btn= document.querySelector('.submitRole')
   const form = document.querySelector('.form__role')
@@ -60,3 +61,4 @@
   }
 
 </script>
+{{/section}}

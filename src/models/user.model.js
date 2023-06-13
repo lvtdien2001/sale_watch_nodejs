@@ -8,10 +8,11 @@ const userSchema = new Schema({
             ref: 'role'
         }
     }],
-    username: {
+    email: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        index:true
     },
     password: {
         type: String,

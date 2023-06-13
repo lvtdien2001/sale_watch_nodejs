@@ -2,16 +2,23 @@ import userModel from '../models/user.model'
 
 class UserService {
     async create(infoUser){
-        return await userModel.findOneAndUpdate(
-            {username:infoUser.username},
-            infoUser,
-            { returnDocument: "after", upsert: true }
-        )
+        try {
+            const userRegister = new userModel(infoUser)
+            const result = await userRegister.save();
+            return result
+        } catch (error) {
+            console.log(error+'thanh')
+        }
     }
 
-    async checkUsername(username){
-        const isUsername=await userModel.findOne({username})
-        return  isUsername ? true : false
+    async checkEmail(email){
+        try {
+            const isEmail=await userModel.findOne({email})
+            return  isEmail ? true : false
+        } catch (error) {
+            console.log(error)
+        }
+        
     }
 
     async checkPhoneNumber(phoneNumber){
@@ -20,8 +27,8 @@ class UserService {
     }
 
     
-    async findByUsername(username){
-        return await userModel.findOne({username}).lean()
+    async findByEmail(email){
+        return await userModel.findOne({email}).lean()
     }
     async updateUser(id,data){
         return userModel.findByIdAndUpdate(
@@ -29,6 +36,7 @@ class UserService {
             data,
             { returnDocument: "after", upsert: true }
         ).lean()
+        .exclude('password')
     }
 
     async findById(id){

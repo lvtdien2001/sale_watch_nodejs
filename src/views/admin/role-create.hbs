@@ -3,16 +3,16 @@
 {{/section}}
 
 <div class="role__create">
-    <form action="/role/create" method="post" class="form__crearte-role">
+    <form action="/admin/role/create" method="post" class="form__crearte-role">
         <h3 class="text-center">Thêm quyền vào hệ thống</h3>
-        {{#if message}}
-        <span class="text-success">{{message}}</span>
-        {{/if}}
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Tên Quyền</label>
             <input placeholder="Nhập tên quyền" type="text" name="name" class="form-control" id="exampleInputEmail1">
         </div>
         <button class="btn btn-info">Thêm</button>
+        {{#if success}}
+            <p class="text-success fs-4">{{message}}</p>
+        {{/if}}
     </form>
 
 
@@ -32,8 +32,8 @@
                 <tr>
                     <th scope="row">{{@index}}</th>
                     <td>{{this.name}}</td>
-                    <td class="text-center"><a href="/role/role-edit/{{this._id}}" class="btn btn-warning">sửa</a></td>
-                    <td class="text-center"><a href="/role/role-delete/{{this._id}}" class="btn btn-danger">Xóa</a></td>
+                    <td class="text-center"><a href="/admin/role/role-edit/{{this._id}}" class="btn btn-warning">sửa</a></td>
+                    <td class="text-center"><a href="/admin/role/role-delete/{{this._id}}" class="btn btn-danger">Xóa</a></td>
                 </tr>
                 {{/each}}
             </tbody>
