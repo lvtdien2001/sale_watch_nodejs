@@ -12,7 +12,7 @@ exports.findAllAndPage = async (currentPage, receiptPerPage, condition) => {
             .find(condition)
             .skip(skipPage)
             .limit(receiptPerPage)
-            .sort({ updatedAt: -1 })
+            .sort({ createdAt: -1 })
             .populate('createBy', ['_id', 'fullName'])
             .lean()
 

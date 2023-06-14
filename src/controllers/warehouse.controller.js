@@ -7,10 +7,8 @@ exports.getHomePage = async (req, res) => {
     try {
         const currentPage = req.query.currentPage || 1;
         const receiptPerPage = req.query.receiptPerPage || 10;
-        const watchPerPage = req.query.watchPerPage || 10;
 
         const rspWatch = await watchService.findAll(null, null, {name: 1});
-        const rspPaginateWatch = await watchService.findAllAndPage(currentPage, {}, watchPerPage);
         const rspReceipt = await addReceipService.findAllAndPage(currentPage, receiptPerPage);
 
         res.render('admin/warehouse', {
@@ -23,30 +21,34 @@ exports.getHomePage = async (req, res) => {
             pageNumberOfReceipt: rspReceipt.pageNumber,
             currentPageOfReceipt: rspReceipt.currentPage,
 
-            // paginate watches
-            watchesOfPage: rspPaginateWatch.watches,
-            pageNumberOfWatch: rspPaginateWatch.pageNumber,
-            currentPageOfWatch: rspPaginateWatch.currentPage,
+            activeProduct: req.session.activeProduct,
 
             helpers: {
                 formatNum: num => Number((currentPage - 1) + '0') + Number(num),
                 paginateProducts: () => {
                     const watches = rspWatch.watches;
-                    
-                    return `<ul class="pagination justify-content-center mb-3">
-                                <li class="page-item">
-                                    <a class="page-link" href="/admin/warehouse" aria-label="Previous">
+                    const watchPerPage = 20;
+                    const pageNumber = Math.ceil(watches.length/watchPerPage);
+                    let html = `<li class="page-item">
+                                    <div onclick="changePage('', 1)" id="product-first-page" class="page-link" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                
-                                <li class="page-item">
-                                    <a class="page-link" href="/admin/warehouse?currentPage={{pageNumberOfReceipt}}" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>`
-                }
+                                    </div>
+                                </li>`;
+                    for (let i=1; i<=pageNumber; i++){
+                        const className = i===1 ? 'page-item active' : 'page-item';
+                        html += `<li id="page-${i}" class="${className}"><div onclick="changePage(this, ${i})" id="${i===1 ? 'currentPage' : ''}" class="page-link">${i}</div></li>`;
+                    }
+                    
+                    html += `<li class="page-item">
+                                <div onclick="changePage('', ${pageNumber})" id="product-last-page" class="page-link" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </div>
+                            </li>`;
+
+                    return html;
+                },
+                clearActive: () => req.session.activeProduct = undefined,
+                clearMessage: () => req.session.message = undefined
             }
         })
     } catch (error) {

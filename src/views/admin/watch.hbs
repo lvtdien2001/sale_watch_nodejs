@@ -25,14 +25,6 @@
                         <label for="inputImage" class="form-label fw-bold">Hình ảnh <span class="text-danger">*</span></label>
                         <input name="image" required="true" type="file" class="form-control" id="inputImage">
                     </div>
-                    <div class="col-6 col-xl-2">
-                        <label for="inputQuantity" class="form-label fw-bold">Số lượng</label>
-                        <input value="0" name="currentQuantity" type="number" class="form-control" id="inputQuantity">
-                    </div>
-                    <div class="col-6 col-xl-2">
-                        <label for="inputPrice" class="form-label fw-bold">Đơn giá <span class="text-danger">*</span></label>
-                        <input value="0" name="price" required="true" type="number" class="form-control" id="inputPrice">
-                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-12 col-xl">
@@ -105,13 +97,11 @@
             <thead>
                 <tr>
                     <th scope="col">STT</th>
-                    <th scope="col" class="product-name-title">Tên sản phẩm</th>
+                    <th scope="col">Tên sản phẩm</th>
                     <th scope="col">Hình ảnh</th>
                     <th scope="col">Thương hiệu</th>
-                    <th scope="col">Đơn giá</th>
-                    <th scope="col">Tồn kho</th>
-                    <th scope="col" class="product-history-title">Lịch sử</th>
-                    <th scope="col"></th>
+                    <th scope="col">Lịch sử</th>
+                    <th style="width: 10%;" scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -128,8 +118,6 @@
                                     {{name}}
                                 {{/with}}
                             </td>
-                            <td>{{formatPrice price}}</td>
-                            <td>{{inventory}}</td>
                             <td class="text-start">
                                 <b>Thời gian tạo: </b>
                                 {{createdAt}}, được tạo bởi
@@ -144,16 +132,14 @@
                                 {{/with}}
                             </td>
                             <td>
-                                <div class="d-flex">
-                                    {{!-- button trigger edit modal --}}
-                                    <button type="button" class="edit-btn" data-bs-toggle="modal" data-bs-target="#edit-modal-{{@index}}">
-                                        <i class="fas fa-pen"></i>
-                                    </button>
-                                    <!-- Button trigger delete modal -->
-                                    <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#delete-modal-{{@index}}">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
+                                {{!-- button trigger edit modal --}}
+                                <button type="button" class="btn btn-outline-success me-1" data-bs-toggle="modal" data-bs-target="#edit-modal-{{@index}}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <!-- Button trigger delete modal -->
+                                <button type="button" class="btn btn-outline-danger ms-1" data-bs-toggle="modal" data-bs-target="#delete-modal-{{@index}}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
 
@@ -169,17 +155,9 @@
                                         <div class="modal-body">
                                             {{!-- name, quantity, price --}}
                                             <div class="row">
-                                                <div class="col-6 mb-3">
+                                                <div class="col mb-3">
                                                     <label for="edit-name-{{@index}}" class="form-label fw-bold">Tên sản phẩm</label>
                                                     <input name="name" value="{{name}}" type="text" class="form-control" id="edit-name-{{@index}}" placeholder="Nhập tên sản phẩm">
-                                                </div>
-                                                <div class="col mb-3">
-                                                    <label for="edit-quantity-{{@index}}" class="form-label fw-bold">Tồn kho</label>
-                                                    <input name="currentQuantity" value="{{currentQuantity}}" type="number" class="form-control" id="edit-quantity-{{@index}}">
-                                                </div>
-                                                <div class="col mb-3">
-                                                    <label for="edit-price-{{@index}}" class="form-label fw-bold">Đơn giá</label>
-                                                    <input name="price" value="{{price}}" type="number" class="form-control" id="edit-price-{{@index}}">
                                                 </div>
                                             </div>
                                             {{!-- brand and style --}}

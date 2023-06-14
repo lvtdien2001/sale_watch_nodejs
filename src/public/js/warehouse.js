@@ -100,3 +100,36 @@ if (messageToast){
     const toast = new bootstrap.Toast(messageToast)
     toast.show()
 }
+
+// paginate product table
+const rows = document.getElementById('product-table-body').childElementCount;
+for (let i=20; i<rows; i++){
+    document.getElementById(`table-row-${i}`).className = 'hidden';
+}
+
+const changePage = (element, page) => {
+    const prevPage = document.getElementById('currentPage').innerHTML;
+
+    if (prevPage == page) 
+        return;
+
+    for (let i=(prevPage-1)*20; i<prevPage*20; i++){
+        if (document.getElementById(`table-row-${i}`))
+            document.getElementById(`table-row-${i}`).className = 'hidden';
+    }
+
+    for (let i=(page-1)*20; i<page*20; i++){
+        (document.getElementById(`table-row-${i}`))?.classList.toggle('hidden');
+    }
+
+    document.getElementById('currentPage').id = '';
+
+    if (!element){
+        element = document.getElementById(`page-${page}`).getElementsByTagName('div')[0];
+        console.log(element);
+    }
+    element.id = 'currentPage';
+
+    document.getElementById(`page-${prevPage}`).classList.toggle('active');
+    document.getElementById(`page-${page}`).classList.toggle('active');
+};

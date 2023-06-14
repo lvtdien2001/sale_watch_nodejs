@@ -11,3 +11,6 @@
     color: var(--bs-blue);
     text-decoration: underline;
 }
+#product-first-page, #product-last-page, .page-link {
+    cursor: pointer;
+}
