@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer'
-
 import dotenv from 'dotenv';
-
+dotenv.config();
 exports.sendMail = async (to, text, subject) => {
     let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
@@ -25,4 +24,5 @@ exports.sendMail = async (to, text, subject) => {
 
       // Gửi email
       const info = await transporter.sendMail(mailOptions);
+      return info
 }

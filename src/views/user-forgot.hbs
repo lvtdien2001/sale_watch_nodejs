@@ -1,0 +1,40 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/user.css" />
+{{/section}}
+<div class="title d-none">Quên mật khẩu</div>
+
+<div class="register">
+    <div class="register__banner">
+        <img src="https://curnonwatch.com/blog/wp-content/uploads/2021/03/anh-dong-ho-dep-76.jpg" alt="" class="banner__img">
+    </div>
+
+    <div class="register__content">
+        <div class="container">
+            <div class="form">
+                <form class="form__block"  action="/user/forgot/update/{{emailUser}}" method="POST">
+                <h3 class="form__headding">Đặt lại mật khẩu</h3>
+                {{#if message}}
+                    <span class="text-success">{{message}} <a href="/user/login" class="text-info">Đăng nhập</a></span>
+                 {{/if}} 
+                    <div class="form__group">
+                        <label for="" class="form__label">Mật khẩu mới</label>
+                        <input type="password" name="password" id="password" class="form__input" placeholder="Mật khẩu của bạn">
+                        <span class="message"></span>
+                    </div>
+                    <div class="form__group">
+                        <label for="" class="form__label">Xác thực mật khẩu</label>
+                        <input type="password" class="form__input" id="confirm-pass" placeholder="Nhập lại mật khẩu">
+                        <span class="message"></span>
+
+                    </div>
+                    <button class="btn__submit" id="submit-btn">Đặt lại</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{{#section 'js'}}
+<script src="/js/user.js"></script>
+{{/section}}
