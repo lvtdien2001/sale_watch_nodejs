@@ -1,12 +1,14 @@
 {{#section 'css'}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="/css/user.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="/css/user.css" />
 {{/section}}
 
 <div class="container d-flex justify-content-center align-items-center">
     <div class="wrapper">
         {{#if message}}
-            <p class="text-success text-center fs-4">{{message}}</p>
+        <p class="text-success text-center fs-4">{{message}}</p>
         {{/if}}
 
         {{#with user}}
@@ -19,8 +21,7 @@
                     <h5>Ảnh hồ sơ</h5>
                     <div class="user-image-edit">
                         <div class="image__container">
-                            <img id="image-user" src="{{imageUrl}}"
-                                alt="ảnh đại diện">
+                            <img id="image-user" src="{{imageUrl}}" alt="ảnh đại diện">
                         </div>
                         <input type="file" name="imageUrl" id="input__img" />
                         <label title="Chọn hình ảnh" for="input__img" class="user__file">
@@ -37,13 +38,14 @@
 
                 <div class="user-sdt d-flex">
                     <h5>Số điện thoại</h5>
-                    <input class="pl-3 ps-3" value="{{phoneNumber}}" type="text" name="phoneNumber" placeholder="Số điện thoại" />
+                    <input class="pl-3 ps-3" value="{{phoneNumber}}" type="text" name="phoneNumber"
+                        placeholder="Số điện thoại" />
                 </div>
-                <hr />
+                {{!-- đổi mật khẩu --}}
+                <a href="/user/change-pass/{{_id}}" class="change-pass">Đổi mật khẩu</a>
                 <div class="submit-user-edit">
                     <button type="submit" id="submit-edit-user">Thay đổi</button>
                 </div>
-            </div>
         </form>
         {{/with}}
     </div>
@@ -51,21 +53,21 @@
 
 
 {{#section 'js'}}
-    <script>
-        const btnSubmit = document.querySelector('#submit-edit-user')
-        btnSubmit.addEventListener('click', (e)=> {
-            if(confirm('Hành động này sẽ thay đổi thông tin của bạn')){
-                e.submit()
-            }else{
-                e.preventDefault()
-            }
-        })
-        const inputImageFile= document.querySelector('#input__img')
-        const imageUser = document.querySelector('#image-user')
-        inputImageFile.addEventListener('change',(e)=>{
-            console.log(e.target.files)
-            const src = URL.createObjectURL(e.target.files[0])
-            imageUser.src= src
-        })
-    </script>
+<script>
+    const btnSubmit = document.querySelector('#submit-edit-user')
+    btnSubmit.addEventListener('click', (e) => {
+        if (confirm('Hành động này sẽ thay đổi thông tin của bạn')) {
+            e.submit()
+        } else {
+            e.preventDefault()
+        }
+    })
+    const inputImageFile = document.querySelector('#input__img')
+    const imageUser = document.querySelector('#image-user')
+    inputImageFile.addEventListener('change', (e) => {
+        console.log(e.target.files)
+        const src = URL.createObjectURL(e.target.files[0])
+        imageUser.src = src
+    })
+</script>
 {{/section}}

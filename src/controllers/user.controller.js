@@ -1,8 +1,9 @@
 import userService from "../services/user.service";
+import codeService from "../services/code.service";
 import cloudinary from "../utils/cloudinary";
 import * as argon2 from "argon2";
 import jwt from 'jsonwebtoken';
-import nodemailer from "nodemailer"
+import mailer from '../utils/mailler'
 class userController {
 
   displayRegister(req, res){
@@ -67,6 +68,7 @@ class userController {
     }
     res.render('login')
   }
+
   async login(req, res){
     try {
         if(req.body){
@@ -163,6 +165,150 @@ class userController {
       }
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  async forgotPass(req, res){
+    try {
+      const isEmail = await userService.findByEmail(req.body?.email)
+      if(isEmail){
+        let numbers = '';
+  
+          for (let i = 0; i < 6; i++) {
+            let randomNumber = Math.floor(Math.random() * 10);
+            numbers+=randomNumber;
+          }
+          const result = await mailer.sendMail(req.body.email , numbers, 'Mã Xác Nhận')
+          if(result){
+            const code = await codeService.create({
+              codeNumber:numbers,
+              emailUser: req.body.email,
+              resetTokenExpires:Date.now() + 60000
+            })
+            req.session.verification= 'Mã xác thực đã được gửi'
+            res.render('login',{
+              verification: req.session.verification,
+              emailUser:req.body.email
+            })
+          }
+      }
+      else{
+        res.render('login',{
+          notEmail: 'Tài khoản không tồn tại !'
+        })
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async verification(req, res){
+    try {
+        const forgotCode = await codeService.findAllByEmail(req.params.emailUser)
+        if(forgotCode.length!=0){
+          if( forgotCode[0].codeNumber == req.body.verification){
+            res.render('user-forgot',{
+              emailUser:req.params.emailUser
+            })
+          }else{
+            req.session.verification= 'Mã xác thực không chính xác'
+            res.render('login',{
+              verification: req.session.verification,
+              emailUser:req.params.emailUser
+            })
+          }
+        }else{
+          req.session.verification= 'Mã xác thực không chính xác hoặc đã hết hạn'
+            res.render('login',{
+              verification: req.session.verification,
+              emailUser:req.params.emailUser
+            })
+        }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  
+  async updatePass(req, res){
+    try {
+      const passHashed = await argon2.hash(req.body.password);
+      const result = await userService.updatePassword({email:req.params.emailUser}, {password:passHashed})
+      if(result){
+        req.session.messageForgot = 'Mật khẩu đã được cập nhật'
+        res.render('user-forgot',{
+          message:req.session.messageForgot,
+          emailUser:req.params.emailUser
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async resend(req, res){
+    try {
+      if(req.params.emailUser){
+        let numbers = '';
+          for (let i = 0; i < 6; i++) {
+            let randomNumber = Math.floor(Math.random() * 10);
+            numbers+=randomNumber;
+          }
+          const result =await mailer.sendMail(req.params.emailUser , numbers, 'Mã Xác Nhận')
+          if(result){
+            const code = await codeService.create({
+              codeNumber:numbers,
+              emailUser: req.params.emailUser
+            })
+            req.session.verification= 'Mã xác thực đã được gửi lại'
+            res.render('login',{
+              verification: req.session.verification,
+              emailUser: req.params.emailUser
+            })
+          }
+      }else{
+        res.render('login',{
+          notEmail: 'Tài khoản không tồn tại !'
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  displayChangePass(req, res){
+    try {
+      res.render('change-pass',{id:req.params.id})
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async changePass(req, res){
+    try {
+      const userChangePass = await userService.findById(req.params.id)
+      const decryptionPass = await argon2.verify(userChangePass.password, req.body.passwordOld)
+      if(decryptionPass){
+        const passHashed = await argon2.hash(req.body.passwordNew);
+        const result = await userService.updateUser(req.params.id, {password:passHashed})
+        if(result){
+          res.render('change-pass',{
+            layout: 'main',
+            id:req.params.id,
+            messageSuccess:'Đổi mật khẩu thành công'
+          })
+        }
+      }else{
+      res.render('change-pass',{
+        layout: 'main',
+        id:req.params.id,
+        messageFailure:'Mật khẩu bạn nhập không chính xác'
+      })
+
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 }

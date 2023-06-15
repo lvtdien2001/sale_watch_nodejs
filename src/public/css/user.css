@@ -28,6 +28,7 @@
     padding: 40px;
     border: 1px solid #ccc;
     box-sizing: border-box;
+    /* z-index: 1000; */
 }
 .message__failure{
     font-size: 18px;
@@ -264,3 +265,53 @@
     color: #71ee17;
     transform: scale(1.2);
   } 
+.overlay, .overlay2, .overlay3 , .overlay__change{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  transition: all linear 0.3s;
+}
+.overlay2, .overlay__change{
+  display: flex;
+}
+.overlay3{
+  display: flex;
+}
+.forgot__content{
+  box-sizing: border-box;
+  min-height: 200px;
+  max-width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding:10px 50px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000
+}
+.forgot__email{
+  outline: none;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+  height: 35px;
+  border-radius: 5px;
+}
+.head__form{
+  position: relative;
+}
+.btn__close, .btn__close2{
+  position: absolute;
+  top: 5px;
+  right: -44px;
+  border: 1px solid red;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+  color: red;
+}

@@ -62,6 +62,14 @@ class UserService {
     async updateRole(id, data){
          return await this.updateUser(id, {roles:data});
     }
+
+    async updatePassword(email,password){
+        return userModel.findOneAndUpdate(
+            email,
+            password,
+            { returnDocument: "after", upsert: true }
+        ).lean()
+    }
 }
 
 module.exports = new UserService;
