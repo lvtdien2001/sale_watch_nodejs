@@ -175,18 +175,32 @@
 
                         {{!-- detail modal --}}
                         <div class="modal fade" id="detail-modal-{{@index}}" tabindex="-1" aria-labelledby="detail-modal-label-{{@index}}" aria-hidden="true">
-                            <div class="modal-dialog modal-xl">
+                            <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="detail-modal-label-{{@index}}">Thông tin phiếu nhập kho</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-body">
-                                        ...
+                                    <div id="content-print-{{@index}}" class="modal-body">
+                                        <div class="row">
+                                            <div class="col"><b>Cửa hàng đồng hồ ABC</b></div>
+                                            <div class="col">
+                                                PHIẾU NHẬP KHO
+                                                Ngày nhập: {{createdAt}}
+                                                Số phiếu:
+                                            </div>
+                                        </div>
+                                        <div class="row text-center">
+                                            <div class="col">
+                                                Họ và tên người giao:
+                                                Theo hóa đơn số:
+                                                Nhập tại kho: Địa điểm:
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="modal-footer justify-content-center">
                                         <button type="button" class="btn btn-lg btn-outline-danger" data-bs-dismiss="modal">Đóng</button>
-                                        <button type="button" class="btn btn-lg btn-outline-success">In phiếu nhập kho</button>
+                                        <button onclick="printPDF({{@index}}, '{{createdAt}}')" type="button" class="btn btn-lg btn-outline-success">In phiếu nhập kho</button>
                                     </div>
                                 </div>
                             </div>
@@ -275,6 +289,5 @@
 </div>
 
 {{#section 'js'}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="/js/warehouse.js"></script>
 {{/section}}
