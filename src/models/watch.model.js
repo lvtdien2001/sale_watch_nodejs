@@ -23,7 +23,11 @@ const watchSchema = new Schema({
         type: String,
         required: true
     },
-    currentQuantity: {
+    inventory: {
+        type: Number,
+        default: 0
+    },
+    sold: {
         type: Number,
         default: 0
     },

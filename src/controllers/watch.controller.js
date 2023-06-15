@@ -132,8 +132,6 @@ exports.create = async (req, res) => {
             brandId: req.body.brandId,
             style: req.body.style,
             imageUrl: req.file.path,
-            price: req.body.price,
-            currentQuantity: req.body.currentQuantity,
             strap: req.body.strap,
             glass: req.body.glass,
             principleOperate: req.body.principleOperate,
@@ -165,7 +163,6 @@ exports.update = async (req, res) => {
             style: req.body.style,
             imageUrl: req.file?.path,
             price: req.body.price,
-            currentQuantity: req.body.currentQuantity,
             strap: req.body.strap,
             glass: req.body.glass,
             principleOperate: req.body.principleOperate,
@@ -175,7 +172,8 @@ exports.update = async (req, res) => {
         const response = await watchService.update(data, watchId, userId);
         req.session.message = response.msg;
         req.session.success = response.success;
-        return res.redirect('/admin/watch');
+        req.session.activeProduct = true; 
+        return res.redirect('back');
     } catch (error) {
         console.log(error);
         req.session.message = 'Internal server error';

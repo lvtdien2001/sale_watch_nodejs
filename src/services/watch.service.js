@@ -169,6 +169,18 @@ exports.update = async (data, watchId, userId) => {
     }
 }
 
+exports.increaseInventory = async (quantity, watchId, userId) => {
+    try {
+        await watchModel.findByIdAndUpdate(watchId, {updateBy: userId, $inc: {'inventory': quantity}})
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
+}
+
 exports.delete = async watchId => {
     try {
         const deleteWatch = await watchModel.findByIdAndDelete(watchId);
