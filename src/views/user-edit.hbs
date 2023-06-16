@@ -7,8 +7,12 @@
 
 <div class="container d-flex justify-content-center align-items-center">
     <div class="wrapper">
-        {{#if message}}
-        <p class="text-success text-center fs-4">{{message}}</p>
+        {{#if messageEditUser}}
+        <p class="text-success text-center fs-4">{{messageEditUser}}</p>
+        {{/if}}
+
+        {{#if messagePhone}}
+        <p class="text-danger text-center fs-4">{{messagePhone}}</p>
         {{/if}}
 
         {{#with user}}
@@ -54,6 +58,8 @@
 
 {{#section 'js'}}
 <script>
+    document.title='Chỉnh sửa thông tin'
+    
     const btnSubmit = document.querySelector('#submit-edit-user')
     btnSubmit.addEventListener('click', (e) => {
         if (confirm('Hành động này sẽ thay đổi thông tin của bạn')) {
