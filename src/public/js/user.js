@@ -41,7 +41,7 @@ if(usernameInput){
 if(passInput){
     passInput.addEventListener('blur', checkPassword)
     function checkPassword(e){
-        passInput.value.length < 6 ? messageError(passInput,'Mật khẩu quá ngắn') : messageSuccess(passInput,'Hợp lệ')
+        passInput.value.length < 3 ? messageError(passInput,'Mật khẩu quá ngắn') : messageSuccess(passInput,'Hợp lệ')
     }
 }
 
