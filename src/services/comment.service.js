@@ -25,6 +25,10 @@ class CommentServices {
         })
     }
 
+    async deleteComment(watchId){
+        return commentModel.findOneAndDelete({watchId})
+    }
+
 }
 
 module.exports = new CommentServices
