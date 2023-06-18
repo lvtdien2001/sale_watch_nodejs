@@ -199,7 +199,7 @@ exports.getQuantity = async watchId => {
         const watch = await watchModel.findById(watchId);
 
         
-        return watch.currentQuantity || -1
+        return watch.inventory || -1
 
     } catch (error) {
         console.log(error);

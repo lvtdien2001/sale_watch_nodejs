@@ -3,6 +3,7 @@ import watchController from '../controllers/watch.controller';
 import brandController from '../controllers/brand.controller';
 import newsController from '../controllers/news.controller';
 import roleController from '../controllers/role.controller';
+import orderController from '../controllers/order.controller'
 import {verifyAdmin} from '../middleware/auth';
 import {verifyAddProduct} from '../middleware/role'
 import {verifyUpdateProduct} from '../middleware/role'
@@ -41,4 +42,8 @@ router.post('/role/role-edit/:id', verifyAdmin, roleController.roleEdit)
 router.get('/role/role-create', verifyAdmin, roleController.displayCreateRole)
 router.get('/role', verifyAdmin, roleController.displayRole)
 
+// order route
+router.get('/order', orderController.getAllOrders)
+router.get('/order/:id', orderController.getOrderIdByAdmin)
+router.post('/order/confirm/:id', orderController.updateOrder)
 export default router;

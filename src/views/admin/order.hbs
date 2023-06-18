@@ -4,11 +4,12 @@
 <div class="container mt-4">
             <div class="row">
                 <div class="col">
-                    <h3 class="text-center">Đơn hàng của tôi: {{status}}</h3>     
+                    <h3 class="text-center">Đơn hàng: {{status}} </h3>  
+                                          
                                     {{#templateStatus numberOfStatus status }} {{/templateStatus}}
                                     
                                     
-                                    <div class="table-responsive">
+                                   <div class="table-responsive">
 
                                         <table class="table text-center align-middle">
                                             <thead>
@@ -49,7 +50,7 @@
                                                         <td scope="col">{{description}}, {{ward}}, {{district}}, {{province}}</td>
                                                         <td scope="col">{{status}}</td>
                                                          <td scope="col">{{formatDate createdAt}}</td>
-                                                        <td scope="col"><a href="/order/myorder/{{_id}}">Xem chi tiết</a></td>
+                                                        <td scope="col"><a href="/admin/order/{{_id}}">Xem chi tiết</a></td>
                                                     </tr>
                                                     
                                                     {{/each}}
@@ -62,3 +63,18 @@
                 
             </div>
         </div>
+{{#if (checkPageNumber pageNumber)}}
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="/admin/order" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {{#paginate pageNumber currentPage '/admin/order' getStatus }}{{/paginate}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/watch?currentPage={{pageNumber}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+{{/if}}

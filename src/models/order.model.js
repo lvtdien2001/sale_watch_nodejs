@@ -1,3 +1,4 @@
+import { timeStamp } from 'console';
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
@@ -6,14 +7,26 @@ const orderSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
+    adminConfirm: [
+        {
+            createdBy: {
+                type: Schema.Types.ObjectId,
+                ref: 'user'
+            },
+            status: {
+                type: String,
+                enum: ['Chờ xác nhận', 'Chờ lấy hàng', 'Đã nhận', 'Xác nhận trả hàng','Xác nhận hủy']
+            },
+            createdAt: { type: Date, default: Date.now }
+        }
+    ],
     products: [
         {
-            watchId: {
-                type: Schema.Types.ObjectId,
-                ref: 'watch'
-            },
+            watchId:  Schema.Types.ObjectId,
             quantity: Number,
-            price: Number
+            price: Number,
+            name: String,
+            imageUrl: String,
         }
     ],
     totalAmount: Number,
@@ -31,7 +44,7 @@ const orderSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['Chờ xác nhận', 'Chờ lấy hàng', 'Đang vận chuyển', 'Đã nhận', 'Trả hàng'],
+        enum: ['Chờ xác nhận', 'Chờ lấy hàng', 'Đang vận chuyển', 'Đã nhận', 'Trả hàng', 'Hủy', 'Xác nhận hủy'],
         default: 'Chờ xác nhận'
     }
 }, {timestamps: true});

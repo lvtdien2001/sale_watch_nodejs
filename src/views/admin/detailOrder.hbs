@@ -1,14 +1,29 @@
 {{#section 'css'}}
     <link rel="stylesheet" href="/css/detailOrder.css" />
 {{/section}}
+{{#section 'js'}}
+    <script type="module" src="/js/detailOrder.js"></script>
+{{/section}}
 <div class="container mt-4">
             <div class="row justify-content-center">
                 <h3 class="text-center">Thông tin chi tiết đơn hàng</h3>
                
                     {{#with order}}   
+                        <div class="text-end" id="print">
+                            <button class="btn btn-success">In hóa đơn</button>
+                        </div>
+                        
                         <div class="status-order-title">Trạng thái đơn hàng    </div>
+                        
                         {{#formatStatusProgess status}}{{/formatStatusProgess}}
-                        <div class="col-12 col-md-4 my-2 info-order">
+                        <div class="col-12 col-md-3 m-2 info-order">
+                            <h3 class="text-center">Thông tin người đặt</h3>
+                           
+                           {{#checkUser userId}} {{/checkUser}}
+                           
+                        </div>
+                        <div class="col-12 col-md-5 m-2 info-order">
+                            <h3 class="text-center">Thông tin người nhận</h3>
                             <div class="m-2 p-2"><span class="text-secondary">Tên người nhận :</span> {{fullName}}</div>
                             <div class="m-2 p-2"><span class="text-secondary">Email :</span> {{email}}</div>
                             <div class="m-2 p-2"><span class="text-secondary">Số điện thoại :</span> {{phoneNumber}}</div>
@@ -24,6 +39,16 @@
                                  {{/if}}
                             </div>
                             <div class="m-2 p-2"><span class="text-secondary">Tổng tiền :</span> {{formatPrice totalAmount}}</div>
+                        </div>
+                        <div class="col-12 col-md-3 m-2 info-order">
+                            <h3 class="text-center ">Người kiểm duyệt</h3>
+                            {{#each adminConfirm}} 
+                                <div class="admin-confirm">
+                                    <div class="m-1 p-1"><span class="text-secondary">{{status}} :</span> {{createdBy.fullName}}</div>
+                                    <div class="m-1 p-1"><span class="text-secondary">Số điện thoại :</span> {{createdBy.phoneNumber}}</div> 
+                                    <div class="m-1 p-1"><span class="text-secondary">Thời gian thực hiện :</span> {{formatDate createdAt}}</div>
+                                </div>
+                            {{/each}}
                         </div>
                         <div class="table-responsive">
                             <table class="table text-center align-middle">
@@ -47,38 +72,55 @@
                                     </tr>
                                     {{/each}}
                                 </tbody>
-                                 <tfoot>
+                                <tfoot>
                                     <tr>
                                         <td scope="col"></td>
                                         <td scope="col"></td>
                                         <td scope="col"></td>
                                         <td scope="col">
-                                            {{#if (statusOrder status)}}
-                                            <form method="post" action="/order/refund/{{_id}}?status=Hủy">
-                                                <button type="submit" class="btn btn-danger">
+                                            {{#if (statusTransporting status)}}
+                                            <form method="post" action="/admin/order/confirm/{{_id}}?status={{status}}">
+
+                                                <button type="submit" class="btn btn-primary">
                                                     {{confirmOrder status}}
                                                 </button>
                                             </form>
                                             {{/if}}
-                                        </td>
-                                            
-                                        <td scope="col">
-                                            {{#if (statusTransporting status)}}
-                                            <form method="post" action="/order/refund/{{_id}}?status=Đã nhận">
-                                                <button type="submit" class="btn btn-success">
-                                                    Đã nhận hàng
-                                                </button>
-                                            </form>
+                                            {{#if (checkStatusRefund status)}}
+                                                <form method="post" action="/admin/order/confirm/{{_id}}?status={{status}}">
+
+                                                    <button type="submit" class="btn btn-success">
+                                                        Xác nhận trả hàng
+                                                    </button>
+                                                </form>
+                                            {{/if}}
+                                            {{#if (checkStatusCancel status)}}
+                                                <form method="post" action="/admin/order/confirm/{{_id}}?status={{status}}">
+
+                                                    <button type="submit" class="btn btn-danger">
+                                                        Xác nhận hủy đơn hàng
+                                                    </button>
+                                                </form>
+                                            {{/if}}
+                                            {{#if (checkStatusReceived status)}}
+                                                <form method="post" action="/admin/order/confirm/{{_id}}?status={{status}}">
+
+                                                    <button type="submit" class="btn btn-success">
+                                                        Đã nhận hàng
+                                                    </button>
+                                                </form>
                                             {{/if}}
                                         </td>
+                                            
+                                        <td scope="col"></td>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
-                       
+                                           
+                        
                     {{/with}}     
                 
                
-                
             </div>
         </div>

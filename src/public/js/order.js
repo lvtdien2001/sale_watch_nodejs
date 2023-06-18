@@ -62,3 +62,27 @@ function myDistrict() {
         para.innerText = xa.wards[i].name;
     }
 }
+const formOrder = document.getElementById('form-order')
+const phoneNumber = document.getElementById('phoneNumber');
+const messageValidatePhoneNumber = document.getElementById('validate-phone')
+const phonePattern = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
+
+phoneNumber.oninput = () => {
+    if (!(phonePattern.test(phoneNumber.value))) {
+        messageValidatePhoneNumber.style.display = 'block';
+        messageValidatePhoneNumber.innerText ='Số điện thoại không đúng định dạng'
+        messageValidatePhoneNumber.style.color ='#c0392b'
+    } else {
+        messageValidatePhoneNumber.style.display = 'none';
+    }
+}
+formOrder.onsubmit = (e) => {
+    
+    if (!(phonePattern.test(phoneNumber.value))) {
+        e.preventDefault()
+        return false;
+    }
+   
+        formOrder.submit();
+    
+}

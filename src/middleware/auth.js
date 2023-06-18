@@ -6,8 +6,8 @@ const verifyToken = (req, res, next) => {
     // const authHeader = req.header('Authorization');
     // const token = authHeader && authHeader.split(' ')[1];
     const token = req.session.authState?.accessToken;
-
-    const isPrivateRoute = /\/+admin|order$/;
+    // order/myorder
+    const isPrivateRoute = /\/+admin|order\/myorder$/;
 
     if (isPrivateRoute.test(req.path) === false)
         return next();

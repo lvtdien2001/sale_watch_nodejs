@@ -9,7 +9,6 @@ exports.get = async (condition)  => {
        
         // const userId = req.session.authState?.user._id;
         const orders = await orderModel.find(condition)
-                                    .populate('products.watchId')
                                     .sort({"createdAt": -1}).lean()
        
         return {
@@ -30,7 +29,8 @@ exports.getOrderId = async (condition)  => {
        
        
         const order = await orderModel.findOne(condition)
-                                    .populate('products.watchId')
+                                    .populate('userId', ['imageUrl', 'phoneNumber' ,'fullName'])
+                                    .populate('adminConfirm.createdBy', ['phoneNumber' ,'fullName'])
                                     .lean()
        
         return {
@@ -83,3 +83,53 @@ exports.deleteId = async (condition)  => {
     }
 }
 
+// admin
+
+exports.getAllByAdmin = async (condition, currentPage, watchPerPage)  => {
+    try {
+      
+       
+        const skipPage = (currentPage-1) * watchPerPage;
+        // const userId = req.session.authState?.user._id;
+        const orders = await orderModel.find(condition)
+                                    .skip(skipPage)
+                                    .limit(watchPerPage)
+                                    .sort({"createdAt": -1}).lean()
+        const numberOfOrders = await orderModel.countDocuments(condition);
+        const pageNumber = Math.ceil(numberOfOrders/watchPerPage);
+        return {
+            orders,
+            pageNumber
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
+}
+
+exports.updateOrder = async (condition, body)  => {
+    try {
+      
+        await orderModel.findOneAndUpdate(condition,body)
+        
+        
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
+}
+
+exports.countOrders = async (condition) => {
+    try {
+        const numberOfOrders = await orderModel.countDocuments(condition);
+        return numberOfOrders
+    } catch (error) {
+        console.log(error)
+    }
+}

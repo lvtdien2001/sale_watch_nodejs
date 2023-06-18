@@ -4,5 +4,8 @@
 }
 .status-order-title {
     font-size: 2rem;
-    color:
+}
+
+.admin-confirm {
+    border-top: 1px solid gray;
 }
