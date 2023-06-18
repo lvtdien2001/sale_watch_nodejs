@@ -10,14 +10,3 @@
     width: 100%;
     
 }
-.product-name-title, .product-history-title {
-    width: 25%;
-}
-.edit-btn, .show-btn {
-    color: var(--bs-blue);
-    border: none;
-}
-.delete-btn {
-    color: var(--bs-red);
-    border: none;
-}

@@ -2,16 +2,23 @@ import express from 'express';
 import watchController from '../controllers/watch.controller';
 import brandController from '../controllers/brand.controller';
 import newsController from '../controllers/news.controller';
+import warehouseController from '../controllers/warehouse.controller';
 import roleController from '../controllers/role.controller';
 import orderController from '../controllers/order.controller'
 import {verifyAdmin} from '../middleware/auth';
-import {verifyAddProduct} from '../middleware/role'
-import {verifyUpdateProduct} from '../middleware/role'
+import {verifyAddProduct, verifyUpdateProduct, verifyCreateAddReceipt} from '../middleware/role'
 import upload from '../utils/multer';
 
 const router = express.Router();
 
-router.get('/', (req, res) => res.render('admin/home', {layout: 'admin'}));
+router.get('/', (req, res) => res.render('admin/home', {
+    layout: 'admin',
+    message: req.session.message,
+    success: req.session.success,
+    helpers: {
+        clearMessage: () => req.session.message = undefined
+    }
+}));
 
 // watch route
 router.get('/watch', watchController.getProductManager);
@@ -32,6 +39,9 @@ router.get('/news/edit/:id',newsController.getById)
 router.post('/news/delete/:id',newsController.delete)
 router.post('/news/updateInfo/:id',newsController.updateInformation)
 router.post('/news/updateImage/:id', upload.single('imageUrl'),newsController.updateImage)
+// warehouse route
+router.get('/warehouse', warehouseController.getHomePage);
+router.post('/warehouse/add', verifyCreateAddReceipt, warehouseController.createAddReceipt);
 // role route
 router.post('/role/create', verifyAdmin, roleController.createRole)
 router.post('/role/update-role/:id', verifyAdmin, roleController.updateRole)

@@ -104,3 +104,21 @@ export const verifyDeleteBrand = (req, res, next) => {
   }
 };
 
+export const verifyCreateAddReceipt = async (req, res, next) => {
+  const user = req.session.authState?.user;
+
+  if (!user)
+    return res.redirect('/user/login');
+
+  if (user.isAdmin)
+    return next();
+
+  if (user.roles.map(role => role.roleId).includes('647db28bfc95a902d1b48ee6'))
+    return next();
+  else{
+    req.session.message = 'Truy cập bị từ chối, bạn không có quyền thực hiện chức năng này!';
+    req.session.success = false;
+    return res.redirect('back');
+  }
+}
+

@@ -1,26 +1,27 @@
 {{#section 'css'}}
-    <link rel="stylesheet" href="../css/user.css" />
+<link rel="stylesheet" href="/css/user.css" />
 {{/section}}
 
 <div class="title d-none">Đăng nhập</div>
 <div class="register">
     <div class="register__banner">
-        <img src="https://curnonwatch.com/blog/wp-content/uploads/2021/03/anh-dong-ho-dep-76.jpg" alt="" class="banner__img">
+        <img src="https://curnonwatch.com/blog/wp-content/uploads/2021/03/anh-dong-ho-dep-76.jpg" alt=""
+            class="banner__img">
     </div>
 
     <div class="register__content">
         <div class="container">
             <div class="form">
-                <form class="form__block"  action="/user/login" method="POST">
-                <h3 class="form__headding">Đăng nhập</h3>
-               {{#if messageSuccess}}
+                <form class="form__block" action="/user/login" method="POST">
+                    <h3 class="form__headding">Đăng nhập</h3>
+                    {{#if messageSuccess}}
                     <h3 class="message__success">{{messageSuccess}}</h3>
-                {{/if}}
+                    {{/if}}
 
-                {{#if messageFailure}}
+                    {{#if messageFailure}}
                     <h3 class="message__failure">Đăng nhập Không thành công <br>{{messageFailure}}</h3>
-                {{/if}}
-                   
+                    {{/if}}
+
                     <div class="form__group">
                         <label for="" class="form__label">Email</label>
                         <input type="email" name="email" id="username" class="form__input" placeholder="Email của bạn">
@@ -28,23 +29,71 @@
                     </div>
                     <div class="form__group">
                         <label for="" class="form__label">Mật khẩu</label>
-                        <input type="password" name="password" id="password" class="form__input" placeholder="Mật khẩu của bạn">
+                        <input type="password" name="password" id="password" class="form__input"
+                            placeholder="Mật khẩu của bạn">
                         <span class="message"></span>
                     </div>
-                    
+
                     <button class="btn__submit" id="submit-btn-login">Đăng Nhập</button>
 
                     <div class="form__change">
-                        <span>  Chưa có tài khoản</span>
+                        <span> Chưa có tài khoản</span>
                         <br>
                         <a href="/user/register" class="change__link">Đăng ký</a>
+                        <a class="forgot__pass text-danger">Quên mật khẩu</a>
                     </div>
                 </form>
+                <div class="overlay">
+                    <form method="post" action="/user/forgot" class="forgot__content">
+                        <div class="head__form">
+                            <h6 class="text-center my-3">Quên mật khẩu</h6>
+                            <span class="btn__close ms-3">Đóng</span>
+                        </div>
+
+                        <label for="forgot__email mb-2">Email</label>
+                        <input type="email" class="forgot__email my-2" id="forgot__email" name="email"
+                            placeholder="Tài khoản email của bạn">
+                        <button class="btn btn-outline-info">Gửi mã</button>
+                    </form>
+                </div>
+                {{#if verification}}
+                <div class="overlay2">
+                    <form method="post" action="/user/forgot/verification/{{emailUser}}" class="forgot__content">
+                        <div class="head__form">
+                            <h6 class="text-center my-3">Mã xác nhận</h6>
+                            <span class="btn__close2 ms-3">Đóng</span>
+                        </div>
+                        <p class="text-warning">{{verification}}</p>
+                        <label for="forgot__email mb-2">Mã</label>
+                        <input type="number" class="forgot__email my-2" id="forgot__email" name="verification"
+                            placeholder="Nhập mã xác nhận">
+                        <button class="btn btn-outline-info">Xác nhận</button>
+                        <a href="/user/forgot/resend-pass/{{emailUser}}" class="text-center mt-3">Gửi lại mã</a>
+                    </form>
+                </div>
+                {{/if}}
+                {{#if notEmail}}
+                <div class="overlay3">
+                    <form method="post" action="/user/forgot" class="forgot__content">
+                        <div class="head__form">
+                            <h6 class="text-center my-3">Quên mật khẩu</h6>
+                            <span class="btn__close3 ms-3">Đóng</span>
+                            <p class="text-danger">{{notEmail}}</p>
+                        </div>
+
+                        <label for="forgot__email mb-2">Email</label>
+                        <input type="email" class="forgot__email my-2" id="forgot__email" name="email"
+                            placeholder="Tài khoản email của bạn">
+                        <button class="btn btn-outline-info">Gửi mã</button>
+                    </form>
+                </div>
             </div>
+            {{/if}}
         </div>
     </div>
 </div>
+</div>
 
 {{#section 'js'}}
-    <script src="/js/user.js"></script>
+<script src="/js/user.js"></script>
 {{/section}}

@@ -26,7 +26,11 @@ class UserService {
         return  isPhone ? true : false
     }
 
-    
+    async checkPhoneNumberInUsers(phoneNumber , email){
+        const isPhone = await userModel.find({phoneNumber, email:{$ne: email}})
+        return  isPhone.length >0 ? true : false 
+    }
+
     async findByEmail(email){
         return await userModel.findOne({email}).lean()
     }
@@ -61,6 +65,14 @@ class UserService {
 
     async updateRole(id, data){
          return await this.updateUser(id, {roles:data});
+    }
+
+    async updatePassword(email,password){
+        return userModel.findOneAndUpdate(
+            email,
+            password,
+            { returnDocument: "after", upsert: true }
+        ).lean()
     }
 }
 

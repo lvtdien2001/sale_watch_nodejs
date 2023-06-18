@@ -9,7 +9,7 @@
             <i class="text-secondary">Có <b>{{numberOfResult}}</b> kết quả phù hợp</i>
         </div>
 
-         {{!-- pagination --}}
+        {{!-- pagination --}}
         {{#if (checkPageNumber pageNumber)}}
             <ul class="pagination justify-content-center">
                 <li class="page-item">
@@ -43,24 +43,26 @@
                 </div>
             {{/each}}
         {{/if}}
+
+        {{!-- pagination --}}
+        {{#if (checkPageNumber pageNumber)}}
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {{#paginate pageNumber currentPage '/search' (setSearchKey searchValue)}}{{/paginate}}
+                <li class="page-item">
+                    <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8&currentPage={{pageNumber}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        {{/if}}
     </div>
 
-    {{!-- pagination --}}
-    {{#if (checkPageNumber pageNumber)}}
-        <ul class="pagination justify-content-center">
-            <li class="page-item">
-                <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            {{#paginate pageNumber currentPage '/search' 'key={{searchValue}}&watchPerPage=8'}}{{/paginate}}
-            <li class="page-item">
-                <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8&currentPage={{pageNumber}}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    {{/if}}
+     
 </div>
 
 {{#section 'js'}}
