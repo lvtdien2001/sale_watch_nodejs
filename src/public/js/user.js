@@ -70,11 +70,11 @@ function checkMatchPass(e){
     }
 }
 if(submitBtn){
-    submitBtn.addEventListener('click',submitFormRegister)
+    submitBtn.addEventListener('submit',submitFormRegister)
 }
+
 function submitFormRegister(e){
-    // e.preventDefault()
-    let isValid=0
+    let isValid=1
     checkFullName()
     checkPhoneNumber()
     checkUsername()
@@ -89,11 +89,12 @@ function submitFormRegister(e){
     if(isValid == 0){
         submitBtn.preventDefault();
     }else{
-        e.submit()
+        submitBtn.submit()
     }
 }
+
 if(submitBtnLogIn){
-    submitBtnLogIn.addEventListener('click',submitFormLogin)
+    submitBtnLogIn.addEventListener('submit',submitFormLogin)
 }
 function submitFormLogin(e){
     let isValid=1
@@ -106,11 +107,13 @@ function submitFormLogin(e){
     })
 
     if(isValid == 0){
-        e.preventDefault();
+        submitBtnLogIn.preventDefault();
     }else{
-        e.submit()
+        submitBtnLogIn.submit()
     }
 }
+
+
 const btnOpen = document.querySelector('.forgot__pass')
 const overlay = document.querySelector('.overlay')
 const btnClose = document.querySelector('.btn__close')
