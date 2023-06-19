@@ -20,7 +20,7 @@ document.getElementById('btn-add').onclick = () => {
             +    '<div class="row">'
             +    '<div class="col-4 mb-3">'
             +        '<label class="form-label fw-bold">Nhà cung cấp <span class="text-danger">*</span></label>'
-            +        '<input id="suplier-' + localStorage['listLength'] + '" class="form-control" name="watches[' + localStorage['listLength'] + '][suplier]" required="true" oninvalid="setCustomValidity('+"'Nhà cung cấp không thể bỏ trống'"+')" oninput="setCustomValidity('+"''"+')" type="text" placeholder="Nhà cung cấp">'
+            +        '<input id="supplier-' + localStorage['listLength'] + '" class="form-control" name="watches[' + localStorage['listLength'] + '][supplier]" required="true" oninvalid="setCustomValidity('+"'Nhà cung cấp không thể bỏ trống'"+')" oninput="setCustomValidity('+"''"+')" type="text" placeholder="Nhà cung cấp">'
             +    '</div>'
             +    '<div class="col mb-3">'
             +        '<label class="form-label fw-bold">Số lượng <span class="text-danger">*</span></label>'
@@ -54,9 +54,9 @@ const removeProduct = num => {
         htmlName.name = `watches[${i-1}][name]`;
         htmlName.id = `name-${i-1}`;
 
-        let htmlSuplier = document.getElementById(`suplier-${i}`);
-        htmlSuplier.name = `watches[${i-1}][suplier]`;
-        htmlSuplier.id = `suplier-${i-1}`;
+        let htmlSupplier = document.getElementById(`supplier-${i}`);
+        htmlSupplier.name = `watches[${i-1}][supplier]`;
+        htmlSupplier.id = `supplier-${i-1}`;
 
         let htmlQuantity = document.getElementById(`quantity-${i}`);
         htmlQuantity.name = `watches[${i-1}][quantity]`;
@@ -138,7 +138,7 @@ const printPDF = (index, date) => {
     let mywindow = window.open('', 'PRINT', 'height=1123,width=900,top=100,left=150');
 
     mywindow.document.write(`<html><head><title>Phieu-Nhap-Kho-${date}</title>`);
-    mywindow.document.write('</head><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"><body >');
+    mywindow.document.write('</head><body >');
     mywindow.document.write(document.getElementById(`content-print-${index}`).innerHTML);
     mywindow.document.write('</body></html>');
 
