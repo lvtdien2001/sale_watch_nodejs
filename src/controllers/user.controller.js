@@ -1,7 +1,9 @@
 import userService from "../services/user.service";
+import codeService from "../services/code.service";
 import cloudinary from "../utils/cloudinary";
 import * as argon2 from "argon2";
 import jwt from 'jsonwebtoken';
+import mailer from '../utils/mailler'
 class userController {
 
   displayRegister(req, res){
@@ -13,7 +15,7 @@ class userController {
   async register(req, res) {
     try {
       if (req.body) {
-        var isUsename = await userService.checkUsername(req.body.username);
+        var isUsename = await userService.checkEmail(req.body.email);
         var isPhoneNumber = await userService.checkPhoneNumber(
           req.body.phoneNumber
         );
@@ -31,19 +33,14 @@ class userController {
             };
           }
           const infoUser = {
-            // roles:[
-            //     {
-            //         roleId:''
-            //     },
-            // ],
-            username: req.body.username,
+            email: req.body.email,
             password: passHashed,
             fullName: req.body.fullName,
             phoneNumber: req.body.phoneNumber,
             imageUrl: imageUrl.url,
             imageId: imageUrl.public_id,
           };
-          var result = await userService.create(infoUser);
+          let result = await userService.create(infoUser);
           if(result){
             res.render('register', {messageSuccess: "Đăng Ký thành công"})
           }
@@ -54,8 +51,9 @@ class userController {
           })
           }else if(isUsename){
             res.render('register', {
-              messageFailure:'Tên người dùng đã đươc sử dụng',
+              messageFailure:'Email đã đươc sử dụng',
           })
+          
           }
         }
       }
@@ -70,10 +68,11 @@ class userController {
     }
     res.render('login')
   }
+
   async login(req, res){
     try {
         if(req.body){
-            var user= await userService.findByUsername(req.body.username)
+            var user= await userService.findByEmail(req.body.email)
             if(user){
                 const decryptionPass = await argon2.verify(user.password, req.body.password)
                 if(decryptionPass){
@@ -100,10 +99,10 @@ class userController {
                   else res.redirect('/admin')
                 }
                 else{
-                  res.render('login',{messageFailure:'sai mật khẩu'})
+                  res.render('login',{messageFailure:'Tên người dùng hoặc mật khẩu không hợp lệ'})
                 } 
             }else{
-              res.render('login',{messageFailure:'tên người dùng ko hợp lệ'})
+              res.render('login',{messageFailure:'Tên người dùng hoặc mật khẩu khong hợp lệ'})
             }
         }
     } catch (error) {
@@ -116,7 +115,228 @@ class userController {
         if (err) res.redirect('/');
         res.redirect('/user/login');
     })
-}
+  }
+
+  async displayEditUser(req, res){
+    try {
+      if(req.session.authState){
+        res.render('user-edit',{
+          user:req.session.authState?.user,
+          messageEditUser:req.session.messageEditUser,
+          messagePhone:req.session.messagePhone
+        })
+      }else{
+        res.redirect('/user/login')
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async editUser(req, res){
+    try {
+      req.session.messagePhone= undefined
+      req.session.messageEditUser= undefined
+      const userLogin = req.session.authState?.user
+      if(userLogin){
+        let isPhoneNumber = await userService.checkPhoneNumberInUsers(
+          req.body.phoneNumber,
+          userLogin.email
+        );
+        const str1 = JSON.stringify(req.body);
+        const str2 = JSON.stringify({
+          fullName:userLogin.fullName,
+          phoneNumber:userLogin.phoneNumber
+        });
+        // console.log(str1 == str2);
+        if(isPhoneNumber){
+            req.session.messagePhone = 'Số điện thoại đã được đăng ký'
+            res.redirect('back')
+        }
+        else if(str1 == str2){
+          req.session.messagePhone = 'Bạn chưa chỉnh sửa bất kỳ thông tin nào'
+          res.redirect('back')
+        }
+        else{
+          if(req.file){
+            const imageOptions = await cloudinary.uploader.upload(req.file.path, {
+                folder: "user_avatars",
+              });
+              const data ={
+                fullName : req.body.fullName,
+                phoneNumber : req.body.phoneNumber,
+                imageUrl: imageOptions?.url || undefined,
+                imageId : imageOptions?.public_id  || undefined
+              }
+              let result = await userService.updateUser(userLogin._id,data)
+              
+              if(result){
+                req.session.authState.user= result
+                req.session.messageEditUser = 'Chỉnh sửa thông tin thành công'
+                res.redirect('back')
+              }
+            }else{
+              let result = await userService.updateUser(userLogin._id,req.body)
+              if(result){
+                req.session.authState.user= result
+                req.session.messageEditUser = 'Chỉnh sửa thông tin thành công'
+                res.redirect('back')
+              }
+            }
+        }
+        
+      }else{
+        res.redirect('/user/login')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async forgotPass(req, res){
+    try {
+      const isEmail = await userService.findByEmail(req.body?.email)
+      if(isEmail){
+        let numbers = '';
+  
+          for (let i = 0; i < 6; i++) {
+            let randomNumber = Math.floor(Math.random() * 10);
+            numbers+=randomNumber;
+          }
+          const result = await mailer.sendMail(req.body.email , numbers, 'Mã Xác Nhận')
+          if(result){
+            const code = await codeService.create({
+              codeNumber:numbers,
+              emailUser: req.body.email,
+              resetTokenExpires:Date.now() + 60000
+            })
+            req.session.verification= 'Mã xác thực đã được gửi'
+            res.render('login',{
+              verification: req.session.verification,
+              emailUser:req.body.email
+            })
+          }
+      }
+      else{
+        res.render('login',{
+          notEmail: 'Tài khoản không tồn tại !'
+        })
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async verification(req, res){
+    try {
+        const forgotCode = await codeService.findAllByEmail(req.params.emailUser)
+        if(forgotCode.length!=0){
+          if( forgotCode[0].codeNumber == req.body.verification){
+            res.render('user-forgot',{
+              emailUser:req.params.emailUser
+            })
+          }else{
+            req.session.verification= 'Mã xác thực không chính xác'
+            res.render('login',{
+              verification: req.session.verification,
+              emailUser:req.params.emailUser
+            })
+          }
+        }else{
+          req.session.verification= 'Mã xác thực không chính xác hoặc đã hết hạn'
+            res.render('login',{
+              verification: req.session.verification,
+              emailUser:req.params.emailUser
+            })
+        }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  
+  async updatePass(req, res){
+    try {
+      const passHashed = await argon2.hash(req.body.password);
+      const result = await userService.updatePassword({email:req.params.emailUser}, {password:passHashed})
+      if(result){
+        req.session.messageForgot = 'Mật khẩu đã được cập nhật'
+        res.render('user-forgot',{
+          message:req.session.messageForgot,
+          emailUser:req.params.emailUser
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async resend(req, res){
+    try {
+      if(req.params.emailUser){
+        let numbers = '';
+          for (let i = 0; i < 6; i++) {
+            let randomNumber = Math.floor(Math.random() * 10);
+            numbers+=randomNumber;
+          }
+          const result =await mailer.sendMail(req.params.emailUser , numbers, 'Mã Xác Nhận')
+          if(result){
+            const code = await codeService.create({
+              codeNumber:numbers,
+              emailUser: req.params.emailUser
+            })
+            req.session.verification= 'Mã xác thực đã được gửi lại'
+            res.render('login',{
+              verification: req.session.verification,
+              emailUser: req.params.emailUser
+            })
+          }
+      }else{
+        res.render('login',{
+          notEmail: 'Tài khoản không tồn tại !'
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  displayChangePass(req, res){
+    try {
+      res.render('change-pass',{id:req.params.id})
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async changePass(req, res){
+    try {
+      const userChangePass = await userService.findById(req.params.id)
+      const decryptionPass = await argon2.verify(userChangePass.password, req.body.passwordOld)
+      if(decryptionPass){
+        const passHashed = await argon2.hash(req.body.passwordNew);
+        const result = await userService.updateUser(req.params.id, {password:passHashed})
+        if(result){
+          res.render('change-pass',{
+            layout: 'main',
+            id:req.params.id,
+            messageSuccess:'Đổi mật khẩu thành công'
+          })
+        }
+      }else{
+      res.render('change-pass',{
+        layout: 'main',
+        id:req.params.id,
+        messageFailure:'Mật khẩu bạn nhập không chính xác'
+      })
+
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 module.exports = new userController();

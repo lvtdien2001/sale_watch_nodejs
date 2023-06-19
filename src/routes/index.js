@@ -2,6 +2,7 @@ import adminRoute from './admin.route';
 import brandRouter from './brand.route';
 import userRouter from './user.route';
 import watchRouter from './watch.route';
+import commentRouter from './comment.route';
 
 import brandService from '../services/brand.service';
 import watchService from '../services/watch.service';
@@ -11,6 +12,7 @@ const initRoutes = (app) => {
     app.use('/brand', brandRouter);
     app.use('/user', userRouter);
     app.use('/watch', watchRouter);
+    app.use('/comment', commentRouter);
     app.use('/admin', verifyRole, adminRoute);
     
     // search
@@ -38,6 +40,7 @@ const initRoutes = (app) => {
                 numberOfResult: response.numberOfWatches,
                 pageNumber: response.pageNumber,
                 currentPage: response.currentPage,
+                user: req.session.authState?.user,
                 helpers: {
                     setSearchKey: key => `key=${key}&watchPerPage=8`
                 }

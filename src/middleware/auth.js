@@ -5,9 +5,9 @@ dotenv.config();
 const verifyToken = (req, res, next) => {
     const token = req.session.authState?.accessToken;
 
-    const isPublicRoute = req.path==='/' || !(new RegExp('/admin').test(req.path));
+    const isPrivateRoute = /\/+admin|order$/;
 
-    if (isPublicRoute)
+    if (isPrivateRoute.test(req.path) === false)
         return next();
 
     // Token not found

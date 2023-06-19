@@ -1,0 +1,22 @@
+{{#section "css"}}
+<link rel="stylesheet" href="/css/role.css" />
+{{/section}}
+
+<div class="role__create">
+    {{#with role}}
+        <form action="/admin/role/role-edit/{{_id}}" method="post" class="form__crearte-role">
+            <h3 class="text-center">chỉnh sửa quyền</h3>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Tên Quyền</label>
+                <input placeholder="Nhập tên quyền" type="text" name="name" value="{{name}}" class="form-control"
+                    id="exampleInputEmail1">
+            </div>
+            <button class="btn btn-info">Sửa</button>
+        </form>
+    {{/with}}
+
+</div>
+
+<Script>
+
+</Script>

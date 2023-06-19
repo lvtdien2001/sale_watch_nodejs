@@ -5,10 +5,10 @@ exports.getAuthBtn = user => {
     if (user){
         return  `<div class="dropdown">
                     <button class="btn dropdown-toggle header-user-toggle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="${user.imageUrl}" width="25px" height="25px">
+                        <img id="header-user-avatar" src="${user.imageUrl}" width="25px" height="25px">
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">#1</a></li>
+                        <li><a class="dropdown-item" href="/user/edit">Chỉnh sửa thông tin</a></li>
                         <li><a class="dropdown-item" href="#">#2</a></li>
                         <li>
                             <a class="dropdown-item text-danger" href="/user/logout">
@@ -89,7 +89,7 @@ exports.formatName = name => {
 }
 
 exports.checkRole = user => {
-    if (user?.isAdmin || user?.roles.length>0)
+    if (user?.isAdmin || (user?.roles?.length && user?.roles.length>0))
         return true;
     return false;
 }

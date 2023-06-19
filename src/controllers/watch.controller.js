@@ -1,4 +1,6 @@
 import watchService from '../services/watch.service';
+import commentServices from '../services/comment.service'
+import cloudinary from "../utils/cloudinary";
 
 // @route GET /admin/watch?currentPage=...
 // @desc get watches for product manager function
@@ -16,7 +18,7 @@ exports.getProductManager = async (req, res) => {
             helpers: {
                 getTemplateEditSelect: (index, attr) => {
                     let template = '';
-                    switch(attr){
+                    switch (attr) {
                         case 'brand':
                             template = response.brands.map(brand => {
                                 if (brand.name === response.watches[index].brandId.name)
@@ -81,10 +83,27 @@ exports.getProductDetail = async (req, res) => {
         const watchId = req.params.id;
 
         const response = await watchService.findById(watchId);
-        const suggestWatches = (await watchService.findAll({brandId: response.watch.brandId, _id: {$ne: response.watch._id}}, 4, {price: -1})).watches;
+        const suggestWatches = (await watchService.findAll({ brandId: response.watch.brandId, _id: { $ne: response.watch._id } }, 4, { price: -1 })).watches;
+        // comment
 
+        const result = await commentServices.findAllByWatchId(req.params.id)
+        var data = [];
+        for (let i = 0; i < result.length; i++) {
+            let starElement = []
+            for (let j = 0; j < parseInt(result[i].rate); j++) {
+                starElement.push(1)
+            }
+          
+            const temp = {
+                element: starElement,
+                ...result[i],
+            }
+            data.push(temp)
+        }
+        // comment        
         res.render('productDetail', {
             watch: response.watch,
+            data,
             suggestWatches,
             user: req.session.authState?.user
         })
@@ -92,7 +111,7 @@ exports.getProductDetail = async (req, res) => {
         console.log(error);
         req.session.message = 'Internal server error';
         req.session.success = false;
-        res.render('err404', {layout: false});
+        res.render('err404', { layout: false });
     }
 }
 
@@ -100,7 +119,7 @@ exports.getProductDetail = async (req, res) => {
 // @desc create a new product
 // @access private
 exports.create = async (req, res) => {
-    if (!req.body.name || !req.body.brandId || !req.file){
+    if (!req.body.name || !req.body.brandId || !req.file) {
         req.session.message = 'Tên sản phẩm, hình ảnh và thương hiệu không thể bỏ trống!';
         req.session.success = false;
         return res.redirect('/admin/watch');
@@ -113,8 +132,6 @@ exports.create = async (req, res) => {
             brandId: req.body.brandId,
             style: req.body.style,
             imageUrl: req.file.path,
-            price: req.body.price,
-            currentQuantity: req.body.currentQuantity,
             strap: req.body.strap,
             glass: req.body.glass,
             principleOperate: req.body.principleOperate,
@@ -146,7 +163,6 @@ exports.update = async (req, res) => {
             style: req.body.style,
             imageUrl: req.file?.path,
             price: req.body.price,
-            currentQuantity: req.body.currentQuantity,
             strap: req.body.strap,
             glass: req.body.glass,
             principleOperate: req.body.principleOperate,
@@ -156,7 +172,8 @@ exports.update = async (req, res) => {
         const response = await watchService.update(data, watchId, userId);
         req.session.message = response.msg;
         req.session.success = response.success;
-        return res.redirect('/admin/watch');
+        req.session.activeProduct = true; 
+        return res.redirect('back');
     } catch (error) {
         console.log(error);
         req.session.message = 'Internal server error';

@@ -7,8 +7,8 @@
 6. Phân quyền người dùng
 7. Quản lý khách hàng thân thiết
 8. Quản lý thương hiệu
+9. Quản lý kho hàng 
 # Khách hàng:
-9. Bình luận - đánh giá
 10. Xem sản phẩm
 11. Lịch sử mua hàng
 12. Tìm kiếm
@@ -19,10 +19,11 @@
 17. Lọc sản phẩm
 18. Giỏ hàng
 19. Thanh toán
+20. Bình luận - đánh giá
 
 ## THANH
-13 6 14
+13 6 14 20
 ## DIEN
-1 8 12 10
+1 8 12 10 9
 ## KY
 5 16 18

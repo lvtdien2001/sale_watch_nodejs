@@ -1,0 +1,356 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/warehouse.css" />
+{{/section}}
+
+<div>
+    <h4 class="text-center mt-3 mb-3">QUẢN LÝ KHO HÀNG</h4>
+    
+    <div class="mb-3">
+        <ul class="nav nav-tabs">
+            {{#if activeProduct}}
+                <li class="nav-item">
+                    <div id="nav-receipt" class="nav-link">Phiếu nhập kho</div>
+                </li>
+                <li class="nav-item">
+                    <div id="nav-product" class="nav-link active">Hàng hóa</div>
+                </li>
+            {{else}}
+                <li class="nav-item">
+                    <div id="nav-receipt" class="nav-link active">Phiếu nhập kho</div>
+                </li>
+                <li class="nav-item">
+                    <div id="nav-product" class="nav-link">Hàng hóa</div>
+                </li>
+            {{/if}}
+        </ul>
+    </div>
+
+    {{!-- product list content --}}
+    <div class="{{#if activeProduct}}''{{else}}hidden{{/if}}" id="product-list-content">
+        <h5 class="mb-3 text-center">DANH MỤC HÀNG HÓA</h5>
+
+        <div class="table-responsive">
+            <table class="table table-bordered border-dark text-center align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Tên sản phẩm</th>
+                        <th scope="col">Hình ảnh</th>
+                        <th scope="col">Tồn kho</th>
+                        <th scope="col">Đã bán</th>
+                        <th scope="col">Đơn giá</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="product-table-body">
+                    {{#each watches}}
+                        <tr id="table-row-{{@index}}">
+                            <th>{{increase @index}}</th>
+                            <td style="max-width: 700px;" class="text-start">{{name}}</td>
+                            <td>
+                                <img src={{imageUrl}} alt="Hinh anh thuong hieu" width="100px" height="100px">
+                            </td>
+                            <td>{{inventory}}</td>
+                            <td>{{sold}}</td>
+                            <td><b class="text-danger">{{formatPrice price}}</b></td>
+                            <td>
+                                {{!-- Button trigger edit modal --}}
+                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#edit-modal-{{@index}}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        {{!-- Edit modal --}}
+                        <div class="modal fade" id="edit-modal-{{@index}}" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="edit-modal-label-{{@index}}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="edit-modal-label-{{@index}}">Cập nhật đơn giá</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="/admin/watch/update/{{_id}}" method="post">
+                                        <div class="modal-body">
+                                            <div class="text-primary">
+                                                <b>{{name}}</b>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <img src="{{imageUrl}}" alt="Hinh anh san pham" width="100%">
+                                                </div>
+                                                <div class="col-6">
+                                                    {{!-- form input --}}
+                                                    <div class="mt-3 mb-3">
+                                                        <label for="inputPrice" class="form-label fw-bold">Đơn giá</label>
+                                                        <input value="{{price}}" name="price" type="number" class="form-control" id="inputPrice">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Hủy</button>
+                                            <button type="submit" class="btn btn-outline-success">Lưu thay đổi</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+
+        <ul class="pagination justify-content-center mb-3 pagination-products">
+            {{#paginateProducts}}{{/paginateProducts}}
+        </ul>
+    </div>
+
+    {{!-- Add receipt list content --}}
+    <div class="{{#if activeProduct}}hidden{{/if}}" id="receipt-list-content">
+        <!-- Button trigger create receipt modal -->
+        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#create-receipt-modal">
+            Tạo phiếu nhập kho
+        </button>
+
+        <h5 class="mb-3 text-center">DANH SÁCH PHIẾU NHẬP KHO</h5>
+
+        {{#if (checkPageNumber pageNumberOfReceipt)}}
+            <ul class="pagination justify-content-center mb-3">
+                <li class="page-item">
+                    <a class="page-link" href="/admin/warehouse" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {{#paginate pageNumberOfReceipt currentPageOfReceipt '/admin/warehouse' ''}}{{/paginate}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/warehouse?currentPage={{pageNumberOfReceipt}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        {{/if}}
+
+        {{!-- receipt list table --}}
+        <div class="table-responsive">
+            <table class="table table-bordered border-dark text-center align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Ngày nhập kho</th>
+                        <th scope="col">Phân loại sản phẩm</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Tổng số tiền</th>
+                        <th scope="col">Người tạo phiếu</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each receipts}}
+                        <tr>
+                            <th>{{formatNum (increase @index)}}</th>
+                            <td class="text-start">{{createdAt}}</td>
+                            <td>
+                                {{#with watches}}
+                                    {{length}}
+                                {{/with}}
+                            </td>
+                            <td>
+                                {{totalQuantity}}
+                            </td>
+                            <td class="text-danger">
+                                <b>{{formatPrice totalAmount}}</b>
+                            </td>
+                            <td>
+                                {{#with createBy}}
+                                    {{fullName}}
+                                {{/with}}
+                            </td>
+                            <td>
+                                {{!-- button trigger detail modal --}}
+                                <button class="btn btn-light btn-detail" data-bs-toggle="modal" data-bs-target="#detail-modal-{{@index}}">
+                                    Xem chi tiết
+                                </button>
+                            </td>
+                        </tr> 
+
+                    {{/each}}
+                </tbody>
+            </table>
+
+            {{#each receipts}}
+                {{!-- detail modal --}}
+                <div class="modal fade" id="detail-modal-{{@index}}" tabindex="-1" aria-labelledby="detail-modal-label-{{@index}}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="detail-modal-label-{{@index}}">Thông tin phiếu nhập kho</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div id="content-print-{{@index}}" class="modal-body">
+                                <div style="height: 80px;">
+                                    <div style="width: 35%; float: left;">
+                                        <b>Cửa hàng đồng hồ ABC</b>
+                                        </br>
+                                        <span style="font-size: 13px;">
+                                            Địa chỉ: 60 Phố Tô Hiến Thành - Hà Nội</br>
+                                            Điện thoại: 099 999 9999
+                                        </span>
+                                    </div>
+                                    <div style="width: 35%; float: left; text-align:center;">
+                                        <b style="font-size: 24px;">PHIẾU NHẬP KHO</b></br>
+                                        Ngày nhập: {{createdAt}}
+                                    </div>
+                                    <div style="width: 30%; font-size:18px; float: left; text-align:center;">
+                                        Số: ....................
+                                    </div>
+                                </div>
+                                <div style="height: 24px;">
+                                    <div style="width: 50%; float: left;">Nhập tại kho: .................................................................</div>
+                                    <div style="width: 50%; float: left;">Người nhận: .................................................................</div>
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <table style="width:100%;">
+                                        <tr style="text-align: center;">
+                                            <th style="border: solid 1px #c2bfbf;">STT</th>
+                                            <th style="border: solid 1px #c2bfbf;">Tên sản phẩm</th>
+                                            <th style="border: solid 1px #c2bfbf;">Nhà cung cấp</th>
+                                            <th style="border: solid 1px #c2bfbf;">SL</th>
+                                            <th style="border: solid 1px #c2bfbf;">Đơn giá</th>
+                                            <th style="border: solid 1px #c2bfbf;">Thành tiền</th>
+                                            <th style="border: solid 1px #c2bfbf;">Ghi chú</th>
+                                        </tr>
+                                        {{#each watches}}
+                                            <tr>
+                                                <td style="border: solid 1px #c2bfbf; text-align: center;">{{increase @index}}</td>
+                                                <td style="border: solid 1px #c2bfbf; width: 300px;">
+                                                    {{#with watchId}}
+                                                        {{name}}
+                                                    {{/with}}
+                                                </td>
+                                                <td style="border: solid 1px #c2bfbf; text-align: center;">{{supplier}}</td>
+                                                <td style="border: solid 1px #c2bfbf; text-align: center;">{{quantity}}</td>
+                                                <td style="border: solid 1px #c2bfbf; text-align: center;">{{formatPrice price}}</td>
+                                                <td style="border: solid 1px #c2bfbf; text-align: center;">{{formatPrice amount}}</td>
+                                                <td style="border: solid 1px #c2bfbf;"></td>
+                                            </tr>
+                                        {{/each}}
+                                        <tr>
+                                            <td style="border: #c2bfbf solid 1px;"></td>
+                                            <td style="border: #c2bfbf solid 1px;"></td>
+                                            <th style="border: solid 1px #c2bfbf; text-align: center;">TỔNG</th>
+                                            <th style="border: #c2bfbf solid 1px; text-align: center;">{{getTotalQuantity @index}}</th>
+                                            <td style="border: #c2bfbf solid 1px;"></td>
+                                            <th style="border: #c2bfbf solid 1px; text-align: center;">{{formatPrice totalAmount}}</th>
+                                            <td style="border: #c2bfbf solid 1px;"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div style="margin-top: 20px; height: 150px;">
+                                    <div style="width: 25%; float: left; text-align:center;">
+                                        <b>Người giao</b></br>
+                                        (Ký, họ tên)
+                                    </div>
+                                    <div style="width: 25%; float: left; text-align:center;">
+                                        <b>Thủ kho</b></br>
+                                        (Ký, họ tên)
+                                    </div>
+                                    <div style="width: 25%; float: left; text-align:center;">
+                                        <b>Người nhận</b></br>
+                                        (Ký, họ tên)
+                                    </div>
+                                    <div style="width: 25%; float: left; text-align:center;">
+                                        <b>Kế toán</b></br>
+                                        (Ký, họ tên)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button type="button" class="btn btn-lg btn-outline-danger" data-bs-dismiss="modal">Đóng</button>
+                                <button onclick="printPDF({{@index}}, '{{createdAt}}')" type="button" class="btn btn-lg btn-outline-success">In phiếu nhập kho</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+
+        {{#if (checkPageNumber pageNumberOfReceipt)}}
+            <ul class="pagination justify-content-center mb-3">
+                <li class="page-item">
+                    <a class="page-link" href="/admin/warehouse" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {{#paginate pageNumberOfReceipt currentPageOfReceipt '/admin/warehouse' ''}}{{/paginate}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/warehouse?currentPage={{pageNumberOfReceipt}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        {{/if}}
+    </div>
+
+    <!-- create receipt modal -->
+    <div class="modal fade" id="create-receipt-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createReceiptModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="createReceiptModalLabel">Tạo phiếu nhập kho</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                {{!-- create add receipt form --}}
+                <form action="/admin/warehouse/add" method="POST">
+                    <div id="product-list" class="modal-body">
+                        <div id="product-item-0" class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label fw-bold">Sản phẩm <span class="text-danger">*</span></label>
+                                <select id="select-product" required class="form-select" name="watches[0][watchId]" oninvalid="setCustomValidity('Bạn chưa chọn sản phẩm')" oninput="setCustomValidity('')">
+                                    <option value="" hidden>--- Chọn sản phẩm ---</option>
+                                    {{#each watches}}
+                                        <option value="{{_id}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-4 mb-3">
+                                        <label class="form-label fw-bold">Nhà cung cấp <span class="text-danger">*</span></label>
+                                        <input class="form-control" required="true" oninvalid="setCustomValidity('Nhà cung cấp không thể bỏ trống')" oninput="setCustomValidity('')" type="text" name="watches[0][supplier]" placeholder="Nhà cung cấp">
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label class="form-label fw-bold">Số lượng <span class="text-danger">*</span></label>
+                                        <input class="form-control" min="1" required="true" oninvalid="setCustomValidity('Số lượng phải lớn hơn 0')" oninput="setCustomValidity('')" type="number" name="watches[0][quantity]" value="0">
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label class="form-label fw-bold">Đơn giá nhập <span class="text-danger">*</span></label>
+                                        <input class="form-control" min="1000" required="true" oninvalid="setCustomValidity('Đơn giá thấp nhất là 1000 đ')" oninput="setCustomValidity('')" type="number" name="watches[0][price]" value="0">
+                                    </div>
+                                    <div class="col-2 mb-3 align-self-end">
+                                        <button id="btn-add" type="button" class="btn btn-outline-success">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-outline-danger btn-lg" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-outline-success btn-lg">Gửi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{!-- message --}}
+    {{#showMessage message success}}{{/showMessage}}
+    {{clearMessage}}
+
+    {{clearActive}}
+</div>
+
+{{#section 'js'}}
+    <script src="/js/warehouse.js"></script>
+{{/section}}
