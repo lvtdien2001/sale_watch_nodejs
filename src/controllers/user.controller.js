@@ -122,7 +122,8 @@ class userController {
       if(req.session.authState){
         res.render('user-edit',{
           user:req.session.authState?.user,
-          message:req.session.message
+          messageEditUser:req.session.messageEditUser,
+          messagePhone:req.session.messagePhone
         })
       }else{
         res.redirect('/user/login')
@@ -135,33 +136,58 @@ class userController {
 
   async editUser(req, res){
     try {
-      const userLogin = req.session.authState.user
-      if(req.body){
-        if(req.file){
-        const imageOptions = await cloudinary.uploader.upload(req.file.path, {
-            folder: "user_avatars",
-          });
-          const data ={
-            fullName : req.body.fullName,
-            phoneNumber : req.body.phoneNumber,
-            imageUrl: imageOptions?.url || undefined,
-            imageId : imageOptions?.public_id  || undefined
-          }
-          let result = await userService.updateUser(userLogin._id,data)
-          
-          if(result){
-            req.session.authState.user= result
-            req.session.message = 'Chỉnh sửa thông tin thành công'
+      req.session.messagePhone= undefined
+      req.session.messageEditUser= undefined
+      const userLogin = req.session.authState?.user
+      if(userLogin){
+        let isPhoneNumber = await userService.checkPhoneNumberInUsers(
+          req.body.phoneNumber,
+          userLogin.email
+        );
+        const str1 = JSON.stringify(req.body);
+        const str2 = JSON.stringify({
+          fullName:userLogin.fullName,
+          phoneNumber:userLogin.phoneNumber
+        });
+        // console.log(str1 == str2);
+        if(isPhoneNumber){
+            req.session.messagePhone = 'Số điện thoại đã được đăng ký'
             res.redirect('back')
-          }
-        }else{
-          let result = await userService.updateUser(userLogin._id,req.body)
-          if(result){
-            req.session.authState.user= result
-            req.session.message = 'Chỉnh sửa thông tin thành công'
-            res.redirect('back')
-          }
         }
+        else if(str1 == str2){
+          req.session.messagePhone = 'Bạn chưa chỉnh sửa bất kỳ thông tin nào'
+          res.redirect('back')
+        }
+        else{
+          if(req.file){
+            const imageOptions = await cloudinary.uploader.upload(req.file.path, {
+                folder: "user_avatars",
+              });
+              const data ={
+                fullName : req.body.fullName,
+                phoneNumber : req.body.phoneNumber,
+                imageUrl: imageOptions?.url || undefined,
+                imageId : imageOptions?.public_id  || undefined
+              }
+              let result = await userService.updateUser(userLogin._id,data)
+              
+              if(result){
+                req.session.authState.user= result
+                req.session.messageEditUser = 'Chỉnh sửa thông tin thành công'
+                res.redirect('back')
+              }
+            }else{
+              let result = await userService.updateUser(userLogin._id,req.body)
+              if(result){
+                req.session.authState.user= result
+                req.session.messageEditUser = 'Chỉnh sửa thông tin thành công'
+                res.redirect('back')
+              }
+            }
+        }
+        
+      }else{
+        res.redirect('/user/login')
       }
     } catch (error) {
       console.log(error)
