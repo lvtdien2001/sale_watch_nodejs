@@ -70,7 +70,7 @@ function checkMatchPass(e){
     }
 }
 if(submitBtn){
-    submitBtn.addEventListener('submit',submitFormRegister)
+    submitBtn.addEventListener('click',submitFormRegister)
 }
 
 function submitFormRegister(e){
@@ -87,14 +87,14 @@ function submitFormRegister(e){
     })
 
     if(isValid == 0){
-        submitBtn.preventDefault();
+        e.preventDefault();
     }else{
         submitBtn.submit()
     }
 }
 
 if(submitBtnLogIn){
-    submitBtnLogIn.addEventListener('submit',submitFormLogin)
+    submitBtnLogIn.addEventListener('click',submitFormLogin)
 }
 function submitFormLogin(e){
     let isValid=1
@@ -107,7 +107,7 @@ function submitFormLogin(e){
     })
 
     if(isValid == 0){
-        submitBtnLogIn.preventDefault();
+        e.preventDefault();
     }else{
         submitBtnLogIn.submit()
     }
