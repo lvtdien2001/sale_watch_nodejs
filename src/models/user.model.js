@@ -22,6 +22,10 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
+    disable:{
+        type:Boolean,
+        default: false
+    },
     fullName: {
         type: String
     },

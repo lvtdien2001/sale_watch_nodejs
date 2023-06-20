@@ -1,0 +1,77 @@
+{{#section "css"}}
+  <link rel="stylesheet" href="../css/role.css" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+{{/section}}
+
+<div class="container">
+    <h3 class="text-center my-4">Quản lý tài khoản người dùng</h3>
+    <div>
+        <h4 class="text-center my-4 text-info">Tài khoản chưa bị khóa</h4>
+        {{#if messageDisable}}
+            <span class="text-danger text-center fs-4">{{messageDisable}}</span>
+        {{/if}}
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">fullName</th>
+                <th scope="col">Email</th>
+                <th scope="col">Số điện thoại</th>
+                <th scope="col">Khóa tài khoản</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each unlockUser}}
+                <tr>
+                <th scope="row">{{this.index}}</th>
+                <td>{{this.fullName}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.phoneNumber}}</td>
+                <td>
+                    <a class="btn btn-danger text-white" href="/admin/user/toggle?id={{this._id}}&type=disable">
+                        <i class="fa-solid fa-lock"></i>
+                        Khóa
+                    </a>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <div>
+        <h4 class="text-center my-4 text-danger">Tài khoản đã bị khóa</h4>
+        {{#if messageUnlock}}
+            <span class="text-success text-center fs-4">{{messageUnlock}}</span>
+        {{/if}}
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">fullName</th>
+                <th scope="col">Email</th>
+                <th scope="col">Số điện thoại</th>
+                <th scope="col">Mở khóa</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each disableUser}}
+                <tr>
+                <th scope="row">{{this.index}}</th>
+                <td>{{this.fullName}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.phoneNumber}}</td>
+                <td>
+                    <a class="btn btn-info text-white" href="/admin/user/toggle?id={{this._id}}&type=unlock">
+                        <i class="fa-solid fa-lock-open"></i>
+                        Mở khóa
+                    </a>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
