@@ -1,6 +1,8 @@
 
 exports.increase = num => num+1;
 
+exports.equals = (str1, str2) => str1 == str2;
+
 exports.getAuthBtn = user => {
     if (user){
         return  `<div class="dropdown">
