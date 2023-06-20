@@ -337,6 +337,44 @@ class userController {
       console.log(error);
     }
   }
+
+  async displayUserManager(req, res){
+    try {
+      const disableUser = await userService.disableUser();
+      const unlockUser = await userService.unlockUser();
+      res.render('admin/user',{
+        layout:'admin',
+        disableUser,
+        unlockUser,
+        messageUnlock:req.session.messageUnlock,
+        messageDisable:req.session.messageDisable
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async unlockUser(req, res){
+    try {
+      if(req.query?.type =='unlock'){
+        const unlockUser = await userService.unlockUserUpdate(req.query.id)
+        if(unlockUser){
+          req.session.messageUnlock= 'Mở khóa tài khoản thành công'
+          req.session.messageDisable= undefined
+          res.redirect('back')
+        }
+      }else{
+        const disableUser = await userService.disableUserUpdate(req.query.id)
+        if(disableUser){
+          req.session.messageDisable= 'Tài khoản đã bị khóa'
+          req.session.messageUnlock= undefined
+          res.redirect('back')
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 
 module.exports = new userController();
