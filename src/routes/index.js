@@ -1,5 +1,4 @@
 import adminRoute from './admin.route';
-import brandRouter from './brand.route';
 import newsRouter from './news.route'
 import userRouter from './user.route'
 import watchRouter from './watch.route';
@@ -12,7 +11,6 @@ import watchService from '../services/watch.service';
 import { verifyRole } from '../middleware/role';
 
 const initRoutes = (app) => {
-    app.use('/brand', brandRouter);
     app.use('/user', userRouter);
     app.use('/watch', watchRouter);
     app.use('/news', newsRouter)
@@ -30,25 +28,69 @@ const initRoutes = (app) => {
             const searchValue = req.query.key;
             const currentPage = req.query.currentPage || 1;
             const watchPerPage = req.query.watchPerPage;
+            const brandFilter = req.query.brand;
+            const priceFilter = req.query.price;
+
+            let priceCondition;
+            switch(priceFilter){
+                case '<2':
+                    priceCondition = {$lt: 2000000};
+                    break;
+                case '2-5':
+                    priceCondition = {$gt: 2000000, $lt: 5000000};
+                    break;
+                case '5-10':
+                    priceCondition = {$gt: 5000000, $lt: 10000000};
+                    break;
+                case '10-20':
+                    priceCondition = {$gt: 10000000, $lt: 20000000};
+                    break;
+                case '>20':
+                    priceCondition = {$gt: 20000000};
+                    break;
+                default:
+                    priceCondition = {$gt: 1000};
+                    break;
+            }
+
+            let condition = {
+                $text: {$search: searchValue},
+                price: priceCondition
+            }
+            if (brandFilter && brandFilter!=='all'){
+                condition = {
+                    ...condition,
+                    brandId: brandFilter
+                }
+            }
 
             const response = await watchService.findAllAndPage(
                 currentPage, 
-                {$text: {$search: searchValue}},
+                condition,
                 watchPerPage
             );
 
             const isEmpty = response.watches.length>0 ? false : true;
+            // const brands = response.watches.reduce((brands, watch) => {
+            //     if (!(brands?.includes(watch.brandId))) {
+            //         return [...brands, watch.brandId];
+            //     }
+            //     return brands;
+            // }, [])
 
             res.render('search', {
                 watches: response.watches,
                 searchValue,
                 isEmpty,
+                brands: response.brands,
                 numberOfResult: response.numberOfWatches,
                 pageNumber: response.pageNumber,
                 currentPage: response.currentPage,
                 user: req.session.authState?.user,
+                brandFilter,
+                priceFilter,
                 helpers: {
-                    setSearchKey: key => `key=${key}&watchPerPage=8`
+                    setSearchKey: key => `key=${key}&watchPerPage=8&brand=${brandFilter}&price=${priceFilter}`
                 }
             });
         } catch (error) {

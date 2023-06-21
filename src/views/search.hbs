@@ -9,60 +9,117 @@
             <i class="text-secondary">Có <b>{{numberOfResult}}</b> kết quả phù hợp</i>
         </div>
 
-        {{!-- pagination --}}
-        {{#if (checkPageNumber pageNumber)}}
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                {{#paginate pageNumber currentPage '/search' (setSearchKey searchValue)}}{{/paginate}}
-                <li class="page-item">
-                    <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8&currentPage={{pageNumber}}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        {{/if}}
-
-        {{#if isEmpty}}
-            <i class="fs-5 text-secondary">Không tìm thấy kết quả phù hợp</i>
-        {{else}}
-            {{#each watches}}
-                <div class="col-6 col-xl-3 col-md-4 mb-3">
-                    <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{name}}">
-                        <a style="text-decoration: none;" href="/watch/{{_id}}">
-                            <img src="{{imageUrl}}" class="card-img-top card-image" alt="...">
-                            <div class="card-body">
-                                <div id="search-card-name" class="text-name-home">{{formatName name}}</div>
-                                <div id="search-card-price" class="text-price-home">{{formatPrice price}}</div>
+        <div class="col-12">
+            <div class="row">
+                <div class="col-xl-2">
+                    <div class="row">
+                        <div class="col-xl-12 mt-3">
+                            <h4>Bộ lọc <i class="fas fa-filter"></i></h4>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="mb-3">
+                                <label class="form-label"><b>Thương hiệu</b></label>
+                                <select id="brand-filter" class="form-select">
+                                    {{#if (equals 'all' brandFilter)}}
+                                        <option value="all" selected>Tất cả</option>
+                                    {{else}}
+                                        <option value="all">Tất cả</option>
+                                    {{/if}}
+                                    {{#each brands}}
+                                        {{#if (equals ../brandFilter _id)}}
+                                            <option value="{{_id}}" selected>{{name}}</option>
+                                        {{else}}
+                                            <option value="{{_id}}">{{name}}</option>
+                                        {{/if}}
+                                    {{/each}}
+                                </select>
                             </div>
-                        </a>
+                            <div class="mb-3">
+                                <label class="form-label"><b>Giá tiền</b></label>
+                                <select id="price-filter" class="form-select">
+                                    {{!-- all --}}
+                                    {{#if (equals 'all' priceFilter)}}
+                                        <option value="all" selected>Tất cả</option>
+                                    {{else}}
+                                        <option value="all">Tất cả</option>
+                                    {{/if}}
+                                    {{!-- < 2> --}}
+                                    {{#if (equals '<2' priceFilter)}}
+                                        <option value="<2" selected>Dưới 2 triệu</option>
+                                    {{else}}
+                                        <option value="<2">Dưới 2 triệu</option>
+                                    {{/if}}
+                                    {{!-- 2-5 --}}
+                                    {{#if (equals '2-5' priceFilter)}}
+                                        <option value="2-5" selected>Từ 2 - 5 triệu</option>
+                                    {{else}}
+                                        <option value="2-5">Từ 2 - 5 triệu</option>
+                                    {{/if}}
+                                    {{!-- 5-10 --}}
+                                    {{#if (equals '5-10' priceFilter)}}
+                                        <option value="5-10" selected>Từ 5 - 10 triệu</option>
+                                    {{else}}
+                                        <option value="5-10">Từ 5 - 10 triệu</option>
+                                    {{/if}}
+                                    {{!-- 10-20 --}}
+                                    {{#if (equals '10-20' priceFilter)}}
+                                        <option value="10-20" selected>Từ 10 - 20 triệu</option>
+                                    {{else}}
+                                        <option value="10-20">Từ 10 - 20 triệu</option>
+                                    {{/if}}
+                                    {{!-- > 20 --}}
+                                    {{#if (equals '>20' priceFilter)}}
+                                        <option value=">20" selected>Trên 20 triệu</option>
+                                    {{else}}
+                                        <option value=">20">Trên 20 triệu</option>
+                                    {{/if}}
+                                </select>
+                            </div>
+                            <button id="btn-filter" type="button" onclick="filter('{{searchValue}}')" class="btn btn-outline-success mb-3">Bắt đầu lọc</button>
+                        </div>
                     </div>
                 </div>
-            {{/each}}
-        {{/if}}
+                <div class="col-xl-10">
+                    <div class="row">
+                        {{#if isEmpty}}
+                            <i class="fs-5 text-secondary">Không tìm thấy kết quả phù hợp</i>
+                        {{else}}
+                            {{#each watches}}
+                                <div class="col-6 col-xl-3 col-md-4 mb-3">
+                                    <div class="card" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{name}}">
+                                        <a style="text-decoration: none;" href="/watch/{{_id}}">
+                                            <img src="{{imageUrl}}" class="card-img-top card-image" alt="...">
+                                            <div class="card-body">
+                                                <div class="text-name-home"><b>{{formatName name}}</b></div>
+                                                <div class="text-price-home"><b class="text-danger">{{formatPrice price}}</b></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        {{/if}}
 
-        {{!-- pagination --}}
-        {{#if (checkPageNumber pageNumber)}}
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                {{#paginate pageNumber currentPage '/search' (setSearchKey searchValue)}}{{/paginate}}
-                <li class="page-item">
-                    <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8&currentPage={{pageNumber}}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        {{/if}}
+                        {{!-- pagination --}}
+                        {{#if (checkPageNumber pageNumber)}}
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {{#paginate pageNumber currentPage '/search' (setSearchKey searchValue)}}{{/paginate}}
+                                <li class="page-item">
+                                    <a class="page-link" href="/search?key={{searchValue}}&watchPerPage=8&currentPage={{pageNumber}}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-     
 </div>
 
 {{#section 'js'}}

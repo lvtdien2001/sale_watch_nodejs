@@ -48,7 +48,11 @@ exports.getHomePage = async (req, res) => {
                     return html;
                 },
                 clearActive: () => req.session.activeProduct = undefined,
-                clearMessage: () => req.session.message = undefined
+                clearMessage: () => req.session.message = undefined,
+                getTotalQuantity: index => {
+                    const watches = rspReceipt.receipts[index].watches;
+                    return watches.reduce((total, watch) => total + watch.quantity, 0)
+                }
             }
         })
     } catch (error) {

@@ -5,6 +5,7 @@ import newsController from '../controllers/news.controller';
 import warehouseController from '../controllers/warehouse.controller';
 import roleController from '../controllers/role.controller';
 import orderController from '../controllers/order.controller'
+import userController from '../controllers/user.controller';
 import {verifyAdmin} from '../middleware/auth';
 import {verifyAddProduct, verifyUpdateProduct, verifyCreateAddReceipt} from '../middleware/role'
 import upload from '../utils/multer';
@@ -56,4 +57,8 @@ router.get('/role', verifyAdmin, roleController.displayRole)
 router.get('/order', orderController.getAllOrders)
 router.get('/order/:id', orderController.getOrderIdByAdmin)
 router.post('/order/confirm/:id', orderController.updateOrder)
+//user route
+router.get('/user',verifyAdmin,userController.displayUserManager)
+router.get('/user/toggle',verifyAdmin,userController.unlockUser)
+
 export default router;

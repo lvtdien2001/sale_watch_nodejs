@@ -14,6 +14,14 @@ exports.findAllAndPage = async (currentPage, receiptPerPage, condition) => {
             .limit(receiptPerPage)
             .sort({ createdAt: -1 })
             .populate('createBy', ['_id', 'fullName'])
+            .populate({
+                path: 'watches',
+                populate: {
+                    path: 'watchId',
+                    select: '_id, name',
+                    options: { lean: true}
+                }
+            })
             .lean()
 
         const numberOfReceipts = await addReceiptModel.countDocuments(condition);

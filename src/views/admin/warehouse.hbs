@@ -171,44 +171,107 @@
                                     Xem chi tiết
                                 </button>
                             </td>
-                        </tr>
-
-                        {{!-- detail modal --}}
-                        <div class="modal fade" id="detail-modal-{{@index}}" tabindex="-1" aria-labelledby="detail-modal-label-{{@index}}" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="detail-modal-label-{{@index}}">Thông tin phiếu nhập kho</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div id="content-print-{{@index}}" class="modal-body">
-                                        <div class="row">
-                                            <div class="col"><b>Cửa hàng đồng hồ ABC</b></div>
-                                            <div class="col">
-                                                PHIẾU NHẬP KHO
-                                                Ngày nhập: {{createdAt}}
-                                                Số phiếu:
-                                            </div>
-                                        </div>
-                                        <div class="row text-center">
-                                            <div class="col">
-                                                Họ và tên người giao:
-                                                Theo hóa đơn số:
-                                                Nhập tại kho: Địa điểm:
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer justify-content-center">
-                                        <button type="button" class="btn btn-lg btn-outline-danger" data-bs-dismiss="modal">Đóng</button>
-                                        <button onclick="printPDF({{@index}}, '{{createdAt}}')" type="button" class="btn btn-lg btn-outline-success">In phiếu nhập kho</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </tr> 
 
                     {{/each}}
                 </tbody>
             </table>
+
+            {{#each receipts}}
+                {{!-- detail modal --}}
+                <div class="modal fade" id="detail-modal-{{@index}}" tabindex="-1" aria-labelledby="detail-modal-label-{{@index}}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="detail-modal-label-{{@index}}">Thông tin phiếu nhập kho</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div id="content-print-{{@index}}" class="modal-body">
+                                <div style="height: 80px;">
+                                    <div style="width: 35%; float: left;">
+                                        <b>Cửa hàng đồng hồ ABC</b>
+                                        </br>
+                                        <span style="font-size: 13px;">
+                                            Địa chỉ: 60 Phố Tô Hiến Thành - Hà Nội</br>
+                                            Điện thoại: 099 999 9999
+                                        </span>
+                                    </div>
+                                    <div style="width: 35%; float: left; text-align:center;">
+                                        <b style="font-size: 24px;">PHIẾU NHẬP KHO</b></br>
+                                        Ngày nhập: {{createdAt}}
+                                    </div>
+                                    <div style="width: 30%; font-size:18px; float: left; text-align:center;">
+                                        Số: ....................
+                                    </div>
+                                </div>
+                                <div style="height: 24px;">
+                                    <div style="width: 50%; float: left;">Nhập tại kho: .................................................................</div>
+                                    <div style="width: 50%; float: left;">Người nhận: .................................................................</div>
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <table style="width:100%;">
+                                        <tr style="text-align: center;">
+                                            <th style="border: solid 1px #c2bfbf;">STT</th>
+                                            <th style="border: solid 1px #c2bfbf;">Tên sản phẩm</th>
+                                            <th style="border: solid 1px #c2bfbf;">Nhà cung cấp</th>
+                                            <th style="border: solid 1px #c2bfbf;">SL</th>
+                                            <th style="border: solid 1px #c2bfbf;">Đơn giá</th>
+                                            <th style="border: solid 1px #c2bfbf;">Thành tiền</th>
+                                            <th style="border: solid 1px #c2bfbf;">Ghi chú</th>
+                                        </tr>
+                                        {{#each watches}}
+                                            <tr>
+                                                <td style="border: solid 1px #c2bfbf; text-align: center;">{{increase @index}}</td>
+                                                <td style="border: solid 1px #c2bfbf; width: 300px;">
+                                                    {{#with watchId}}
+                                                        {{name}}
+                                                    {{/with}}
+                                                </td>
+                                                <td style="border: solid 1px #c2bfbf; text-align: center;">{{supplier}}</td>
+                                                <td style="border: solid 1px #c2bfbf; text-align: center;">{{quantity}}</td>
+                                                <td style="border: solid 1px #c2bfbf; text-align: center;">{{formatPrice price}}</td>
+                                                <td style="border: solid 1px #c2bfbf; text-align: center;">{{formatPrice amount}}</td>
+                                                <td style="border: solid 1px #c2bfbf;"></td>
+                                            </tr>
+                                        {{/each}}
+                                        <tr>
+                                            <td style="border: #c2bfbf solid 1px;"></td>
+                                            <td style="border: #c2bfbf solid 1px;"></td>
+                                            <th style="border: solid 1px #c2bfbf; text-align: center;">TỔNG</th>
+                                            <th style="border: #c2bfbf solid 1px; text-align: center;">{{getTotalQuantity @index}}</th>
+                                            <td style="border: #c2bfbf solid 1px;"></td>
+                                            <th style="border: #c2bfbf solid 1px; text-align: center;">{{formatPrice totalAmount}}</th>
+                                            <td style="border: #c2bfbf solid 1px;"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div style="margin-top: 20px; height: 150px;">
+                                    <div style="width: 25%; float: left; text-align:center;">
+                                        <b>Người giao</b></br>
+                                        (Ký, họ tên)
+                                    </div>
+                                    <div style="width: 25%; float: left; text-align:center;">
+                                        <b>Thủ kho</b></br>
+                                        (Ký, họ tên)
+                                    </div>
+                                    <div style="width: 25%; float: left; text-align:center;">
+                                        <b>Người nhận</b></br>
+                                        (Ký, họ tên)
+                                    </div>
+                                    <div style="width: 25%; float: left; text-align:center;">
+                                        <b>Kế toán</b></br>
+                                        (Ký, họ tên)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button type="button" class="btn btn-lg btn-outline-danger" data-bs-dismiss="modal">Đóng</button>
+                                <button onclick="printPDF({{@index}}, '{{createdAt}}')" type="button" class="btn btn-lg btn-outline-success">In phiếu nhập kho</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
         </div>
 
         {{#if (checkPageNumber pageNumberOfReceipt)}}
