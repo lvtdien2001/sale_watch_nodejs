@@ -54,11 +54,10 @@
                                         <td scope="col"></td>
                                         <td scope="col">
                                             {{#if (statusOrder status)}}
-                                            <form method="post" action="/order/refund/{{_id}}?status=Hủy">
-                                                <button type="submit" class="btn btn-danger">
-                                                    {{confirmOrder status}}
-                                                </button>
-                                            </form>
+                                            
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                {{confirmOrder status}}
+                                            </button>
                                             {{/if}}
                                         </td>
                                             
@@ -75,7 +74,31 @@
                                 </tfoot>
                             </table>
                         </div>
-                       
+                       <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-center text-danger" id="exampleModalLabel">Hủy đơn hàng</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="post" action="/order/refund/{{_id}}?status=Hủy">
+                                    <div class="modal-body">
+                                        <div class="form-group mt-4">
+                                            <label for="reasonCancel">Lí do hủy:</label>
+                                            <textarea class="form-control" rows="8" aria-label="With textarea" name="reasonCancel" required="true" >
+                                        
+                                            </textarea>
+                                    </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i></button>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
                     {{/with}}     
                 
                

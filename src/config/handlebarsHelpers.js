@@ -94,3 +94,4 @@ exports.checkRole = user => {
         return true;
     return false;
 }
+

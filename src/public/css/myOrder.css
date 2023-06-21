@@ -1,12 +1,10 @@
 .list-status {
     display: flex;
-    overflow: scroll;
-    overflow-y: hidden
+   
 }
 
 .status-item-link {
     text-decoration: none;
-    
     margin : 15px 5px;
 }
 
@@ -21,4 +19,14 @@
 .icon-failure {
     font-size: 6rem;
     color: #c0392b;
+}
+
+@media (min-width:320px) and (max-width:768px){
+    .list-status {
+        overflow: scroll;
+        overflow-y: hidden;
+    }
+    .btn-mobile {
+        min-width: 100px;
+    }
 }

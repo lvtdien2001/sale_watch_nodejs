@@ -1,9 +1,8 @@
-import { response } from 'express';
-import Cart from '../models/cart.model';
+
 import watchModel from '../models/watch.model';
 import cartServices from '../services/cart.service'
 
-import watchServices from '../services/watch.service'
+
 
 
 // @route POST /cart/add/:id
@@ -47,7 +46,7 @@ exports.get = async (req, res) => {
                 cartsRender = cartsDB.carts
             } else {
                 const watchId = req?.cookies?.cart?.map(item => item.watchId) || []
-                const cartCookies = await watchModel.find({ _id: { $in: watchId }}).sort({"createdAt": -1}).lean()
+                const cartCookies = await watchModel.find({ _id: { $in: watchId }}).sort({"createdAt": 1}).lean()
                 const cartsCookies = cartCookies.map((item, index) => { 
                         return {
                             quantity: req?.cookies?.cart[index]?.quantity,
@@ -129,12 +128,13 @@ exports.delete = async (req, res) => {
    
     try { 
         const userId = req.session.authState?.user._id;
-        const cartId = req.params.id;
-        const condition = {_id : cartId}
+        const watchId = req.params.id
+        
         if (userId) {
-            await cartServices.delete(condition)
+            
+            await cartServices.deleteById({"userId": userId, "watchId": watchId})
         } else {
-            const watchId = req.params.id
+            
             const cart = req.cookies.cart || [];
             var index = cart.findIndex(function(item) {
                 return item.watchId === watchId;

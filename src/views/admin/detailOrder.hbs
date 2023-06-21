@@ -1,20 +1,24 @@
 {{#section 'css'}}
     <link rel="stylesheet" href="/css/detailOrder.css" />
 {{/section}}
-{{#section 'js'}}
-    <script type="module" src="/js/detailOrder.js"></script>
-{{/section}}
+
 <div class="container mt-4">
             <div class="row justify-content-center">
                 <h3 class="text-center">Thông tin chi tiết đơn hàng</h3>
                
                     {{#with order}}   
                         <div class="text-end" id="print">
-                            <button class="btn btn-success">In hóa đơn</button>
+                            <button  onclick="printPDF('{{fullName}}-{{province}}-{{paymentMethod}}-{{totalAmount}}')" type="button"  class="btn btn-success">In hóa đơn</button>
                         </div>
                         
-                        <div class="status-order-title">Trạng thái đơn hàng    </div>
-                        
+                        <div class="status-order-title">Trạng thái đơn hàng: <span class="fw-bold">{{status}}</span>    </div>
+                        {{#if reasonCancel}}
+                           <div class="my-2">
+                             <span class="fw-bold">
+                                Lí do hủy đơn hàng:
+                             </span>   {{reasonCancel}}
+                           </div>
+                        {{/if}}
                         {{#formatStatusProgess status}}{{/formatStatusProgess}}
                         <div class="col-12 col-md-3 m-2 info-order">
                             <h3 class="text-center">Thông tin người đặt</h3>
@@ -49,6 +53,7 @@
                                     <div class="m-1 p-1"><span class="text-secondary">Thời gian thực hiện :</span> {{formatDate createdAt}}</div>
                                 </div>
                             {{/each}}
+                            
                         </div>
                         <div class="table-responsive">
                             <table class="table text-center align-middle">
@@ -110,6 +115,15 @@
                                                     </button>
                                                 </form>
                                             {{/if}}
+                                            {{#if (checkStatusPurchased status isPayment)}}
+                                                <form method="post" action="/admin/order/confirm/{{_id}}?status={{status}}">
+
+                                                    <button type="submit" class="btn btn-success">
+                                                        Đã thanh toán
+                                                    </button>
+                                                </form>
+                                            {{/if}}
+                                            
                                         </td>
                                             
                                         <td scope="col"></td>
@@ -117,10 +131,100 @@
                                 </tfoot>
                             </table>
                         </div>
-                                           
+                            
+
+
+
+                    <div class="d-none" id="order-pdf">
+                                <div class="d-flex border border-dark my-2">
+                                    <div><img width="100px" height="100px" src="https://cse.duytan.edu.vn/uploads/images/logo-CSE-1(2).png" /></div>
+                                    <div>
+                                        <div class="fw-bold">CÔNG TY TNHH PASSAGE OF STUDY - CHI NHÁNH CẦN THƠ</div>
+                                        <div><span class="fw-bold">Địa chỉ:</span> Số 24 đường A3, khu dân cư Hưng Phú 1, Phường Hưng Phú, Quận Cái Răng, Thành phố Cần Thơ, Việt Nam</div>
+                                        <div><span class="fw-bold">Điện thoại:</span>.........</div>
+                                        <div><span class="fw-bold">Fax:</span>......</div>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-2">
+                                    <div class="fs-3 fw-bold">Phiếu giao hàng</div>
+                                    <div>{{#dateNow}} {{/dateNow}}</div>
+                                </div>
+                                <div class="mt-4">
+                                    <div><span class="fw-bold">Người nhận hàng: </span> {{fullName}}</div>
+                                    <div><span class="fw-bold">Địa chỉ: </span> {{description}}, {{ward}}, {{district}}, {{province}}</div>
+                                    <div><span class="fw-bold">Số điện thoại: </span> {{phoneNumber}}</div>
+                                    <div><span class="fw-bold">Hình thức thanh toán: </span> {{formatPaymentMethod paymentMethod}} </div>
+                                </div>
+                                <table class="table text-center align-middle table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">STT</th>
+                                            <th scope="col">Tên sản phẩm</th>
+                                            <th scope="col">Số lượng</th>
+                                            <th scope="col">Đơn giá</th>
+                                            
+                                            <th scope="col">Thành tiền</th>
+                                            <th scope="col">Ghi chú</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each products}}
+                                            <tr>
+                                                <td scope="col">{{increase @index}}</td>
+                                                <td scope="col" class="text-start">{{name}}</td>
+                                                <td scope="col">{{quantity}}</td>
+                                                <td scope="col">{{formatPrice price}}</td>
+                                                <td scope="col">{{totalPrice price quantity}}</td>
+                                                
+                                                <td scope="col"></td>
+                                            </tr>
+                                        {{/each}}
+                                    </tbody>
+                                    <tfoot>
+                                        <td scope="col"></td>
+                                        <td scope="col">Tổng Tiền:</td>
+                                        <td scope="col" colspan="3">
+                                           {{formatPrice totalAmount}}
+                                        </td>
+                                        <td scope="col"></td>
+                                    </tfoot>
+                                </table>
+
+                                <div><span class="fw-bold">Thành tiền (Viết bằng chữ): </span> {{#convertNumberToText totalAmount}} {{/convertNumberToText}} </div>
+                                <div>
+                                    <span class="fw-bold">Tiền phải trả: </span>
+                                    {{#if (checkPayment isPayment) }} 
+                                    {{formatPrice 0}}
+                                        
+                                    {{else}} 
+                                    {{formatPrice totalAmount}}
+                                    
+                                    {{/if}}
+                                </div> 
+                                <div class="text-end mb-4">Ngày....... tháng ........ năm .........</div>
+                                <div class="d-flex justify-content-around items-center">
+                                    <div>
+                                        <div class="fw-bold fs-5">Người nhận hàng</div>
+                                        <div>(Ký và ghi rõ họ tên)</div>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold fs-5">Người giao hàng</div>
+                                        <div>(Ký và ghi rõ họ tên)</div>
+                                        
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold fs-5">Người lập phiếu</div>
+                                        <div>(Ký và ghi rõ họ tên)</div>
+                                        <div class="mt-5 text-center fw-bold">{{#deliveryMaker}}{{/deliveryMaker}}</div>
+                                    </div>
+                                </div>
+                    </div>
                         
                     {{/with}}     
                 
                
             </div>
         </div>
+{{#section 'js'}}
+    <script src="/js/detailOrder.js"></script>
+{{/section}}

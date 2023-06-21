@@ -63,11 +63,13 @@ function myDistrict() {
     }
 }
 const formOrder = document.getElementById('form-order')
-const phoneNumber = document.getElementById('phoneNumber');
-const messageValidatePhoneNumber = document.getElementById('validate-phone')
-const phonePattern = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
 
-phoneNumber.oninput = () => {
+const messageValidatePhoneNumber = document.getElementById('validate-phone')
+const btnOrder = document.getElementById('btn-order')
+const phonePattern = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
+const phoneNumber = document.getElementById('phoneNumber');
+phoneNumber.onchange = () => {
+    
     if (!(phonePattern.test(phoneNumber.value))) {
         messageValidatePhoneNumber.style.display = 'block';
         messageValidatePhoneNumber.innerText ='Số điện thoại không đúng định dạng'
@@ -77,12 +79,12 @@ phoneNumber.oninput = () => {
     }
 }
 formOrder.onsubmit = (e) => {
+    e.preventDefault();
+    const phone = document.getElementById('phoneNumber');
     
-    if (!(phonePattern.test(phoneNumber.value))) {
-        e.preventDefault()
-        return false;
+    const reg = phonePattern.test(phone.value)
+    if ( reg) { 
+        formOrder.submit();
     }
    
-        formOrder.submit();
-    
 }

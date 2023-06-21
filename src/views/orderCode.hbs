@@ -1,0 +1,41 @@
+<div class="grid my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-2 col-xs-6">
+            <form method="post" action="/order/ordercode" id="form-order-code">
+                <div class="form-group mt-4">
+                    <div class="form-group">
+                        <label class="text-primary fs-3">Mã xác nhận </label>
+                        <div class="d-flex">
+                            <input maxlength="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'  type="text" class="form-control input-code"  name="orderCode" required="true">
+                            <input maxlength="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'  type="text" class="form-control input-code"  name="orderCode" required="true">
+                            <input maxlength="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'  type="text" class="form-control input-code"  name="orderCode" required="true">
+                            <input maxlength="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57' type="text" class="form-control input-code"  name="orderCode" required="true">
+                            <input maxlength="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57' type="text" class="form-control input-code"  name="orderCode" required="true">
+                            <input maxlength="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57' type="text" class="form-control input-code"  name="orderCode" required="true">
+                        </div>
+                        {{#if status}}<div class="text-danger">Mã xác nhận không đúng hoặc hết hạn</div> {{/if}}
+                    </div>
+                    
+                    <div class="text-end mt-2">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </form>
+            <form method="post" action="/order/ordercode/sendemailagain">
+                        <div class="text-end">
+                            <button class="btn btn-light  mt-2 text-primary">
+                                Gửi lại mã xác nhận
+                            </button>
+                        </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{!-- message --}}
+    {{#showMessage message success}}{{/showMessage}}
+    {{clearMessage}}
+
+{{#section 'js'}}
+    <script src="/js/orderCode.js"></script>
+{{/section}}

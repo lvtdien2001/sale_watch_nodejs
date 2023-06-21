@@ -221,3 +221,13 @@ exports.getQuantity = async watchId => {
         }
     }
 }
+
+exports.updatePurchasedSuccess = async (body,watchId) => {
+    try {
+        // { $inc: { inventory: -quantity, sold: quantity } }
+        await watchModel.updateOne({ _id: watchId }, body);
+
+    } catch (error) {
+        console.log(error)
+    }
+}

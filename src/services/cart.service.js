@@ -79,9 +79,9 @@ const checkCurrentQuantity = async (quantity, watchId) => {
     return true;
 }
 
-exports.delete = async (conditional) => {
+exports.deleteById = async condition => {
     try {
-        await cartModel.findOneAndDelete(conditional)
+        await cartModel.deleteOne(condition)
     } catch (error) {
         console.log(error);
         return {

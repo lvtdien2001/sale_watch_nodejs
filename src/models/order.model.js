@@ -38,6 +38,10 @@ const orderSchema = new Schema({
     email: String,
     phoneNumber: String,
     paymentMethod: String,
+    reasonCancel: {
+        type: String,
+        default:null
+    },
     isPayment: {
         type: Boolean,
         default: false

@@ -9,3 +9,6 @@
 .admin-confirm {
     border-top: 1px solid gray;
 }
+.border-center-page {
+    border-bottom: 4px solid black;
+}

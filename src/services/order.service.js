@@ -113,9 +113,11 @@ exports.getAllByAdmin = async (condition, currentPage, watchPerPage)  => {
 exports.updateOrder = async (condition, body)  => {
     try {
       
-        await orderModel.findOneAndUpdate(condition,body)
+        const res = await orderModel.findOneAndUpdate(condition,body)
         
-        
+        return {
+            order: res
+        }
     } catch (error) {
         console.log(error);
         return {
