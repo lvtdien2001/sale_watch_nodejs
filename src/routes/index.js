@@ -2,7 +2,7 @@ import adminRoute from './admin.route';
 import userRouter from './user.route';
 import watchRouter from './watch.route';
 import commentRouter from './comment.route';
-
+// import addReceiptModel from '../models/addReceipt.model';
 import brandService from '../services/brand.service';
 import watchService from '../services/watch.service';
 import { verifyRole } from '../middleware/role';
@@ -12,7 +12,16 @@ const initRoutes = (app) => {
     app.use('/watch', watchRouter);
     app.use('/comment', commentRouter);
     app.use('/admin', verifyRole, adminRoute);
-    
+    // app.use('/test', async (req, res) => {
+    //     try {
+    //         await addReceiptModel.updateMany({}, {createBy: '64915d28c2011a82aa913211'})
+    //         res.json({
+    //             msg: 'OK'
+    //         })
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // })
     // search
     app.use('/search', async (req, res) => {
         // Bỏ dấu tiếng Việt

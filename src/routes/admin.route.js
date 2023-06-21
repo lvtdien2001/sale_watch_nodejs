@@ -3,6 +3,7 @@ import watchController from '../controllers/watch.controller';
 import brandController from '../controllers/brand.controller';
 import warehouseController from '../controllers/warehouse.controller';
 import roleController from '../controllers/role.controller';
+import turnoverController from '../controllers/turnover.controller';
 import {verifyAdmin} from '../middleware/auth';
 import {verifyAddProduct, verifyUpdateProduct, verifyCreateAddReceipt} from '../middleware/role'
 import upload from '../utils/multer';
@@ -42,5 +43,8 @@ router.get('/role/role-delete/:id', verifyAdmin, roleController.deleteRole)
 router.post('/role/role-edit/:id', verifyAdmin, roleController.roleEdit)
 router.get('/role/role-create', verifyAdmin, roleController.displayCreateRole)
 router.get('/role', verifyAdmin, roleController.displayRole)
+
+// turnover routes
+router.get('/turnover', turnoverController.display)
 
 export default router;
