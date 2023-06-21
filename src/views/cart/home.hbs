@@ -1,0 +1,108 @@
+{{#section 'css'}}
+    <link  type="text/css" rel="stylesheet" href="/css/cart.css" />
+{{/section}}
+<h1 class="text-center">Giỏ hàng của bạn</h1>
+
+<div class="container">
+  <div class="table-responsive">
+    <table class="table table-striped text-center align-middle">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col" class="cart-col-name">Tên</th>
+          <th scope="col">Hình ảnh</th>
+          <th scope="col" >Số lượng</th>
+          
+          <th scope="col">Giá Tiền</th>
+          <th scope="col">Tổng cộng</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        {{#each carts}}
+        
+          <tr>
+            
+            <td scope="col">{{number @index}}</td>
+            <td scope="col" class="text-start">
+              <a class="watch-name-link" href="/watch/{{watchId._id}}">{{watchId.name}}</a>
+            </td>
+            <td scope="col"><img width="100px" height="100px" src="{{watchId.imageUrl}}"/></td>
+           
+            <td scope="col" class="cart-col-quantity">
+              <span class="cart-col-item">
+                {{quantity}}
+              </span>
+             
+            </td>
+          
+            <td scope="col">{{formatPrice watchId.price}}</td>
+            <td scope="col">{{totalPrice watchId.price quantity}}</td>
+            <td scope="col">
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{watchId._id}}">
+                <i class="fas fa-edit"></i>
+              </button>
+            </td>
+            <td scope="col">
+              <form method="post" action="/cart/delete/{{watchId._id}}">
+                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal-{{@index}}">
+                    <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </td>
+            
+
+          </tr>
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal{{watchId._id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{watchId._id}}" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel{{watchId._id}}">Chỉnh sửa số lượng</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="/cart/update/{{watchId._id}}">
+                  <div class="modal-body">
+                    <div class="form-group">
+                        <label for="quantity">Số lượng</label>
+                        <input type="number" class="form-control" value="{{quantity}}" min="1" max="{{watchId._id}}" id="quantity" name="quantity" required="true">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-success">Ok</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      
+      </tbody>
+      <tfoot>
+        <tr>
+            <td scope="col"></td>
+            <td scope="col"></td>
+            <td scope="col"></td>
+            <td scope="col"></td>
+            <td scope="col"></td>
+            <td scope="col"></td>
+            
+            <td scope="col">{{#if carts}} <a class="purchase-link" href="/order"><button class="btn btn-success">Mua hàng</button></a>{{/if}}</td>
+            <td scope="col">
+            
+            </td>
+        </tr>
+      </tfoot>
+      </table>
+  </div>
+</div>
+
+   
+  
+
+    
+

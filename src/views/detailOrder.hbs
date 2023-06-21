@@ -1,0 +1,107 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/detailOrder.css" />
+{{/section}}
+<div class="container mt-4">
+            <div class="row justify-content-center">
+                <h3 class="text-center">Thông tin chi tiết đơn hàng</h3>
+               
+                    {{#with order}}   
+                        <div class="status-order-title">Trạng thái đơn hàng    </div>
+                        {{#formatStatusProgess status}}{{/formatStatusProgess}}
+                        <div class="col-12 col-md-4 my-2 info-order">
+                            <div class="m-2 p-2"><span class="text-secondary">Tên người nhận :</span> {{fullName}}</div>
+                            <div class="m-2 p-2"><span class="text-secondary">Email :</span> {{email}}</div>
+                            <div class="m-2 p-2"><span class="text-secondary">Số điện thoại :</span> {{phoneNumber}}</div>
+                            <div class="m-2 p-2"><span class="text-secondary">Địa chỉ :</span> {{description}}, {{ward}}, {{district}}, {{province}}</div>
+                            <div class="m-2 p-2"><span class="text-secondary">Phương thức thanh toán :</span> {{formatPaymentMethod paymentMethod}}</div>
+                            <div class="m-2 p-2"><span class="text-secondary">
+                                Thanh toán : {{#if (checkPayment isPayment) }} 
+                                <button class="btn btn-primary"><i class="fas fa-check-circle"></i></button>
+                                    
+                                 {{else}} 
+                                 <button class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                   
+                                 {{/if}}
+                            </div>
+                            <div class="m-2 p-2"><span class="text-secondary">Tổng tiền :</span> {{formatPrice totalAmount}}</div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table text-center align-middle">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Tên sản phẩm</th>
+                                        <th scope="col">Hình ảnh</th>
+                                        <th scope="col">Số lượng</th>
+                                        <th scope="col">Giá tiền</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each products}}
+                                    <tr>
+                                        <td scope="col">{{name}}</td>
+                                        <td scope="col"><img width="100px" height="100px" src="{{imageUrl}}" /></td>
+                                        <td scope="col">{{quantity}}</td>
+                                        <td scope="col">{{formatPrice price}}</td>
+                                        <td scope="col"> <a href="/watch/{{watchId}}">Xem chi tiết</a></td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                                 <tfoot>
+                                    <tr>
+                                        <td scope="col"></td>
+                                        <td scope="col"></td>
+                                        <td scope="col"></td>
+                                        <td scope="col">
+                                            {{#if (statusOrder status)}}
+                                            
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                {{confirmOrder status}}
+                                            </button>
+                                            {{/if}}
+                                        </td>
+                                            
+                                        <td scope="col">
+                                            {{#if (statusTransporting status)}}
+                                            <form method="post" action="/order/refund/{{_id}}?status=Đã nhận">
+                                                <button type="submit" class="btn btn-success">
+                                                    Đã nhận hàng
+                                                </button>
+                                            </form>
+                                            {{/if}}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                       <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-center text-danger" id="exampleModalLabel">Hủy đơn hàng</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="post" action="/order/refund/{{_id}}?status=Hủy">
+                                    <div class="modal-body">
+                                        <div class="form-group mt-4">
+                                            <label for="reasonCancel">Lí do hủy:</label>
+                                            <textarea class="form-control" rows="8" aria-label="With textarea" name="reasonCancel" required="true" >
+                                        
+                                            </textarea>
+                                    </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i></button>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    {{/with}}     
+                
+               
+                
+            </div>
+        </div>

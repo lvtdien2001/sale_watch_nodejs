@@ -1,0 +1,42 @@
+.text-right {
+    text-align: right;
+}
+
+.order-image {
+    width: 75px;
+    height: 75px;
+    border-radius: 12px;
+    
+}
+.order-quantity {
+    position: relative;
+    background: gray;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    border-radius: 12px;
+    color:white;
+}
+.background-cart {
+    background: #dfe6e9;
+}
+.col-name {
+    width: 25%;
+   
+}
+.col-name-tbody {
+    overflow: hidden;
+    line-height: 2rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.alert-quantity {
+    max-width: 75px;
+}
+
+
+#validate-phone {
+    display: none;
+}

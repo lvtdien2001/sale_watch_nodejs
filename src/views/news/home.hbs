@@ -1,0 +1,55 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/news/home.css" />
+{{/section}}
+<h1 class="text-center">Trang tin tức</h1>
+
+
+<div class="container">
+{{#each news}}
+
+    
+    
+        <h2> <a class="title-link" href="/news/{{_id}}">{{title}}</a> </h2>
+        <div>{{formatDate createdAt}}</div>
+        
+        <div class="row justify-content-md-center">
+          <div class="col-3">
+            <div class="layout">
+              <a class="title-link" href="/news/{{_id}}">
+                <img src={{imageUrl}} class="layout-image" />
+              </a>
+            </div>
+          </div>
+          <div class="col-9">
+            <p class="content"><span class="contentValue">{{content}}</span></p>
+          </div>
+        </div>
+  
+{{/each}}
+ </div>
+
+ {{!-- pagination --}}
+    {{#with news}}
+        {{#if (checkPageNumber pageNumber)}}
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="/admin/watch" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {{#paginate pageNumber currentPage '/admin/watch'}}{{/paginate}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/watch?currentPage={{pageNumber}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        {{/if}}
+    {{/with}}
+<script>
+  let nodeList = document.querySelectorAll(".contentValue");
+  nodeList.forEach(function(node) {
+    node.innerHTML = node.textContent;
+
+  });
+</script>

@@ -205,3 +205,29 @@ exports.delete = async watchId => {
         }
     }
 }
+
+exports.getQuantity = async watchId => {
+    try {
+        const watch = await watchModel.findById(watchId);
+
+        
+        return watch.inventory || -1
+
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            msg: 'Internal server error'
+        }
+    }
+}
+
+exports.updatePurchasedSuccess = async (body,watchId) => {
+    try {
+        // { $inc: { inventory: -quantity, sold: quantity } }
+        await watchModel.updateOne({ _id: watchId }, body);
+
+    } catch (error) {
+        console.log(error)
+    }
+}

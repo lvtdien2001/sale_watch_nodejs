@@ -1,0 +1,25 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/myOrder.css" />
+{{/section}}
+<div class="grid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 alert-payment">
+            <div class="mt-4">
+
+           
+    {{#if (checkStatus code) }}
+            <div class="text-center">  
+                <i class="fas fa-check-circle icon-success"></i>
+            </div>
+            <div class="text-center fs-1 text-success">Thanh toán thành công</div>
+    {{else}}
+            <div class="text-center">   
+                <i class="fas fa-times-circle icon-failure"></i>
+            </div>
+            <div class="text-center fs-1 text-danger">Thanh toán thất bại</div>
+        
+    {{/if}}
+            </div>
+        </div>
+    </div>
+</div>

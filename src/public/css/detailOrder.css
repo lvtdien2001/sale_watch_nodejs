@@ -1,0 +1,14 @@
+.info-order {
+    background: #dfe6e9;
+    border-radius: 12px;
+}
+.status-order-title {
+    font-size: 2rem;
+}
+
+.admin-confirm {
+    border-top: 1px solid gray;
+}
+.border-center-page {
+    border-bottom: 4px solid black;
+}

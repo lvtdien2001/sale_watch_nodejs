@@ -10,6 +10,7 @@ exports.getAuthBtn = user => {
                         <img id="header-user-avatar" src="${user.imageUrl}" width="25px" height="25px">
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/order/myorder?status=Chờ xác nhận">Đơn hàng của tôi</a></li>
                         <li><a class="dropdown-item" href="/user/edit">Chỉnh sửa thông tin</a></li>
                         <li><a class="dropdown-item" href="#">#2</a></li>
                         <li>
@@ -95,3 +96,4 @@ exports.checkRole = user => {
         return true;
     return false;
 }
+

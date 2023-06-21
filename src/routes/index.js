@@ -1,6 +1,9 @@
 import adminRoute from './admin.route';
-import userRouter from './user.route';
+import newsRouter from './news.route'
+import userRouter from './user.route'
 import watchRouter from './watch.route';
+import cartRouter from './cart.route';
+import orderRouter from './order.route';
 import commentRouter from './comment.route';
 // import addReceiptModel from '../models/addReceipt.model';
 import brandService from '../services/brand.service';
@@ -10,6 +13,9 @@ import { verifyRole } from '../middleware/role';
 const initRoutes = (app) => {
     app.use('/user', userRouter);
     app.use('/watch', watchRouter);
+    app.use('/news', newsRouter)
+    app.use('/cart', cartRouter)
+    app.use('/order', orderRouter)
     app.use('/comment', commentRouter);
     app.use('/admin', verifyRole, adminRoute);
     // app.use('/test', async (req, res) => {

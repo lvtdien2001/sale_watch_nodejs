@@ -1,0 +1,64 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/myOrder.css" />
+{{/section}}
+<div class="container mt-4">
+            <div class="row">
+                <div class="col">
+                    <h3 class="text-center">Đơn hàng của tôi: {{status}}</h3>     
+                                    {{#templateStatus numberOfStatus status }} {{/templateStatus}}
+                                    
+                                    
+                                    <div class="table-responsive">
+
+                                        <table class="table text-center align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Tên sản phẩm</th>
+                                                    <th scope="col">Hình ảnh</th>
+                                                    <th scope="col">Tổng tiền</th>
+                                                    <th scope="col">Số điện thoại</th>
+                                                    <th scope="col">Địa chỉ</th>
+                                                    <th scope="col">Trạng thái đơn hàng</th>
+                                                    <th scope="col">Thời gian đặt hàng</th>
+                                                    <th scope="col"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                    {{#each orders}}
+                                                    <tr>
+                                                        <td scope="col">
+                                                        
+                                                            {{#each products}}
+                                                            {{#if (firstWatch @index)}}
+                                                                {{name}}
+                                                            {{/if}} 
+                                                            {{/each}}
+                                                        </td>
+                                                         <td scope="col">
+                                                          
+                                                            {{#each products}}
+                                                            {{#if (firstWatch @index)}}
+                                                                <img width="100px" height="100px" src="{{imageUrl}}" />
+                                                            {{/if}} 
+                                                            {{/each}}
+                                                        </td>
+                                                        <td scope="col">{{formatPrice totalAmount}}</td>
+                                                        <td scope="col">{{phoneNumber}}</td>
+                                                        
+                                                        <td scope="col">{{description}}, {{ward}}, {{district}}, {{province}}</td>
+                                                        <td scope="col">{{status}}</td>
+                                                         <td scope="col">{{formatDate createdAt}}</td>
+                                                        <td scope="col"><a href="/order/myorder/{{_id}}">Xem chi tiết</a></td>
+                                                    </tr>
+                                                    
+                                                    {{/each}}
+                                            
+                                            </tbody>
+                                           
+                                        </table>
+                                   </div>
+                </div>
+                
+            </div>
+        </div>
