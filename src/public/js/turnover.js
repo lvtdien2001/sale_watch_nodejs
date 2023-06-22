@@ -1,19 +1,61 @@
-const ctx = document.getElementById('myChart');
+
+// chart
+const displayChart = () => {
+    const ctx = document.getElementById('myChart');
+    const data = new Array(12);
+    const year = document.getElementById('year-filter').value;
+    const month = document.getElementById('month-filter').value;
+    const length = document.getElementById('turnover-list').getElementsByTagName('span').length;
+    let labels = new Array(length);
+    if (length<=12){
+        labels.fill('Tháng ');
+    }
+    else {
+        labels.fill('Ngày ');
+    }
+
+    for (let i=0; i<length; i++){
+        data[i] = document.getElementById(`turnover-${i}`).innerText;
+        labels[i] += (i+1);
+    }
     new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
-        datasets: [{
-        label: 'Biểu đồ thống kê doanh thu 2023',
-        data: [0, 1000000, 3000000, 5, 2, 3, 0, 1000000, 3000000, 50129202, 21241211, 3],
-        borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+        type: month==='none' ? 'line' : 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: month!=='none' ? `Biểu đồ thống kê doanh thu ${month}-${year}` : `Biểu đồ thống kê doanh thu ${year}`,
+                data: data,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
         }
+    });
+}
+
+const filterChart = () => {
+    document.getElementById('btn-filter-date').onclick = () => {
+        const year = document.getElementById('year-filter').value;
+        const month = document.getElementById('month-filter').value;
+        
+        if (year==='none'){
+            return;
+        }
+    
+        let params = `year=${year}`;
+    
+        if (month !== 'none'){
+            params += `&month=${month}`;
+        }
+    
+        window.location.href = `/admin/turnover?${params}`;
     }
-});
+}
+
+displayChart();
+filterChart();

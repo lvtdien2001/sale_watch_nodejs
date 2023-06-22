@@ -1,7 +1,55 @@
 <div class="container">
     <h4 class="text-center mt-3 mb-3">QUẢN LÝ DOANH THU</h4>
+
+    <div>
+        <div class="row align-items-center mb-3 mt-3">
+            {{!-- <div class="col-auto">Từ ngày:</div>
+            <div class="col-auto">
+                <input value="2022" class="form-control" id="start-date" type="month">
+            </div>
+            <div class="col-auto">đến ngày:</div>
+            <div class="col-auto">
+                <input value="{{endDate}}" class="form-control" id="end-date" type="date">
+            </div>
+            <div class="col-auto">
+                <button id="btn-filter-date" class="btn btn-outline-primary">Lọc</button>
+            </div> --}}
+            <div class="col-auto">
+                Chọn năm:
+            </div>
+            <div class="col-auto">
+                <select id="year-filter" class="form-select">
+                    <option value="none" hidden>--------</option>
+                    {{#getTemplateYear}}{{/getTemplateYear}}
+                </select>
+            </div>
+            <div class="col-auto">
+                Chọn tháng:
+            </div>
+            <div class="col-auto">
+                <select id="month-filter" class="form-select">
+                    <option value="none" hidden>----------</option>
+                    <option value="none">Cả năm</option>
+                    {{#getTemplateMonth}}{{/getTemplateMonth}}
+                </select>
+            </div>
+            <div class="col-auto">
+                <button id="btn-filter-date" class="btn btn-outline-primary">Lọc</button>
+            </div>
+        </div>
+        <b>Tổng doanh thu: <span class="text-danger">{{formatPrice totalRevenue}}</span></b>
+    </div>
+
     <div>
         <canvas id="myChart"></canvas>
+    </div>
+    <div style="display: none;">
+        <div id="turnover-list">
+            {{#each turnover}}
+                <span id="turnover-{{@index}}">{{this}}</span>
+            {{/each}}
+        </div>
+        <span id="year">{{year}}</span>
     </div>
 </div>
 
