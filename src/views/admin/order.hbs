@@ -28,7 +28,7 @@
 
                                                     {{#each orders}}
                                                     <tr>
-                                                        <td scope="col">
+                                                        <td scope="col" class="text-start" style="width:250px;">
                                                         
                                                             {{#each products}}
                                                             {{#if (firstWatch @index)}}
@@ -44,7 +44,7 @@
                                                             {{/if}} 
                                                             {{/each}}
                                                         </td>
-                                                        <td scope="col">{{formatPrice totalAmount}}</td>
+                                                        <td scope="col" style="width: 120px;">{{formatPrice totalAmount}}</td>
                                                         <td scope="col">{{phoneNumber}}</td>
                                                         
                                                         <td scope="col">{{description}}, {{ward}}, {{district}}, {{province}}</td>

@@ -5,27 +5,32 @@
 
 
 <div class="container">
-{{#each news}}
+
 
     
     
-        <h2> <a class="title-link" href="/news/{{_id}}">{{title}}</a> </h2>
-        <div>{{formatDate createdAt}}</div>
         
-        <div class="row justify-content-md-center">
-          <div class="col-3">
-            <div class="layout">
-              <a class="title-link" href="/news/{{_id}}">
-                <img src={{imageUrl}} class="layout-image" />
-              </a>
+        
+        <div class="row">
+          {{#each news}}
+          <div class="col-10 col-md-5 my-2">
+            <div class="layout d-flex">
+              <div class="mb-4">
+                <a  class="title-link" href="/news/{{_id}}">
+                  <img width="200px" height="200px" src={{imageUrl}} class="layout-image" />
+                </a>
+              </div>
+              <div>
+                <h3> <a class="title-link" href="/news/{{_id}}">{{title}}</a> </h3>
+                <div>{{formatDate createdAt}}</div>
+              </div>
+              
             </div>
           </div>
-          <div class="col-9">
-            <p class="content"><span class="contentValue">{{content}}</span></p>
-          </div>
+         {{/each}}
         </div>
   
-{{/each}}
+
  </div>
 
  {{!-- pagination --}}

@@ -63,7 +63,7 @@
         <tr>
          
             <td scope="col">{{increaseNumber @index}}</td>
-             <td scope="col">
+             <td scope="col" class="text-start" style="width: 200px">
                 {{title}}
             </td>
              <td scope="col">
@@ -76,8 +76,8 @@
             <td scope="col">
                
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal-{{@index}}">
-                    <i class="fas fa-trash"></i>
-                </button>
+                      <i class="fas fa-trash"></i>
+                    </button>
                 <div class="modal fade" id="delete-modal-{{@index}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="delete-modal-label-{{@index}}" aria-hidden="true">
                                 <div class="modal-dialog modal-sm">
                                     <div class="modal-content">
@@ -107,6 +107,14 @@
   
     </table>
 </div>    
+{{!-- message --}}
+{{#showMessage message success}}{{/showMessage}}
+{{clearMessage}}
+
+
+{{#section 'js'}}
+    <script src="/js/newsAdmin.js"></script>
+{{/section}}
    {{#if (checkPageNumber pageNumber)}}
             <ul class="pagination justify-content-center">
                 <li class="page-item">
@@ -122,6 +130,22 @@
                 </li>
             </ul>
         {{/if}}
+
+{{!-- {{#if (checkPageNumber pageNumber)}}
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="/admin/news" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {{#paginate pageNumber currentPage '/admin/order' getStatus }}{{/paginate}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/watch?currentPage={{pageNumber}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+{{/if}} --}}
 <script src="/ckeditor/ckeditor.js">
   
 </script>

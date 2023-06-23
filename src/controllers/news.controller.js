@@ -11,11 +11,13 @@ import NewsService from '../services/news.service';
 exports.getAllByAdmin = async(req, res) => {
     try {
         const currentPage = req.query.currentPage || '1';
-        const watchPerPage = 3;
+        const watchPerPage = 10;
         const response = await NewsService.findAll(currentPage, watchPerPage);
         res.render('admin/news',{
             layout:'admin',
             news: response.news,
+            message: req.session.message,
+            success: req.session.success,
             helpers: {
                 formatDate: date => moment(date).format('lll'),
                 increaseNumber: number => (currentPage - 1) * watchPerPage + number + 1
@@ -93,11 +95,10 @@ exports.delete = async (req, res) => {
    
     try {
         const deleteImage = await News.findOne({_id: req.params.id})
-        console.log(deleteImage)
         await NewsService.delete(deleteImage.imageId)
-        console.log(deleteImage.imageId)
         await News.findByIdAndDelete(req.params.id)
-        
+        req.session.message = 'Đã xóa thành công bài viết !'
+        req.session.success = true
         res.redirect('/admin/news')
     } catch (error) {
         console.log(error);
@@ -110,7 +111,9 @@ exports.getNewsById = async (req, res) => {
     try {
         const id = req.params.id;
         const data = await News.findOne({_id: id}).lean();
-        res.render('news/detail',{data})
+        res.render('news/detail',{data, helpers: {
+            formatDate: date => moment(date).format('lll'),
+        }})
     } catch (error) {
         console.log(error);
     }
@@ -122,7 +125,7 @@ exports.getById = async (req, res) => {
     try {
         const id = req.params.id;
         const data = await News.findOne({_id: id}).lean();
-        res.render('admin/edit',{ layout: 'admin',data})
+        res.render('admin/editNews',{ layout: 'admin',data})
     } catch (error) {
         console.log(error);
     }
@@ -141,6 +144,8 @@ exports.updateInformation = async (req, res) => {
             content
         }
         await News.findOneAndUpdate( condition , update);
+        req.session.message = 'Đã cập nhật thành công nội dung !'
+        req.session.success = true
         res.redirect(`/admin/news/edit/${id}`)
     } catch (error) {
         console.log(error);
@@ -158,14 +163,15 @@ exports.updateImage = async (req, res) => {
         await NewsService.delete(deleteImage.imageId)   
 
         const result = await NewsService.create(req.file.path)
-        console.log(result)
+
         
         const update = {
             imageUrl: result.secure_url,
             imageId: result.public_id
         }
         await News.findOneAndUpdate( condition , update);
-
+        req.session.message = 'Đã cập nhật thành công hình ảnh !'
+        req.session.success = true
 
         res.redirect(`/admin/news/edit/${id}`)
     } catch (error) {

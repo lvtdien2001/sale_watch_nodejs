@@ -2,17 +2,26 @@
     <link rel="stylesheet" href="/css/news/detail.css" />
 {{/section}}
 {{#with data}}
-        <h2>{{title}}</h2>
-        <div>{{createdAt}}</div>
-        <p><span class="contentValue">{{content}}</span> </p>
+<div class="grid">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+    <h2 id="title">{{title}}</h2>
+        <div>{{formatDate createdAt}}</div>
+       
         
         <div class="layout">
             <img src={{imageUrl}} class="layout-image" />
         </div>
+         <p><span class="contentValue">{{content}}</span> </p>
+    </div>
+  </div>
+</div>
+      
 {{/with}}
 
 
 <script>
+  document.title = document.getElementById('title').textContent;
   let nodeList = document.querySelectorAll(".contentValue");
   nodeList.forEach(function(node) {
     node.innerHTML = node.textContent;

@@ -122,3 +122,22 @@ export const verifyCreateAddReceipt = async (req, res, next) => {
   }
 }
 
+
+export const verifyHandleOrder = async (req, res, next) => {
+  const user = req.session.authState?.user;
+
+  if (!user)
+    return res.redirect('/user/login');
+
+  if (user.isAdmin)
+    return next();
+
+  if (user.roles.map(role => role.roleId).includes('649553a3565cb6c89448e300'))
+    return next();
+  else{
+    req.session.message = 'Truy cập bị từ chối, bạn không có quyền thực hiện chức năng này!';
+    req.session.success = false;
+    return res.redirect('back');
+  }
+}
+

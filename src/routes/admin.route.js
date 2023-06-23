@@ -8,7 +8,7 @@ import turnoverController from '../controllers/turnover.controller';
 import orderController from '../controllers/order.controller'
 import userController from '../controllers/user.controller';
 import {verifyAdmin} from '../middleware/auth';
-import {verifyAddProduct, verifyUpdateProduct, verifyCreateAddReceipt} from '../middleware/role'
+import {verifyAddProduct, verifyUpdateProduct, verifyCreateAddReceipt, verifyHandleOrder} from '../middleware/role'
 import upload from '../utils/multer';
 
 const router = express.Router();
@@ -59,7 +59,7 @@ router.get('/turnover', turnoverController.display)
 // order route
 router.get('/order', orderController.getAllOrders)
 router.get('/order/:id', orderController.getOrderIdByAdmin)
-router.post('/order/confirm/:id', orderController.updateOrder)
+router.post('/order/confirm/:id', verifyHandleOrder, orderController.updateOrder)
 //user route
 router.get('/user',verifyAdmin,userController.displayUserManager)
 router.get('/user/toggle',verifyAdmin,userController.unlockUser)
