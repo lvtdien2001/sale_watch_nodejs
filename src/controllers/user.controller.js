@@ -160,7 +160,7 @@ class userController {
             req.session.messagePhone = 'Số điện thoại đã được đăng ký'
             res.redirect('back')
         }
-        else if(str1 == str2){
+        else if(str1 == str2 & !req.file){
           req.session.messagePhone = 'Bạn chưa chỉnh sửa bất kỳ thông tin nào'
           res.redirect('back')
         }
