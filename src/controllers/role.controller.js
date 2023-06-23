@@ -9,7 +9,8 @@ class roleController {
             req.session.success= false
             const roles = req.body.roles;
             let data = []
-            for (let i = 0; i < roles.length; i++) {
+            const length = roles ? roles.length : 0
+            for (let i = 0; i < length; i++) {
                 data.push(
                     {
                         roleId: roles[i]
@@ -17,14 +18,14 @@ class roleController {
                 )
             }
 
-            if (roles) {
+            
                 const result = await userService.updateRole(req.params.id, data)
                 if (result) {
                     req.session.message = 'Thay đổi quyền thành công'
                     req.session.success= true
                     res.redirect('back')
                 }
-            }
+            
         } catch (error) {
             console.log(error);
         }
