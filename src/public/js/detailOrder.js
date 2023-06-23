@@ -1,4 +1,9 @@
 
+const messageToast = document.getElementById('message-toast')
+if (messageToast){
+    const toast = new bootstrap.Toast(messageToast)
+    toast.show()
+}
 const printPDF = (title) => {
     let mywindow = window.open('', 'PRINT', 'height=1123,width=900,top=100,left=150');
 

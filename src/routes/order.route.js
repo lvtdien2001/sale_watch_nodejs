@@ -5,6 +5,8 @@ import orderController from '../controllers/order.controller';
 
 const router = express.Router();
 
+
+
 router.get('/ordercode',orderController.getMyOrderCode)
 router.post('/ordercode',orderController.checkEmailOrder)
 router.post('/ordercode/sendemailagain',orderController.sendEmailAgain)

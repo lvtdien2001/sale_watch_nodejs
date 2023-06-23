@@ -104,8 +104,16 @@ exports.getProductDetail = async (req, res) => {
         res.render('productDetail', {
             watch: response.watch,
             data,
+            message : req.session.message,
+            success : req.session.success,
             suggestWatches,
-            user: req.session.authState?.user
+            user: req.session.authState?.user,
+            helpers: {
+                clearMessage: () => {
+                    req.session.message = undefined;
+                    req.session.success = undefined;
+                }
+            }
         })
     } catch (error) {
         console.log(error);

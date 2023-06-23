@@ -15,10 +15,21 @@ exports.create = async (req, res) => {
 
         const watchId = req.params.id;
         const userId = req.session.authState?.user._id;
-       
+        req.session.message = 'Đã thêm vào giỏ hàng thành công'
+        req.session.success = true;
         if(!userId) {
-            const cart = req.cookies.cart || [];
-            cart.push({watchId: watchId, quantity: parseInt(quantity)});
+            let cart = req.cookies.cart || [];
+            
+              
+                if (cart.length === 0) {
+                    cart.push({watchId: watchId, quantity: parseInt(quantity)});
+                } else {
+                    for (let i = 0; i< cart.length ; ++i) {
+                        if (cart[i].watchId !== watchId) {
+                            cart.push({watchId: watchId, quantity: parseInt(quantity)});
+                        } 
+                    }
+                }
             res.cookie('cart', cart);
             return res.redirect('back');
         }
@@ -62,6 +73,8 @@ exports.get = async (req, res) => {
         res.render('cart/home',{
             carts: cartsRender,
             user: req.session.authState?.user,
+            message: req.session.message,
+            success: req.session.success,
             helpers: {
                 number: num =>  num + 1,
                 totalPrice: (priceWatch, quantity) => {
@@ -75,8 +88,14 @@ exports.get = async (req, res) => {
                         priceFormat.push(price.substring(i-3, i));
                 
                     return priceFormat.reverse().join('.') + ' đ';
+                },
+                checkCarts: cartsArray => cartsArray.length === 0 ? true : false,
+                clearMessage: () => {
+                    req.session.message = undefined;
+                    req.session.success = undefined;
                 }
-            }
+            },
+
         })
         
         
@@ -99,6 +118,16 @@ exports.update = async (req, res) => {
             await cartServices.updateQuantity(quantity, watchId, userId)
         } else {
             const cart = req?.cookies?.cart || [];
+            // const cartUpdate = cart.map(item => {
+            //     if (item.watchId === watchId) {
+            //         return {
+            //             quantity,
+            //             watchId: item.watchId
+            //         }
+            //     }
+            //     return item
+            // })
+            // res.cookie('cart', cartUpdate)
             const index = cart.findIndex(function(item) {
                 return item.watchId === watchId;
             });
@@ -109,6 +138,8 @@ exports.update = async (req, res) => {
             }
         }
        
+        req.session.message = 'Đã cập nhật thành công !'
+        req.session.success = true;
        
        
         res.redirect('back')

@@ -112,6 +112,8 @@ exports.getMyOrder = async (req, res) => {
             user: req.session.authState?.user,
             orders: response.orders,
             status: req.query.status,
+            message: req.session.message,
+            success: req.session.success,
             numberOfStatus: {
                 numberOfConfirm,
                 numberOfWaiting,
@@ -135,39 +137,43 @@ exports.getMyOrder = async (req, res) => {
                 firstWatch: (a) => {
                     return a === 0 ? true : false
                 },
+                clearMessage: () => {
+                    req.session.message = undefined;
+                    req.session.success = undefined;
+                },
                 templateStatus: (numberStatus, status) => {
-                    let btnConfirmLink = `<button class="btn btn-secondary position-relative">`
-                    let btnWaitingLink = `<button class="btn btn-primary position-relative">`
-                    let btnTransportingLink = `<button class="btn btn-primary position-relative">`
-                    let btnReceivedLink = `<button class="btn btn-success position-relative">`
-                    let btnRefundLink = `<button class="btn btn-danger position-relative">`
-                    let btnConfirmRefunLink = `<button class="btn btn-success position-relative">`
-                    let btnCancelLink = `<button class="btn btn-danger position-relative">`
-                    let btnConfirmCancelLink = `<button class="btn btn-success position-relative">`
+                    let btnConfirmLink = `<button class="btn btn-outline-secondary position-relative">`
+                    let btnWaitingLink = `<button class="btn btn-outline-primary position-relative">`
+                    let btnTransportingLink = `<button class="btn btn-outline-primary position-relative">`
+                    let btnReceivedLink = `<button class="btn btn-outline-success position-relative">`
+                    let btnRefundLink = `<button class="btn btn-outline-danger position-relative">`
+                    let btnConfirmRefunLink = `<button class="btn btn-outline-success position-relative">`
+                    let btnCancelLink = `<button class="btn btn-outline-danger position-relative">`
+                    let btnConfirmCancelLink = `<button class="btn btn-outline-success position-relative">`
                     switch (status) {
                         case 'Chờ xác nhận':
-                            btnConfirmLink = `<button class="btn btn-outline-secondary position-relative">`
+                            btnConfirmLink = `<button class="btn btn-secondary position-relative">`
                             break;
                         case 'Chờ lấy hàng':
-                            btnWaitingLink = `<button class="btn btn-outline-primary position-relative">`
+                            btnWaitingLink = `<button class="btn btn-primary position-relative">`
                             break;
                         case 'Đang vận chuyển':
-                            btnTransportingLink = `<button class="btn btn-outline-primary position-relative">`
+                            btnTransportingLink = `<button class="btn btn-primary position-relative">`
                             break;
                         case 'Đã nhận':
-                            btnReceivedLink = `<button class="btn btn-outline-success position-relative">`
+                            btnReceivedLink = `<button class="btn btn-success position-relative">`
                             break;
                         case 'Trả hàng':
-                            btnRefundLink = `<button class="btn btn-outline-danger position-relative">`
+                            btnRefundLink = `<button class="btn btn-danger position-relative">`
                             break;
                         case 'Xác nhận trả hàng':
-                            btnConfirmRefunLink = `<button class="btn btn-outline-success position-relative">`
+                            btnConfirmRefunLink = `<button class="btn btn-success position-relative">`
                             break;
                         case 'Hủy':
-                            btnCancelLink = `<button class="btn btn-outline-danger position-relative">`
+                            btnCancelLink = `<button class="btn btn-danger position-relative">`
                             break;
                         case 'Xác nhận trả hàng':
-                            btnConfirmCancelLink = `<button class="btn btn-outline-success position-relative">`
+                            btnConfirmCancelLink = `<button class="btn btn-success position-relative">`
                             break;
                         default:
                             break;
@@ -229,7 +235,23 @@ exports.handleOrder = async (req, res) => {
         const orderId = req.params.id;
         const status = req.query.status;
         const reasonCancel = req.body.reasonCancel;
-        await orderServices.updateOrder({"_id": orderId}, {"status": status, "reasonCancel": reasonCancel})
+        const refundInfor = {
+            nameBank: req.body.nameBank,
+            accountNumber: req.body.accountNumber,
+            nameAcount: req.body.nameAccount
+        }
+        let condition = {"status": status};
+        if (reasonCancel) {
+            condition.reasonCancel = reasonCancel
+        }
+        if (refundInfor) {
+            condition.refundInfor = refundInfor
+        }
+        const response = await orderServices.updateOrder({"_id": orderId}, condition )
+        if (response.success) {
+            req.session.message = 'Cập nhật trạng thái thành công !';
+            req.session.success = true;
+        }
         res.redirect('back')
     } catch (error) {
         console.log(error)
@@ -249,6 +271,8 @@ exports.getMyOrderId = async (req, res) => {
         res.render('detailOrder',{
             user: req.session.authState?.user,
             order: response.order,
+            message: req.session.message,
+            success: req.session.success,
             helpers: {
                 totalPrice: (priceWatch, quantity) => {
                     let price = priceWatch * quantity;
@@ -294,16 +318,40 @@ exports.getMyOrderId = async (req, res) => {
                             statusReceived = `<div class="progress-bar" role="progressbar" style="width: 16.6%" aria-valuenow="16.6" aria-valuemin="0" aria-valuemax="100">Đã nhận</div>`
                             statusRefund = `<div class="progress-bar bg-success" role="progressbar" style="width: 16.6%" aria-valuenow="16.6" aria-valuemin="0" aria-valuemax="100">Trả hàng</div>`
                             statusConfirmRefund = `<div class="progress-bar bg-success" role="progressbar" style="width: 16.6%" aria-valuenow="16.6" aria-valuemin="0" aria-valuemax="100">Xác nhận trả hàng</div>`
-                        
+                            
                         default:
                             break;
                     }
-                    return `
+                    let templateProgress = `
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 16.6%" aria-valuenow="16.6" aria-valuemin="0" aria-valuemax="100">Chờ xác nhận</div>
                         ${statusWaiting} ${statusTransporting} ${statusReceived} ${statusRefund} ${statusConfirmRefund}
                     </div>
-                `
+                    `
+                   
+                    switch (progress) {
+                        case 'Hủy':
+                            templateProgress = `
+                            <div class="progress">
+                             <div class="progress-bar" role="progressbar" style="width: 16.6%" aria-valuenow="16.6" aria-valuemin="0" aria-valuemax="100">Chờ xác nhận</div>
+                             <div class="progress-bar bg-danger" role="progressbar" style="width: 16.6%" aria-valuenow="16.6" aria-valuemin="0" aria-valuemax="100">Hủy</div>
+                            </div>
+                            `
+                            break;
+                        case 'Xác nhận hủy':
+                                templateProgress = `
+                                <div class="progress">
+                                 <div class="progress-bar" role="progressbar" style="width: 16.6%" aria-valuenow="16.6" aria-valuemin="0" aria-valuemax="100">Chờ xác nhận</div>
+                                 <div class="progress-bar bg-danger" role="progressbar" style="width: 16.6%" aria-valuenow="16.6" aria-valuemin="0" aria-valuemax="100">Hủy</div>
+                                 <div class="progress-bar bg-danger" role="progressbar" style="width: 16.6%" aria-valuenow="16.6" aria-valuemin="0" aria-valuemax="100">Xác nhận hủy</div>
+                                </div>
+                                `
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                    return templateProgress
                 },
                 checkPayment: payment => payment ? true : false
                 ,
@@ -315,6 +363,7 @@ exports.getMyOrderId = async (req, res) => {
                 },
                 statusTransporting: status => status === 'Đang vận chuyển' ? true : false
                 ,
+                refundProducts: (status, isPayment) => (status === 'Đã nhận' && isPayment) ? true : false,
                 confirmOrder: status => {
                     let btnConfirm = ''
                     switch (status) {
@@ -327,6 +376,10 @@ exports.getMyOrderId = async (req, res) => {
                                 break;
                     }
                 return btnConfirm
+                },
+                clearMessage: () => {
+                    req.session.message = undefined;
+                    req.session.success = undefined;
                 }
             }
         })
@@ -421,7 +474,6 @@ exports.create = async (req, res) => {
                     message: 'Amount not found'
                 })
             }
-
             let vnp_Params = {};
             vnp_Params['vnp_Version'] = '2.1.0';
             vnp_Params['vnp_Command'] = 'pay';
@@ -485,6 +537,7 @@ exports.getVnpayReturn = async (req, res, next) => {
         await cartServices.deleteAll({userId: id});
         body.isPayment = true;
         body.status = 'Chờ lấy hàng';
+        
         await orderServices.create(body)
        
         const listProducts = body?.products
@@ -519,6 +572,13 @@ exports.getVnpayReturn = async (req, res, next) => {
         res.render('orderStatus', {code: '97'})
     }
 };
+
+// admin 
+// @route GET /admin/order/refund/id
+// @desc refund 
+// @access admin 
+
+
 
 // admin 
 // @route GET /admin/Order
@@ -697,6 +757,7 @@ exports.getMyOrderCode = async (req, res) => {
 }
 
 
+
 exports.sendEmailAgain = async (req, res) => {
     try {
         const body = req.cookies.bodyCart;
@@ -741,7 +802,9 @@ exports.checkEmailOrder = async (req, res) => {
             if (response.success) {
                     req.session.statusCode = false;
                     res.clearCookie("cart");
-                    res.clearCookie("bodyCart")
+                    res.clearCookie("bodyCart");
+                    req.session.message = 'Đơn hàng đang đợi xét duyêt !';
+                    req.session.success = true;
                     if (userId) {
                         await cartServices.deleteAll({"userId": userId});
                     } 
@@ -815,21 +878,56 @@ exports.updateOrder = async (req, res) => {
         }
         
         let body = { $push: { adminConfirm: adminConfirmObj  }, "status": status }
-        if (status === 'Đã nhận') {
+        if (status === 'Đã nhận' ) {
             body = { $push: { adminConfirm: adminConfirmObj  }, "status": status, isPayment : true }
         }
-        const response = await orderServices.updateOrder(condition, body)
-
-        if (response.order.userId === null && req.query.status === 'Chờ xác nhận') {
-            await mailer.sendMail(response.order.email , 'Đơn hàng của quý khách đã được xác nhận, cảm ơn quý khách đã mua hàng.', 'Thông báo trạng thái đơn hàng')
+         const refundInfor = {};
+         if(req.body.nameBank !== '' && req.body.accountNumber !=='' && req.body.nameAccount !== '') {
+            refundInfor.nameBank = req.body.nameBank
+            refundInfor.accountNumber = req.body.accountNumber
+            refundInfor.nameAcount = req.body.nameAcount
+         }
+        if(req.query.status === 'Đã nhận') {
+           
+            body = { $push: { adminConfirm: adminConfirmObj  },isPayment : true }
         }
-        const listProducts = response?.order?.products;
-        if (req.query.status === 'Đang vận chuyển' || req.query.status === 'Đã nhận' ) {
-            for(let i = 0; i< listProducts.length; i++) {
-                const bodyUpdateWatch = { $inc: { inventory: -listProducts[i].quantity, sold: listProducts[i].quantity } }
-                await watchServices.updatePurchasedSuccess(bodyUpdateWatch,listProducts[i].watchId)
+        if(req.query.status === 'Đã nhận' && Object.keys(refundInfor).length !== 0) {
+           
+            body = { $push: { adminConfirm: adminConfirmObj  }, "status": status,isPayment : true ,"refundInfor": refundInfor }
+        }
+        if (req.query.status === 'Trả hàng') {
+            body = { $push: { adminConfirm: adminConfirmObj  }, "status": status, isPayment : false }
+        }
+        const response = await orderServices.updateOrder(condition, body)
+        if (response.success) {
+            req.session.message = 'Đơn hàng đã được cập nhật';
+            req.session.success = true;
+            // nếu người dùng khách thì gửi email
+            if (response.order.userId === null && req.query.status === 'Chờ xác nhận') {
+                await mailer.sendMail(response.order.email , 'Đơn hàng của quý khách đã được xác nhận, cảm ơn quý khách đã mua hàng.', 'Thông báo trạng thái đơn hàng')
+            }
+            if (response.order.userId === null && req.query.status === 'Đang vận chuyển') {
+                await mailer.sendMail(response.order.email , 'cảm ơn quý khách đã mua hàng. Chi tiết liên hệ trả hàng số điện thoại: 0942000991', 'Cảm ơn đã sử dụng dịch vụ tại website.')
+            }
+
+            // xử lí cộng trừ kho hàng
+            const listProducts = response?.order?.products;
+            if ((req.query.status === 'Đang vận chuyển' && response?.order?.paymentMethod === 'shipcod' ) || (req.query.status === 'Đã nhận' && response.order.userId !== null )  ) {
+                for(let i = 0; i< listProducts.length; i++) {
+                    const bodyUpdateWatch = { $inc: { inventory: -listProducts[i].quantity, sold: listProducts[i].quantity } }
+                    await watchServices.updatePurchasedSuccess(bodyUpdateWatch,listProducts[i].watchId)
+                }
+            }
+            // trả hàng thì cộng lại sản phẩm đã mua
+            if (req.query.status === 'Trả hàng') {
+                for(let i = 0; i< listProducts.length; i++) {
+                    const bodyUpdateWatch = { $inc: { inventory: listProducts[i].quantity, sold: -listProducts[i].quantity } }
+                    await watchServices.updatePurchasedSuccess(bodyUpdateWatch,listProducts[i].watchId)
+                }
             }
         }
+        
+        
         res.redirect('back')
     } catch (error) {
         console.log(error);
@@ -837,19 +935,24 @@ exports.updateOrder = async (req, res) => {
 }
 
 
-
+// admin 
+// @route get /admin/order/:id
+// @desc get order id detail
+// @access admin 
 
 exports.getOrderIdByAdmin = async (req, res) => {
     try {
         const orderId = req.params.id
         const condition = {"_id": orderId };
         const response = await orderServices.getOrderId(condition)
-        const nameAdmin = req.session.authState?.user?.fullName;
+        
 
       
         res.render('admin/detailOrder',{
             layout: 'admin',
             order: response.order,
+            message: req.session.message,
+            success: req.session.success,
             helpers: {
                 totalPrice: (priceWatch, quantity) => {
                     let price = priceWatch * quantity;
@@ -915,6 +1018,7 @@ exports.getOrderIdByAdmin = async (req, res) => {
                              <div class="progress-bar bg-danger" role="progressbar" style="width: 16.6%" aria-valuenow="16.6" aria-valuemin="0" aria-valuemax="100">Hủy</div>
                             </div>
                             `
+                            break;
                         case 'Xác nhận hủy':
                                 templateProgress = `
                                 <div class="progress">
@@ -949,7 +1053,8 @@ exports.getOrderIdByAdmin = async (req, res) => {
                 checkStatusRefund: status => status === 'Trả hàng' ? true : false,
                 checkStatusCancel: status => status === 'Hủy' ? true : false,
                 checkStatusReceived: status => status === 'Đang vận chuyển' ? true : false,
-                checkStatusPurchased: (status, isPayment) => (status === 'Đã nhận' && !isPayment) ? true : false,  
+                checkStatusPurchased: (status, isPayment) => (status === 'Đã nhận' && !isPayment) ? true : false,
+                refundProducts: (status, paymentMethod, userId, isPayment) => (status === 'Đã nhận' && paymentMethod !== 'shipcod' && userId === null && isPayment) ? true : false,    
                 checkUser: userId => {
                     return userId ? 
                     `
@@ -973,8 +1078,9 @@ exports.getOrderIdByAdmin = async (req, res) => {
                     const year = d.getFullYear();
                     return `Ngày ${day},tháng ${month} ,năm ${year}`
                 },
-                deliveryMaker: () => {
-                    return `${nameAdmin}`
+                clearMessage: () => {
+                    req.session.message = undefined;
+                    req.session.success = undefined;
                 }
                 
                 

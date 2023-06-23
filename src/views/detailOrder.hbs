@@ -59,6 +59,11 @@
                                                 {{confirmOrder status}}
                                             </button>
                                             {{/if}}
+                                            {{#if (refundProducts status isPayment)}}
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                                                    Trả hàng
+                                                </button>
+                                            {{/if}}
                                         </td>
                                             
                                         <td scope="col">
@@ -74,7 +79,7 @@
                                 </tfoot>
                             </table>
                         </div>
-                       <!-- Modal -->
+                       <!-- Modal cancel products -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -99,9 +104,55 @@
                                 </div>
                             </div>
                         </div>
+
+                          <!-- Modal refund products -->
+                        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-center text-danger" id="exampleModalLabel1">Trả hàng</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="post" action="/order/refund/{{_id}}?status=Trả hàng">
+                                    <div class="modal-body">
+                                        <div class="form-group mt-4">
+                                            <label for="reasonCancel">Lí do trả hàng:</label>
+                                            <textarea class="form-control" oninvalid="setCustomValidity('Nhập lí do trả hàng !')" oninput="setCustomValidity('')" rows="8"  aria-label="With textarea" name="reasonCancel" required ></textarea>
+                                        </div>
+                                         <div class="form-group mt-4">
+                                            <label for="reasonCancel">Tên ngân hàng:</label>
+                                            <input class="form-control" type="text" name="nameBank"  required="true" />
+                                        </div>
+                                        <div class="form-group mt-4">
+                                            <label for="accountNumber">Số tài khoản:</label>
+                                            <input class="form-control" type="text" name="accountNumber" required="true" />
+                                        </div>
+                                         <div class="form-group mt-4">
+                                            <label for="nameAccount">Tên chủ tài khoản:</label>
+                                            <input class="form-control" type="text" name="nameAccount" required="true" />
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i></button>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
                     {{/with}}     
                 
                
                 
             </div>
         </div>
+
+{{!-- message --}}
+{{#showMessage message success}}{{/showMessage}}
+{{clearMessage}}
+
+
+{{#section 'js'}}
+    <script src="/js/userDetailOrder.js"></script>
+{{/section}}

@@ -50,6 +50,11 @@ const orderSchema = new Schema({
         type: String,
         enum: ['Chờ xác nhận', 'Chờ lấy hàng', 'Đang vận chuyển', 'Đã nhận', 'Trả hàng', 'Hủy', 'Xác nhận hủy'],
         default: 'Chờ xác nhận'
+    },
+    refundInfor: {
+        nameBank : String,
+        accountNumber : String,
+        nameAccount : String
     }
 }, {timestamps: true});
 
