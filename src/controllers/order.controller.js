@@ -238,7 +238,7 @@ exports.handleOrder = async (req, res) => {
         const refundInfor = {
             nameBank: req.body.nameBank,
             accountNumber: req.body.accountNumber,
-            nameAcount: req.body.nameAccount
+            nameAccount: req.body.nameAccount
         }
         let condition = {"status": status};
         if (reasonCancel) {
