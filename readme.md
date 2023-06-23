@@ -5,7 +5,6 @@
 4. Quản lý đơn hàng
 5. Đăng bài
 6. Phân quyền người dùng
-7. Quản lý khách hàng thân thiết
 8. Quản lý thương hiệu
 9. Quản lý kho hàng 
 # Khách hàng:
@@ -25,6 +24,6 @@
 ## THANH
 13 6 14 20 21 3
 ## DIEN
-1 8 12 10 9 17
+1 8 12 10 9 17 2
 ## KY
 5 16 18 11 15 19 4
