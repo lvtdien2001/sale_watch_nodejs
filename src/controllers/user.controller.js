@@ -311,7 +311,10 @@ class userController {
 
   displayChangePass(req, res){
     try {
-      res.render('change-pass',{id:req.params.id})
+      res.render('change-pass',{
+        id:req.params.id,
+        user: req.session.authState?.user
+      })
     } catch (error) {
       console.log(error);
     }
@@ -319,6 +322,10 @@ class userController {
 
   async changePass(req, res){
     try {
+      const user = req.session.authState?.user;
+      if (!user){
+        res.redirect('/user/login');
+      }
       const userChangePass = await userService.findById(req.params.id)
       const decryptionPass = await argon2.verify(userChangePass.password, req.body.passwordOld)
       if(decryptionPass){

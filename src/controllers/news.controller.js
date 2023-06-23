@@ -75,6 +75,7 @@ exports.get = async (req, res) => {
         res.render('news/home',{
             layout: 'main',
             news,
+            user: req.session.authState?.user,
             helpers: {
                 formatDate: date => moment(date).format('lll')
 
@@ -111,7 +112,10 @@ exports.getNewsById = async (req, res) => {
     try {
         const id = req.params.id;
         const data = await News.findOne({_id: id}).lean();
-        res.render('news/detail',{data, helpers: {
+        res.render('news/detail',{
+            data,
+            user: req.session.authState?.user,
+            helpers: {
             formatDate: date => moment(date).format('lll'),
         }})
     } catch (error) {
