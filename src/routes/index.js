@@ -8,6 +8,7 @@ import commentRouter from './comment.route';
 // import addReceiptModel from '../models/addReceipt.model';
 import brandService from '../services/brand.service';
 import watchService from '../services/watch.service';
+import newsService from '../services/news.service';
 import { verifyRole } from '../middleware/role';
 
 const initRoutes = (app) => {
@@ -126,7 +127,8 @@ const initRoutes = (app) => {
             
             const newWatches = (await watchService.findAll({}, 12, {createdAt: -1})).watches;
             const hotWatches = (await watchService.findAll({}, 4, {currentQuantity: 1})).watches;
-            res.render('home', {user: req.session.authState?.user, brands, newWatches, hotWatches})
+            const hotNews = await newsService.findAll(1,3);
+            res.render('home', {user: req.session.authState?.user, brands, newWatches, hotWatches, news: hotNews.news})
         } catch (error) {
             console.log(error);
             res.redirect('/');
