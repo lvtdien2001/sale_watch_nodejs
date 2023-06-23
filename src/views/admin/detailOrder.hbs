@@ -4,9 +4,17 @@
 
 <div class="container mt-4">
             <div class="row justify-content-center">
+              
                 <h3 class="text-center">Thông tin chi tiết đơn hàng</h3>
                
                     {{#with order}}   
+                        <div>
+                            <a href="/admin/order?status={{status}}">
+                                
+                                <button class="btn btn-primary" type="submit"><i class="fas fa-chevron-left"></i> Back</button>
+                            </a>
+                           
+                        </div>
                         <div class="text-end" id="print">
                             <button  onclick="printPDF('{{fullName}}-{{province}}-{{paymentMethod}}-{{totalAmount}}')" type="button"  class="btn btn-success">In hóa đơn</button>
                         </div>
@@ -18,6 +26,25 @@
                                 Lí do hủy đơn hàng:
                              </span>   {{reasonCancel}}
                            </div>
+                        {{/if}}
+                        {{#if refundInfor}}
+                            {{#with refundInfor}}
+                           <div class="my-2">
+                             <span class="fw-bold">
+                                Tên ngân hàng:
+                             </span>   {{nameBank}}
+                           </div>
+                           <div class="my-2">
+                             <span class="fw-bold">
+                                Thông tin số tài khoản:
+                             </span>   {{accountNumber}}
+                           </div>
+                           <div class="my-2">
+                             <span class="fw-bold">
+                                Tên chủ thẻ:
+                             </span>   {{nameAccount}}
+                           </div>
+                           {{/with}}
                         {{/if}}
                         {{#formatStatusProgess status}}{{/formatStatusProgess}}
                         <div class="col-12 col-md-3 m-2 info-order">
@@ -35,10 +62,10 @@
                             <div class="m-2 p-2"><span class="text-secondary">Phương thức thanh toán :</span> {{formatPaymentMethod paymentMethod}}</div>
                             <div class="m-2 p-2"><span class="text-secondary">
                                 Thanh toán : {{#if (checkPayment isPayment) }} 
-                                <button class="btn btn-primary"><i class="fas fa-check-circle"></i></button>
+                                <button class="btn btn-primary rounded-circle" style="cursor: context-menu;"><i class="fas fa-check-circle"></i></button>
                                     
                                  {{else}} 
-                                 <button class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                 <button class="btn btn-danger rounded-circle"  style="cursor: context-menu;"><i class="fas fa-times"></i></button>
                                    
                                  {{/if}}
                             </div>
@@ -56,7 +83,7 @@
                             
                         </div>
                         <div class="table-responsive">
-                            <table class="table text-center align-middle">
+                            <table class="table text-center align-middle table-bordered border-dark table-striped">
                                 <thead>
                                     <tr>
                                         <th scope="col">Tên sản phẩm</th>
@@ -69,7 +96,7 @@
                                 <tbody>
                                     {{#each products}}
                                     <tr>
-                                        <td scope="col">{{name}}</td>
+                                        <td scope="col" class="text-start">{{name}}</td>
                                         <td scope="col"><img width="100px" height="100px" src="{{imageUrl}}" /></td>
                                         <td scope="col">{{quantity}}</td>
                                         <td scope="col">{{formatPrice price}}</td>
@@ -123,7 +150,12 @@
                                                     </button>
                                                 </form>
                                             {{/if}}
-                                            
+                                            {{#if (refundProducts status paymentMethod userId isPayment)}}
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                    Hoàn tiền và trả hàng
+                                                </button>
+                                               
+                                            {{/if}}
                                         </td>
                                             
                                         <td scope="col"></td>
@@ -215,16 +247,54 @@
                                     <div>
                                         <div class="fw-bold fs-5">Người lập phiếu</div>
                                         <div>(Ký và ghi rõ họ tên)</div>
-                                        <div class="mt-5 text-center fw-bold">{{#deliveryMaker}}{{/deliveryMaker}}</div>
+                                        
                                     </div>
                                 </div>
                     </div>
-                        
+                          <!-- Modal refund admin -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-center text-danger" id="exampleModalLabel">Hoàn tiền</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="post" action="/admin/order/confirm/{{_id}}?status=Đã nhận">
+                                    <div class="modal-body">
+                                        <div class="form-group mt-4">
+                                            <label for="reasonCancel">Tên ngân hàng:</label>
+                                            <input class="form-control" type="text" name="nameBank"  required="true" />
+                                        </div>
+                                        <div class="form-group mt-4">
+                                            <label for="accountNumber">Số tài khoản:</label>
+                                            <input class="form-control" type="text" name="accountNumber" required="true" />
+                                        </div>
+                                         <div class="form-group mt-4">
+                                            <label for="nameAccount">Tên chủ tài khoản:</label>
+                                            <input class="form-control" type="text" name="nameAccount" required="true" />
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i></button>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
                     {{/with}}     
                 
                
             </div>
         </div>
+
+{{!-- message --}}
+{{#showMessage message success}}{{/showMessage}}
+{{clearMessage}}
+
+
 {{#section 'js'}}
     <script src="/js/detailOrder.js"></script>
 {{/section}}

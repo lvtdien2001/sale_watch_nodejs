@@ -56,4 +56,5 @@ router.get('/role', verifyAdmin, roleController.displayRole)
 router.get('/order', orderController.getAllOrders)
 router.get('/order/:id', orderController.getOrderIdByAdmin)
 router.post('/order/confirm/:id', orderController.updateOrder)
+
 export default router;
