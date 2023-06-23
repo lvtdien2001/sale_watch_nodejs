@@ -4,6 +4,7 @@ import brandController from '../controllers/brand.controller';
 import newsController from '../controllers/news.controller';
 import warehouseController from '../controllers/warehouse.controller';
 import roleController from '../controllers/role.controller';
+import turnoverController from '../controllers/turnover.controller';
 import orderController from '../controllers/order.controller'
 import userController from '../controllers/user.controller';
 import {verifyAdmin} from '../middleware/auth';
@@ -53,6 +54,8 @@ router.post('/role/role-edit/:id', verifyAdmin, roleController.roleEdit)
 router.get('/role/role-create', verifyAdmin, roleController.displayCreateRole)
 router.get('/role', verifyAdmin, roleController.displayRole)
 
+// turnover routes
+router.get('/turnover', turnoverController.display)
 // order route
 router.get('/order', orderController.getAllOrders)
 router.get('/order/:id', orderController.getOrderIdByAdmin)
