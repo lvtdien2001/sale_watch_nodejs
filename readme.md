@@ -20,10 +20,3 @@
 19. Thanh toán
 20. Bình luận - đánh giá
 21. Quên mật khẩu
-
-## THANH
-13 6 14 20 21 3
-## DIEN
-1 8 12 10 9 17 2
-## KY
-5 16 18 11 15 19 4
